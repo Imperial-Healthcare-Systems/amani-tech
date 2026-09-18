@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
-import { Icon } from '../Icon';
+import { Icon, LogoMark } from '../Icon';
 import { useToast } from '../Toast';
 import { adminSignOut } from '@/lib/actions/admin';
 
@@ -27,7 +27,7 @@ export function AdminShell({ children, admin, counts }: { children: ReactNode; a
   return (
     <div className="admin-shell">
       <aside className={`a-side ${open ? 'is-open' : ''}`}>
-        <Link className="brand" href="/admin"><svg className="logo-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#0E9F6E" /><path d="M10 26 18 9l8 17" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" /><path d="M13.5 20h9" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" /></svg><span>Amani Tech<small>Admin</small></span></Link>
+        <Link className="brand" href="/admin"><LogoMark /><span>amani tech<small>Admin</small></span></Link>
         <nav className="a-nav" aria-label="Admin">
           {groups.map(g => <div key={g.g || 'top'}>{g.g && <div className="group">{g.g}</div>}{g.items.map(i => (
             <div key={i.href}>

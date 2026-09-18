@@ -10,9 +10,9 @@ const APP = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP),
-  title: { default: 'Amani Tech — Staffing & Recruitment for IT and Non-IT Roles', template: '%s | Amani Tech' },
-  description: 'Find genuine job opportunities or hire screened talent. Amani Tech connects candidates and employers across IT and non-IT roles in India.',
-  openGraph: { type: 'website', siteName: 'Amani Tech', images: ['/og.png'] },
+  title: { default: 'Amani Tech — Technology | Talent | Training', template: '%s | Amani Tech' },
+  description: 'Technology, talent and training. Find genuine job opportunities or hire screened talent — Amani Tech connects candidates and employers across IT and non-IT roles in India.',
+  openGraph: { type: 'website', siteName: 'Amani Tech · Technology | Talent | Training' },
   twitter: { card: 'summary_large_image' },
 };
 

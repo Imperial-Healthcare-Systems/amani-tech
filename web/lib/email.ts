@@ -15,9 +15,9 @@ function transport() {
 
 const layout = (title: string, body: string) => `<!doctype html><html><body style="margin:0;background:#F7F8FA;font-family:Inter,Segoe UI,Arial,sans-serif;color:#151B26">
 <div style="max-width:560px;margin:32px auto;background:#fff;border:1px solid #E3E7ED;border-radius:12px;overflow:hidden">
-<div style="background:#0B2545;padding:20px 28px;color:#fff;font-weight:800;font-size:18px">Amani<span style="color:#0E9F6E">Tech</span></div>
-<div style="padding:28px"><h1 style="font-size:20px;margin:0 0 12px;color:#0B2545">${title}</h1>${body}</div>
-<div style="padding:16px 28px;border-top:1px solid #E3E7ED;font-size:12px;color:#5C6675">Amani Tech · Hyderabad · <a href="${APP}" style="color:#13315C">${APP.replace(/^https?:\/\//, '')}</a></div></div></body></html>`;
+<div style="background:#141A4A;padding:20px 28px;color:#fff;font-weight:800;font-size:18px">amani tech <span style="font-weight:600;font-size:10px;letter-spacing:.16em;color:#93C5FD;margin-left:10px">TECHNOLOGY | TALENT | TRAINING</span></div>
+<div style="padding:28px"><h1 style="font-size:20px;margin:0 0 12px;color:#141A4A">${title}</h1>${body}</div>
+<div style="padding:16px 28px;border-top:1px solid #E3E7ED;font-size:12px;color:#5C6675">Amani Tech · Hyderabad · <a href="${APP}" style="color:#242D78">${APP.replace(/^https?:\/\//, '')}</a></div></div></body></html>`;
 
 async function send(to: string, subject: string, html: string) {
   const t = transport();
@@ -26,7 +26,7 @@ async function send(to: string, subject: string, html: string) {
 }
 
 const p = (s: string) => `<p style="margin:0 0 12px;line-height:1.6">${s}</p>`;
-const btn = (href: string, text: string) => `<p style="margin:20px 0 0"><a href="${href}" style="display:inline-block;background:#0E9F6E;color:#fff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600">${text}</a></p>`;
+const btn = (href: string, text: string) => `<p style="margin:20px 0 0"><a href="${href}" style="display:inline-block;background:#2563EB;color:#fff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600">${text}</a></p>`;
 
 export const email = {
   registrationCompleted: (to: string, name: string, job?: { title: string; company: string }) =>

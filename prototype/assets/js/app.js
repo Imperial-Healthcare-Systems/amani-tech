@@ -78,7 +78,7 @@
     ['jobs.html', 'Find Jobs', 'jobs'], ['employers.html', 'Employers', 'employers'], null, ['careers.html', 'Careers', 'careers'], ['contact.html', 'Contact', 'contact']
   ];
   const RESOURCES = [['blog.html', 'Blog', 'Insights and career advice'], ['blog.html?category=insights', 'Insights', 'Hiring trends and industry views'], ['blog.html?category=career-advice', 'Career Advice', 'Resumes, interviews, growth'], ['faqs.html', 'FAQs', 'Answers for candidates and employers']];
-  const LOGO = `<a class="logo" href="${ROOT}index.html" aria-label="Amani Tech home"><svg class="logo-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#0B2545"/><path d="M10 26 18 9l8 17" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M13.5 20h9" stroke="#0E9F6E" stroke-width="3" stroke-linecap="round"/></svg><span>Amani<em>Tech</em></span></a>`;
+  const LOGO = `<a class="logo" href="${ROOT}index.html" aria-label="Amani Tech home"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 34C8 20 20 10 37 6c-7 6-10 12-11 20-4-4-12 0-22 8z" fill="currentColor"/><path d="M10 38c4-8 12-14 23-16-5 4-7 8-8 13-3-2-9 0-15 3z" fill="currentColor" opacity=".55"/></svg><span class="logo-text"><span class="logo-name">amani tech</span><span class="logo-tag">Technology<i>|</i>Talent<i>|</i>Training</span></span></a>`;
 
   function renderHeader() {
     const page = document.body.dataset.page;

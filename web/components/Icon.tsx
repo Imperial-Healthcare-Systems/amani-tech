@@ -58,11 +58,27 @@ export function Stars({ n, className = 'stars' }: { n: number; className?: strin
   return <div className={className} aria-label={`${n} out of 5 stars`}>{[1, 2, 3, 4, 5].map(i => <Icon key={i} name="star" className={i <= n ? '' : 'is-off'} />)}</div>;
 }
 
-export function Logo({ href = '/', light = false }: { href?: string; light?: boolean }) {
+/** Brand mark: a bird in forward, upward flight — growth and momentum. Fills with currentColor (electric blue via .logo-mark). */
+export function LogoMark({ className = 'logo-mark', size }: { className?: string; size?: number }) {
   return (
-    <a className="logo" href={href} aria-label="Amani Tech home" style={light ? { color: '#fff' } : undefined}>
-      <svg className="logo-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#0B2545" /><path d="M10 26 18 9l8 17" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" /><path d="M13.5 20h9" stroke="#0E9F6E" strokeWidth="3" strokeLinecap="round" /></svg>
-      <span>Amani<em>Tech</em></span>
+    <svg className={className} viewBox="0 0 40 40" aria-hidden="true" style={size ? { width: size, height: size } : undefined}>
+      <path d="M4 34C8 20 20 10 37 6c-7 6-10 12-11 20-4-4-12 0-22 8z" fill="currentColor" />
+      <path d="M10 38c4-8 12-14 23-16-5 4-7 8-8 13-3-2-9 0-15 3z" fill="currentColor" opacity=".55" />
+    </svg>
+  );
+}
+
+export const TAGLINE = ['Technology', 'Talent', 'Training'];
+
+/** Lockup: bird + lowercase wordmark + tagline. `light` is handled by .site-footer CSS; kept for call-site clarity. */
+export function Logo({ href = '/', tagline = true }: { href?: string; light?: boolean; tagline?: boolean }) {
+  return (
+    <a className="logo" href={href} aria-label="Amani Tech home">
+      <LogoMark />
+      <span className="logo-text">
+        <span className="logo-name">amani tech</span>
+        {tagline && <span className="logo-tag">{TAGLINE.map((t, i) => <span key={t}>{i > 0 && <i>|</i>}{t}</span>)}</span>}
+      </span>
     </a>
   );
 }

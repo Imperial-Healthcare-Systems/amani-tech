@@ -30,7 +30,7 @@
   function chrome() {
     const page = document.body.dataset.page, title = document.body.dataset.title || 'Dashboard';
     const side = document.createElement('aside'); side.className = 'a-side'; side.id = 'a-side';
-    side.innerHTML = `<a class="brand" href="index.html"><svg class="logo-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#0E9F6E"/><path d="M10 26 18 9l8 17" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M13.5 20h9" stroke="#0F172A" stroke-width="3" stroke-linecap="round"/></svg><span>Amani Tech<small>Admin</small></span></a>
+    side.innerHTML = `<a class="brand" href="index.html"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 34C8 20 20 10 37 6c-7 6-10 12-11 20-4-4-12 0-22 8z" fill="currentColor"/><path d="M10 38c4-8 12-14 23-16-5 4-7 8-8 13-3-2-9 0-15 3z" fill="currentColor" opacity=".55"/></svg><span>Amani Tech<small>Admin</small></span></a>
       <nav class="a-nav" aria-label="Admin">${NAV.map(n => n.g !== undefined ? (n.g ? `<div class="group">${n.g}</div>` : '') : `<a href="${n[0]}" class="${page === n[3] || (n[4] && n[4].some(s => s[2] === page)) ? 'is-active' : ''}">${icon(n[2])}${n[1]}${n[5] ? `<span class="count">${n[5]}</span>` : ''}</a>${n[4] && (page === n[3] || n[4].some(s => s[2] === page)) ? `<div class="sub">${n[4].map(s => `<a href="${s[0]}">${s[1]}</a>`).join('')}</div>` : ''}`).join('')}</nav>
       <div class="foot"><div class="avatar">AK</div><div><strong>Admin User</strong><small>admin@amanitech.in</small></div><a href="login.html" aria-label="Sign out">${icon('external')}</a></div>`;
     const bd = document.createElement('div'); bd.className = 'a-backdrop';

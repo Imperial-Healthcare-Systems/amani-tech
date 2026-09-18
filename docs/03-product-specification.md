@@ -341,3 +341,22 @@ Cloudinary is not used (S3-compatible storage keeps resumes private with signed 
 ## 16. Prototype Scope (Phase 3)
 
 Static HTML/CSS/vanilla JS in `/prototype`. Sample data in `assets/js/data.js` simulates the database (categories, jobs, blogs, careers, testimonials, FAQs). Search, filters, sort, pagination, apply modal, form validation, upload validation, toasts, drawers, CSV export and CMS editors work client-side to validate UX. No backend.
+
+---
+
+## 17. Brand Update — client input (18 Sep 2026)
+
+Supersedes the colour and logo rows of §11.
+
+| Element | Decision |
+|---|---|
+| Name & tagline | **amani tech** (lowercase wordmark) · **TECHNOLOGY \| TALENT \| TRAINING** — shown under the wordmark in the header (≥1440 px) and footer, in page titles and email headers |
+| Symbol | Abstract bird in forward/upward flight (two swept wing shapes), electric blue, `LogoMark` in `web/components/Icon.tsx`; favicon `web/app/icon.svg` |
+| Primary — Deep Indigo | `--navy-900 #141A4A` · 800 `#1B2260` · 700 `#242D78` · 600 `#2F3A9A` · 100 `#E6E8F5` · 50 `#F3F4FA` — headings, nav, dark sections, wordmark |
+| Accent — Electric Blue | `--accent-600 #2563EB` · 700 `#1D4ED8` · 100 `#DBEAFE` · 50 `#EFF4FF` — CTAs, links, icons, bird, focus ring |
+| Background | White surfaces on `#F7F8FA` page; two-colour identity, no other brand hues |
+| Semantic only | `--success-*` (green) kept strictly for approved/published/success states; amber for featured/ratings; red for errors |
+| Type weight | Manrope 800 for wordmark and headings (unchanged — already heavy) |
+| Contrast | `#2563EB` on white 5.2:1; white on `#2563EB` 5.2:1; `#141A4A` on white 14.6:1 |
+
+Tagline note: "Training" is now a stated pillar, so a **Training & Upskilling** service was added (seed + CMS-editable) so the site delivers on the promise.

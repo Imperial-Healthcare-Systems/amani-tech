@@ -11,7 +11,7 @@ export function HeroVisual({ job, openCount, image }: { job: Job | null; openCou
         {image && (
           <div style={{ position: 'absolute', right: 0, top: 0, width: '78%', height: '100%', borderRadius: 20, overflow: 'hidden', boxShadow: 'var(--sh-lg)' }}>
             <Image src={image} alt="" fill priority sizes="(max-width:1024px) 0px, 520px" style={{ objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,37,69,.05), rgba(11,37,69,.55))' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,26,74,.05), rgba(20,26,74,.55))' }} />
           </div>
         )}
         <div className="hv-card hv-job" style={{ left: 0, top: 48 }}>
