@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Post — Amani Tech Admin</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="blog-editor" data-title="New Post">
+<div class="admin-shell"><div class="a-main"><div class="a-content">
+  <div class="a-page-head"><div><h2>Blog post</h2><p>Write in Markdown. Preview opens the public article template.</p></div><div class="actions"><span class="unsaved"><span data-icon="alert" data-icon-class="icon-sm"></span>Unsaved changes</span><span id="status-badge"></span></div></div>
+  <form id="post-form" novalidate class="a-form-layout">
+    <div class="stack" style="gap:16px">
+      <div class="a-card">
+        <div class="field"><label class="req" for="p-title">Title</label><input class="input" id="p-title" name="title" required style="font-size:1.1rem;font-weight:600"><span class="error-msg"></span></div>
+        <div class="field"><label for="p-slug">Slug</label><div class="row" style="gap:6px;flex-wrap:nowrap"><span class="small muted">/blog/</span><input class="input" id="p-slug" name="slug"></div></div>
+        <div class="field"><label for="p-excerpt">Excerpt</label><textarea class="textarea" id="p-excerpt" name="excerpt" style="min-height:70px" placeholder="Shown on cards and as the default meta description"></textarea></div>
+        <div class="field"><label class="req" for="p-content">Content</label><div class="editor-toolbar" role="toolbar" aria-label="Formatting"><button type="button" data-w="B" title="Bold">B</button><button type="button" data-w="I" title="Italic"><em>I</em></button><button type="button" data-w="H2" title="Heading">H2</button><button type="button" data-w="UL" title="List">•</button><button type="button" data-w="LINK" title="Link">🔗</button></div><textarea class="textarea" id="p-content" name="content" placeholder="Write your article…"></textarea></div>
+      </div>
+      <div class="a-card">
+        <h3>SEO</h3>
+        <div class="field"><label for="p-seo-title">SEO title</label><input class="input" id="p-seo-title" name="seoTitle" maxlength="70"><span class="hint">Defaults to the post title. Up to 70 characters.</span></div>
+        <div class="field"><label for="p-seo-desc">SEO description</label><textarea class="textarea" id="p-seo-desc" name="seoDesc" maxlength="160" style="min-height:70px"></textarea><span class="hint" id="seo-count">0/160</span></div>
+        <div class="preview-box"><div style="color:#1a0dab;font-size:16px;font-weight:500" id="seo-preview-title"></div><div style="color:#006621;font-size:12px">amanitech.in › blog › …</div><div id="seo-preview-desc" style="font-size:13px"></div></div>
+      </div>
+    </div>
+    <div class="stack a-sticky" style="gap:16px">
+      <div class="a-card">
+        <h3>Publishing</h3>
+        <div class="field"><label for="p-cat">Category</label><select class="select" id="p-cat" name="category"><option>Career Advice</option><option>Insights</option><option>Company News</option></select></div>
+        <div class="field"><label for="p-author">Author</label><input class="input" id="p-author" name="author" value="Amani Tech Editorial"></div>
+        <div class="field"><label for="p-date">Publish date</label><input class="input" id="p-date" name="date" type="date" value="2026-09-16"></div>
+        <div class="field"><span class="label">Tags</span><div class="tag-input"><input type="text" placeholder="Add tag, press Enter" aria-label="Add tag"></div></div>
+        <div class="field"><span class="label">Featured image</span><div class="upload" data-kind="image" data-max="3"><input type="file" accept=".jpg,.jpeg,.png,.webp" aria-label="Upload featured image"><span data-icon="upload"></span><strong>Upload image</strong><span class="hint">JPG, PNG or WEBP · 1600×900 recommended</span></div><div class="progress"><span></span></div><div class="upload-file"><span data-icon="file"></span><span class="name"></span><button type="button" class="remove" aria-label="Remove"><span data-icon="x" data-icon-class="icon-sm"></span></button></div><span class="error-msg"></span></div>
+        <div class="field"><label class="switch"><input type="checkbox" name="featured"><span class="track"></span>Feature this post</label></div>
+        <div class="stack" style="gap:8px;margin-top:8px"><button type="button" class="btn btn-primary btn-block" id="publish"><span class="spinner"></span>Publish</button><button type="button" class="btn btn-outline btn-block" id="save-draft"><span class="spinner"></span>Save draft</button><button type="button" class="btn btn-ghost btn-block" id="preview"><span data-icon="eye" data-icon-class="icon-sm"></span>Preview</button></div>
+      </div>
+    </div>
+  </form>
+</div></div></div>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>

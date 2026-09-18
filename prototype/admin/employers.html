@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Employer Enquiries — Amani Tech Admin</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="employers" data-title="Employer Enquiries">
+<div class="admin-shell"><div class="a-main"><div class="a-content">
+  <div class="a-page-head"><div><h2>Employer enquiries</h2><p>Staffing requirements submitted through the website. Track each lead from New to Converted.</p></div><div class="actions"><button class="btn btn-outline btn-sm" type="button" id="export"><span data-icon="download" data-icon-class="icon-sm"></span>Export CSV</button></div></div>
+  <div class="a-toolbar">
+    <div class="search"><span data-icon="search" data-icon-class="icon-sm"></span><input id="q" type="search" placeholder="Search company, contact, email, position or location" aria-label="Search enquiries"></div>
+    <select class="select" id="f-status" aria-label="Filter by status"><option value="">All statuses</option><option value="NEW">New</option><option value="CONTACTED">Contacted</option><option value="IN_DISCUSSION">In discussion</option><option value="CONVERTED">Converted</option><option value="CLOSED">Closed</option></select>
+  </div>
+  <div class="a-table-wrap">
+    <table class="a-table"><thead><tr><th>Company</th><th>Requirement</th><th>Location</th><th>Timeline</th><th>Received</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+    <div class="a-table-foot"><span id="count"></span></div>
+  </div>
+  <div class="drawer" id="lead-drawer" aria-hidden="true"><div class="backdrop" data-close></div><div class="panel" role="dialog" aria-label="Enquiry details"><div class="panel-head"><div><h2></h2><p></p></div><button type="button" class="close-btn" aria-label="Close" data-close><span data-icon="x"></span></button></div><div class="panel-body"></div><div class="panel-foot"><button type="button" class="btn btn-ghost btn-sm" data-close>Close</button></div></div></div>
+</div></div></div>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>

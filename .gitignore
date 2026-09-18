@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+web/.next/
+web/out/
+web/next-env.d.ts
+web/*.tsbuildinfo
+
+# Environment — never commit secrets (.env.example is the template and IS committed)
+.env
+.env.*
+!.env.example
+
+# Supabase CLI local state
+web/supabase/.branches/
+web/supabase/.temp/
+
+# Logs, caches, OS and editor files
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

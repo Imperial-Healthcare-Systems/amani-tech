@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Categories — Amani Tech Admin</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="categories" data-title="Categories">
+<div class="admin-shell"><div class="a-main"><div class="a-content">
+  <div class="a-page-head"><div><h2>Job categories</h2><p>Categories and subcategories drive the job filters, category pages and application forms. Order here is the order shown on the site.</p></div></div>
+  <div class="a-grid-2" style="grid-template-columns:1fr;max-width:900px">
+    <form class="a-card" id="add-cat"><h3>Add a category</h3><div class="row" style="gap:8px;flex-wrap:nowrap"><input class="input" id="new-cat" placeholder="Category name, e.g. Healthcare" aria-label="New category name"><button type="submit" class="btn btn-primary"><span data-icon="plus" data-icon-class="icon-sm"></span>Add</button></div></form>
+    <div class="a-card"><h3>Categories <span class="small muted" style="font-weight:400">Use the arrows to reorder · toggle to activate/deactivate</span></h3><ul class="sortable" id="cat-list"></ul></div>
+  </div>
+</div></div></div>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>

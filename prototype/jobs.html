@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Jobs — IT &amp; Non-IT Openings | Amani Tech</title>
+<meta name="description" content="Search open positions by keyword, category and location. Apply in minutes.">
+<link rel="canonical" href="https://www.amanitech.in/jobs">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="jobs">
+<main id="main">
+  <section class="jobs-hero">
+    <div class="container">
+      <h1>Find your next role</h1>
+      <p class="lead">Search open positions across IT and non-IT categories.</p>
+      <form class="search-bar" id="jobs-search" role="search" aria-label="Job search">
+        <label class="sfield"><span data-icon="search"></span><span class="sr-only">Keyword</span><input id="q" type="text" placeholder="Job title, skill or company" autocomplete="off"></label>
+        <label class="sfield"><span data-icon="pin"></span><span class="sr-only">Location</span><input id="loc" type="text" placeholder="City or 'Remote'" autocomplete="off"></label>
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="container jobs-layout">
+    <aside class="filter-rail" id="filter-rail" aria-label="Filters">
+      <div class="filter-panel">
+        <div class="fp-head"><h2>Filters</h2><div class="row" style="gap:8px"><button type="button" class="btn btn-ghost btn-sm" data-clear>Clear all</button><button type="button" class="close-btn" aria-label="Close filters" data-close-rail><span data-icon="x"></span></button></div></div>
+        <div class="fp-body" id="filters"></div>
+        <div class="fp-foot"><button type="button" class="btn btn-primary" data-close-rail>Show results</button></div>
+      </div>
+    </aside>
+
+    <section aria-label="Job results">
+      <div class="mobile-tools">
+        <button type="button" class="btn btn-outline" id="filter-toggle"><span data-icon="sliders"></span>Filters</button>
+      </div>
+      <div class="results-head">
+        <h2 id="results-count" aria-live="polite">Searching…</h2>
+        <div class="sort"><label for="sort">Sort by</label><select class="select" id="sort"><option value="relevance">Relevance</option><option value="newest">Newest</option><option value="salary">Salary: high to low</option></select></div>
+      </div>
+      <div class="applied-chips" id="applied-chips"></div>
+      <div class="job-grid list" id="results"></div>
+      <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+    </section>
+  </div>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="cta-band">
+        <span class="eyebrow">Not seeing the right role?</span>
+        <h2>Register once. Get found for roles you haven't seen yet.</h2>
+        <p>Our recruiters search registered profiles first when a new requirement comes in.</p>
+        <div class="row"><a class="btn btn-primary btn-lg" href="register.html">Register as a candidate</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

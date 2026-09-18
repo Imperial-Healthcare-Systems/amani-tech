@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Details | Amani Tech</title>
+<meta name="description" content="View the role, requirements and benefits, then apply in under two minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="jobs" data-module="job-detail">
+<main id="main">
+  <section class="job-head"><div class="container" id="job-head"></div></section>
+
+  <div class="container job-layout">
+    <article class="prose" id="job-body"></article>
+    <aside class="stack" style="gap:16px">
+      <div class="side-card apply-card">
+        <h3>Interested in this role?</h3>
+        <p>Apply in under two minutes. A recruiter will review your profile and contact you if it is a fit.</p>
+        <button type="button" class="btn btn-primary btn-block" data-apply>Apply Now</button>
+        <p class="small mt-16" style="margin-bottom:0;color:rgba(255,255,255,.6)">No fees for job seekers · Your resume is only shared for roles you apply to.</p>
+      </div>
+      <div class="side-card"><h3>Job overview</h3><dl class="overview" id="job-overview"></dl></div>
+      <div class="side-card"><h3>Similar roles</h3><div class="similar" id="similar"></div></div>
+    </aside>
+  </div>
+
+  <div class="sticky-apply" id="sticky-apply"><div class="info"><strong id="sticky-title"></strong><small id="sticky-co"></small></div><button type="button" class="btn btn-primary" data-apply>Apply Now</button></div>
+
+  <!-- APPLY MODAL -->
+  <div class="modal" id="apply-modal" aria-hidden="true" role="dialog" aria-labelledby="apply-title">
+    <div class="backdrop" data-close></div>
+    <div class="dialog">
+      <div class="dialog-head">
+        <div><h2 id="apply-title">Apply for <span id="apply-job-title"></span></h2><p id="apply-job-co"></p></div>
+        <button type="button" class="close-btn" aria-label="Close" data-close><span data-icon="x"></span></button>
+      </div>
+      <div class="dialog-body">
+        <form id="apply-form" novalidate data-success="#apply-success" data-error="We couldn't submit your application right now. Please check your connection and try again.">
+          <div class="form-status" role="alert"></div>
+          <div class="row between small muted" style="margin-bottom:8px"><span data-step-label>Step 1 of 3</span><span>All fields required unless marked optional</span></div>
+          <div class="stepper" aria-hidden="true"><span></span><span></span><span></span></div>
+
+          <div class="form-step is-active">
+            <h3 style="font-size:var(--fs-lg)">Personal details</h3>
+            <div class="form-grid">
+              <div class="field"><label class="req" for="a-name">Full name</label><input class="input" id="a-name" name="name" type="text" required autocomplete="name"><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-email">Email</label><input class="input" id="a-email" name="email" type="email" required autocomplete="email"><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-phone">Phone</label><input class="input" id="a-phone" name="phone" type="tel" required autocomplete="tel" placeholder="+91"><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-loc">Current location</label><input class="input" id="a-loc" name="location" type="text" required placeholder="City"><span class="error-msg"></span></div>
+            </div>
+            <div class="form-nav"><span></span><button type="button" class="btn btn-secondary" data-next>Continue</button></div>
+          </div>
+
+          <div class="form-step">
+            <h3 style="font-size:var(--fs-lg)">Professional details</h3>
+            <div class="field"><span class="label req">Profile type</span><div class="radio-group"><label class="radio-pill"><input type="radio" name="profile" value="IT" checked><span>IT</span></label><label class="radio-pill"><input type="radio" name="profile" value="Non-IT"><span>Non-IT</span></label></div></div>
+            <div class="form-grid">
+              <div class="field"><label class="req" for="a-cat">Category</label><select class="select" id="a-cat" name="category" required></select><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-sub">Subcategory</label><select class="select" id="a-sub" name="subcategory" required></select><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-exp">Total experience</label><select class="select" id="a-exp" name="experience" required><option value="">Select</option><option>Fresher</option><option>1–3 years</option><option>3–5 years</option><option>5–8 years</option><option>8–12 years</option><option>12+ years</option></select><span class="error-msg"></span></div>
+              <div class="field"><label class="req" for="a-title">Current or last job title</label><input class="input" id="a-title" name="title" type="text" required><span class="error-msg"></span></div>
+            </div>
+            <div class="form-nav"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-secondary" data-next>Continue</button></div>
+          </div>
+
+          <div class="form-step">
+            <h3 style="font-size:var(--fs-lg)">Resume</h3>
+            <div class="field">
+              <span class="label req">Upload resume</span>
+              <div class="upload" data-kind="resume" data-max="5"><input type="file" name="resume" accept=".pdf,.doc,.docx" required aria-label="Upload resume"><span data-icon="upload"></span><strong>Click to upload</strong> or drag and drop<span class="hint">PDF, DOC or DOCX · up to 5 MB</span></div>
+              <div class="progress"><span></span></div>
+              <div class="upload-file"><span data-icon="file"></span><span class="name"></span><button type="button" class="remove" aria-label="Remove file"><span data-icon="x" data-icon-class="icon-sm"></span></button></div>
+              <span class="error-msg"></span>
+            </div>
+            <div class="field"><label class="check"><input type="checkbox" name="consent" required><span>I agree to the <a href="privacy.html" target="_blank">Privacy Policy</a> and consent to Amani Tech contacting me about this and similar roles.</span></label><span class="error-msg"></span></div>
+            <div class="form-nav"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="submit" class="btn btn-primary"><span class="spinner"></span>Submit Application</button></div>
+          </div>
+        </form>
+        <div class="success-panel" id="apply-success" hidden>
+          <div class="success-icon"><span data-icon="check"></span></div>
+          <h3>Application received</h3>
+          <p>We've sent a confirmation to <strong data-email></strong>. A recruiter will review your application and get in touch if the role is a fit.</p>
+          <div class="row" style="justify-content:center"><a class="btn btn-outline" href="jobs.html">Browse more jobs</a><a class="btn btn-primary" href="candidate-dashboard.html">Go to my dashboard</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

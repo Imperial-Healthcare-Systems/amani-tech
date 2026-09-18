@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Job — Amani Tech Admin</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="job-form" data-title="Create Job">
+<div class="admin-shell"><div class="a-main"><div class="a-content">
+  <div class="a-page-head"><div><h2 id="form-title">New job</h2><p id="form-sub">Fill in the details, save as draft, then publish when ready.</p></div><div class="actions"><span class="unsaved"><span data-icon="alert" data-icon-class="icon-sm"></span>Unsaved changes</span><span id="status-badge"></span></div></div>
+  <form id="job-form" novalidate class="a-form-layout">
+    <div class="stack" style="gap:16px">
+      <div class="a-card">
+        <h3>Basics</h3>
+        <div class="form-grid">
+          <div class="field span-2"><label class="req" for="j-title">Job title</label><input class="input" id="j-title" name="title" required placeholder="e.g. Senior Java Developer"><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-company">Company name</label><input class="input" id="j-company" name="company" required><span class="hint">Shown publicly. Use a descriptor (e.g. “Finserv Product Company”) if the client is confidential.</span><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-loc">Location</label><input class="input" id="j-loc" name="location" required placeholder="City or Remote"><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-cat">Category</label><select class="select" id="j-cat" name="category" required></select><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-sub">Subcategory</label><select class="select" id="j-sub" name="subcategory" required></select><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-mode">Work mode</label><select class="select" id="j-mode" name="workMode" required><option>On-site</option><option>Hybrid</option><option>Remote</option></select><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-type">Employment type</label><select class="select" id="j-type" name="type" required><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select><span class="error-msg"></span></div>
+        </div>
+      </div>
+      <div class="a-card">
+        <h3>Experience &amp; compensation</h3>
+        <div class="form-grid">
+          <div class="field"><label class="req" for="j-exp-min">Experience (years) — min</label><input class="input" id="j-exp-min" name="expMin" type="number" min="0" required value="0"><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="j-exp-max">Experience (years) — max</label><input class="input" id="j-exp-max" name="expMax" type="number" min="0" required value="2"><span class="error-msg"></span></div>
+          <div class="field"><label for="j-sal-min">Salary / CTC — min (LPA)</label><input class="input" id="j-sal-min" name="salaryMin" type="number" min="0" step="0.5"><span class="hint">Leave blank to show “Not disclosed”.</span></div>
+          <div class="field"><label for="j-sal-max">Salary / CTC — max (LPA)</label><input class="input" id="j-sal-max" name="salaryMax" type="number" min="0" step="0.5"></div>
+        </div>
+      </div>
+      <div class="a-card">
+        <h3>Description</h3>
+        <div class="field"><label class="req" for="j-desc">Job description</label><textarea class="textarea" id="j-desc" name="description" required></textarea><span class="error-msg"></span></div>
+        <div class="field"><label for="j-resp">Responsibilities</label><textarea class="textarea" id="j-resp" name="responsibilities" placeholder="One per line"></textarea><span class="hint">One item per line — shown as a bulleted list.</span></div>
+        <div class="field"><label for="j-req">Requirements</label><textarea class="textarea" id="j-req" name="requirements" placeholder="One per line"></textarea></div>
+        <div class="field"><label for="j-qual">Qualification</label><input class="input" id="j-qual" name="qualification" placeholder="e.g. B.E. / B.Tech in Computer Science"></div>
+        <div class="field"><label for="j-ben">Benefits</label><textarea class="textarea" id="j-ben" name="benefits" placeholder="One per line" style="min-height:80px"></textarea></div>
+        <div class="field"><span class="label req">Required skills</span><div class="tag-input"><input type="text" placeholder="Type a skill and press Enter" aria-label="Add skill"></div><span class="hint">Used for search and shown on the job card (first 4).</span><span class="error-msg"></span></div>
+      </div>
+    </div>
+    <div class="stack a-sticky" style="gap:16px">
+      <div class="a-card">
+        <h3>Publishing</h3>
+        <div class="field"><label class="req" for="j-deadline">Application deadline</label><input class="input" id="j-deadline" name="deadline" type="date" required value="2026-10-16"><span class="error-msg"></span></div>
+        <div class="field"><label for="j-source">Job source</label><select class="select" id="j-source" name="source"><option>Direct client</option><option>Staffing partner</option><option>Campus partner</option><option>Internal</option></select></div>
+        <div class="field"><label class="switch"><input type="checkbox" name="featured"><span class="track"></span>Feature on homepage</label></div>
+        <div class="stack" style="gap:8px;margin-top:8px">
+          <button type="button" class="btn btn-primary btn-block" id="publish"><span class="spinner"></span>Publish job</button>
+          <button type="button" class="btn btn-outline btn-block" id="save-draft"><span class="spinner"></span>Save as draft</button>
+          <button type="button" class="btn btn-ghost btn-block" id="preview"><span data-icon="eye" data-icon-class="icon-sm"></span>Preview</button>
+        </div>
+      </div>
+      <div class="preview-box"><strong style="color:var(--a-text)">Before publishing</strong><ul style="margin:8px 0 0;padding-left:18px"><li>Company name is client-approved</li><li>Salary range is agreed or left blank</li><li>Deadline is realistic</li></ul></div>
+    </div>
+  </form>
+</div></div></div>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>

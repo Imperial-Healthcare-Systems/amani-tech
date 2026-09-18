@@ -1,0 +1,19 @@
+# Applies if web/ is used as its own repository (e.g. Vercel import). Mirrors the root .gitignore.
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+.env
+.env.*
+!.env.example
+
+supabase/.branches/
+supabase/.temp/
+
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

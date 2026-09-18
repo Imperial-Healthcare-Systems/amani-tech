@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Opening — Amani Tech Admin</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="career-editor" data-title="New Opening">
+<div class="admin-shell"><div class="a-main"><div class="a-content">
+  <div class="a-page-head"><div><h2>Career opening</h2><p>A role on the Amani Tech team.</p></div><div class="actions"><span class="unsaved"><span data-icon="alert" data-icon-class="icon-sm"></span>Unsaved changes</span><span id="status-badge"></span></div></div>
+  <form id="career-form" novalidate class="a-form-layout">
+    <div class="stack" style="gap:16px">
+      <div class="a-card">
+        <div class="form-grid">
+          <div class="field span-2"><label class="req" for="c-pos">Position</label><input class="input" id="c-pos" name="position" required><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="c-dept">Department</label><select class="select" id="c-dept" name="department" required><option>Recruitment</option><option>Client Services</option><option>Technology</option><option>Operations</option><option>Finance</option></select><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="c-loc">Location</label><input class="input" id="c-loc" name="location" required><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="c-mode">Work mode</label><select class="select" id="c-mode" name="workMode" required><option>On-site</option><option>Hybrid</option><option>Remote</option></select><span class="error-msg"></span></div>
+          <div class="field"><label class="req" for="c-exp">Experience</label><input class="input" id="c-exp" name="experience" required placeholder="e.g. 2–4 years"><span class="error-msg"></span></div>
+        </div>
+        <div class="field"><label class="req" for="c-desc">Description</label><textarea class="textarea" id="c-desc" name="description" required></textarea><span class="error-msg"></span></div>
+        <div class="field"><label for="c-resp">Responsibilities</label><textarea class="textarea" id="c-resp" name="responsibilities" placeholder="One per line"></textarea></div>
+        <div class="field"><label for="c-req">Requirements</label><textarea class="textarea" id="c-req" name="requirements" placeholder="One per line"></textarea></div>
+        <div class="field"><label for="c-ben">Benefits</label><textarea class="textarea" id="c-ben" name="benefits" placeholder="One per line" style="min-height:80px"></textarea></div>
+        <div class="field"><label class="req" for="c-how">Application instructions</label><textarea class="textarea" id="c-how" name="howToApply" required style="min-height:80px" placeholder="e.g. Email your resume to careers@amanitech.in with the subject line…"></textarea><span class="error-msg"></span></div>
+      </div>
+    </div>
+    <div class="stack a-sticky" style="gap:16px">
+      <div class="a-card"><h3>Publishing</h3><div class="stack" style="gap:8px"><button type="button" class="btn btn-primary btn-block" id="publish"><span class="spinner"></span>Publish</button><button type="button" class="btn btn-outline btn-block" id="save-draft"><span class="spinner"></span>Save draft</button></div></div>
+    </div>
+  </form>
+</div></div></div>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>

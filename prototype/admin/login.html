@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Login — Amani Tech</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin" data-admin data-page="login">
+<main class="a-login">
+  <div class="form-card">
+    <div class="brand"><svg class="logo-mark" viewBox="0 0 36 36" aria-hidden="true" width="34" height="34"><rect width="36" height="36" rx="9" fill="#0B2545"/><path d="M10 26 18 9l8 17" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M13.5 20h9" stroke="#0E9F6E" stroke-width="3" stroke-linecap="round"/></svg>Amani Tech Admin</div>
+    <form id="admin-login" novalidate data-error="Incorrect email or password. After 5 failed attempts your account is locked for 15 minutes.">
+      <div class="form-status" role="alert"></div>
+      <div class="field"><label class="req" for="ad-email">Email</label><input class="input" id="ad-email" type="email" required autocomplete="username"><span class="error-msg"></span></div>
+      <div class="field"><label class="req" for="ad-pass">Password</label><input class="input" id="ad-pass" type="password" required autocomplete="current-password"><span class="error-msg"></span></div>
+      <button type="submit" class="btn btn-secondary btn-block btn-lg"><span class="spinner"></span>Sign in</button>
+    </form>
+    <p class="small muted center mt-16" style="margin-bottom:0"><span data-icon="lock" data-icon-class="icon-sm" style="display:inline-flex;vertical-align:middle"></span> Restricted to Amani Tech staff. <a href="../index.html">Back to website</a></p>
+  </div>
+</main>
+<script src="../assets/js/data.js"></script><script src="../assets/js/app.js"></script><script src="../assets/js/admin.js"></script>
+</body>
+</html>
