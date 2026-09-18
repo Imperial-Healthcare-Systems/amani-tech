@@ -1,21 +1,22 @@
 -- Amani Tech — Supabase schema (run in SQL editor or `supabase db push`)
 -- Tables · enums · triggers · RLS · storage buckets
+-- Safe to re-run: every statement skips or replaces what already exists.
 
 create extension if not exists pgcrypto;
 
 -- ---------- Enums ----------
-create type job_status as enum ('DRAFT','PUBLISHED','PAUSED','CLOSED','ARCHIVED');
-create type application_status as enum ('SUBMITTED','REVIEWING','SHORTLISTED','REJECTED','CLOSED');
-create type enquiry_status as enum ('NEW','CONTACTED','IN_DISCUSSION','CONVERTED','CLOSED');
-create type review_status as enum ('PENDING','APPROVED','REJECTED');
-create type content_status as enum ('DRAFT','PUBLISHED','UNPUBLISHED','CLOSED');
+do $$ begin create type job_status as enum ('DRAFT','PUBLISHED','PAUSED','CLOSED','ARCHIVED'); exception when duplicate_object then null; end $$;
+do $$ begin create type application_status as enum ('SUBMITTED','REVIEWING','SHORTLISTED','REJECTED','CLOSED'); exception when duplicate_object then null; end $$;
+do $$ begin create type enquiry_status as enum ('NEW','CONTACTED','IN_DISCUSSION','CONVERTED','CLOSED'); exception when duplicate_object then null; end $$;
+do $$ begin create type review_status as enum ('PENDING','APPROVED','REJECTED'); exception when duplicate_object then null; end $$;
+do $$ begin create type content_status as enum ('DRAFT','PUBLISHED','UNPUBLISHED','CLOSED'); exception when duplicate_object then null; end $$;
 
 -- ---------- Helpers ----------
 create or replace function set_updated_at() returns trigger language plpgsql as $$
 begin new.updated_at = now(); return new; end $$;
 
 -- ---------- Profiles (mirrors auth.users; role drives admin access) ----------
-create table profiles (
+create table if not exists profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text not null,
   name text,
@@ -31,6 +32,7 @@ begin
   on conflict (id) do nothing;
   return new;
 end $$;
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
 
@@ -40,7 +42,7 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 -- ---------- Taxonomy ----------
-create table categories (
+create table if not exists categories (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   slug text not null unique,
@@ -48,7 +50,7 @@ create table categories (
   is_active boolean not null default true,
   created_at timestamptz not null default now()
 );
-create table subcategories (
+create table if not exists subcategories (
   id uuid primary key default gen_random_uuid(),
   category_id uuid not null references categories(id) on delete cascade,
   name text not null,
@@ -59,7 +61,7 @@ create table subcategories (
 );
 
 -- ---------- Jobs ----------
-create table jobs (
+create table if not exists jobs (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
   title text not null,
@@ -88,13 +90,16 @@ create table jobs (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
-create index jobs_status_published_idx on jobs (status, published_at desc);
-create index jobs_category_idx on jobs (category_id, subcategory_id);
-create index jobs_search_idx on jobs using gin (to_tsvector('english', title || ' ' || company_name || ' ' || location || ' ' || array_to_string(skills, ' ')));
+create index if not exists jobs_status_published_idx on jobs (status, published_at desc);
+create index if not exists jobs_category_idx on jobs (category_id, subcategory_id);
+-- array_to_string() is STABLE, so it cannot appear in an index expression; skills get their own GIN index instead.
+create index if not exists jobs_search_idx on jobs using gin (to_tsvector('english', title || ' ' || company_name || ' ' || location));
+create index if not exists jobs_skills_idx on jobs using gin (skills);
+drop trigger if exists jobs_updated_at on jobs;
 create trigger jobs_updated_at before update on jobs for each row execute function set_updated_at();
 
 -- ---------- Candidates & applications ----------
-create table candidates (
+create table if not exists candidates (
   id uuid primary key default gen_random_uuid(),
   user_id uuid unique references auth.users(id) on delete set null,
   name text not null,
@@ -111,9 +116,10 @@ create table candidates (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists candidates_updated_at on candidates;
 create trigger candidates_updated_at before update on candidates for each row execute function set_updated_at();
 
-create table applications (
+create table if not exists applications (
   id uuid primary key default gen_random_uuid(),
   job_id uuid not null references jobs(id) on delete cascade,
   candidate_id uuid not null references candidates(id) on delete cascade,
@@ -125,12 +131,13 @@ create table applications (
   updated_at timestamptz not null default now(),
   unique (job_id, candidate_id)
 );
-create index applications_job_idx on applications (job_id);
-create index applications_candidate_idx on applications (candidate_id);
+create index if not exists applications_job_idx on applications (job_id);
+create index if not exists applications_candidate_idx on applications (candidate_id);
+drop trigger if exists applications_updated_at on applications;
 create trigger applications_updated_at before update on applications for each row execute function set_updated_at();
 
 -- ---------- Leads ----------
-create table employer_enquiries (
+create table if not exists employer_enquiries (
   id uuid primary key default gen_random_uuid(),
   reference text not null unique default ('REQ-' || to_char(now(), 'YYYY') || '-' || lpad(floor(random() * 10000)::text, 4, '0')),
   full_name text not null,
@@ -153,9 +160,10 @@ create table employer_enquiries (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists employer_enquiries_updated_at on employer_enquiries;
 create trigger employer_enquiries_updated_at before update on employer_enquiries for each row execute function set_updated_at();
 
-create table vendor_enquiries (
+create table if not exists vendor_enquiries (
   id uuid primary key default gen_random_uuid(),
   company text not null,
   contact_person text not null,
@@ -173,9 +181,10 @@ create table vendor_enquiries (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists vendor_enquiries_updated_at on vendor_enquiries;
 create trigger vendor_enquiries_updated_at before update on vendor_enquiries for each row execute function set_updated_at();
 
-create table contact_messages (
+create table if not exists contact_messages (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null,
@@ -187,7 +196,7 @@ create table contact_messages (
 );
 
 -- ---------- Testimonials ----------
-create table testimonials (
+create table if not exists testimonials (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   designation text not null,
@@ -202,7 +211,7 @@ create table testimonials (
 );
 
 -- ---------- Content ----------
-create table blog_posts (
+create table if not exists blog_posts (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
   title text not null,
@@ -221,9 +230,10 @@ create table blog_posts (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists blog_posts_updated_at on blog_posts;
 create trigger blog_posts_updated_at before update on blog_posts for each row execute function set_updated_at();
 
-create table career_openings (
+create table if not exists career_openings (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
   position text not null,
@@ -241,9 +251,10 @@ create table career_openings (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists career_openings_updated_at on career_openings;
 create trigger career_openings_updated_at before update on career_openings for each row execute function set_updated_at();
 
-create table services (
+create table if not exists services (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
   title text not null,
@@ -257,7 +268,7 @@ create table services (
   is_active boolean not null default true
 );
 
-create table faqs (
+create table if not exists faqs (
   id uuid primary key default gen_random_uuid(),
   question text not null,
   answer text not null,
@@ -267,12 +278,13 @@ create table faqs (
 );
 
 -- Homepage sections & settings: one JSON payload per key
-create table site_content (
+create table if not exists site_content (
   key text primary key,
   payload jsonb not null default '{}',
   is_visible boolean not null default true,
   updated_at timestamptz not null default now()
 );
+drop trigger if exists site_content_updated_at on site_content;
 create trigger site_content_updated_at before update on site_content for each row execute function set_updated_at();
 
 -- ---------- Row-level security ----------
@@ -293,40 +305,68 @@ alter table faqs enable row level security;
 alter table site_content enable row level security;
 
 -- Own profile; admins see all
+drop policy if exists "profiles: own or admin" on profiles;
 create policy "profiles: own or admin" on profiles for select using (id = auth.uid() or is_admin());
+drop policy if exists "profiles: admin update" on profiles;
 create policy "profiles: admin update" on profiles for update using (is_admin());
 
 -- Public read of published/active content
+drop policy if exists "categories: public read" on categories;
 create policy "categories: public read" on categories for select using (is_active or is_admin());
+drop policy if exists "subcategories: public read" on subcategories;
 create policy "subcategories: public read" on subcategories for select using (is_active or is_admin());
+drop policy if exists "jobs: public read published" on jobs;
 create policy "jobs: public read published" on jobs for select using (status = 'PUBLISHED' or is_admin());
+drop policy if exists "testimonials: public read approved" on testimonials;
 create policy "testimonials: public read approved" on testimonials for select using (status = 'APPROVED' or is_admin());
+drop policy if exists "blog: public read published" on blog_posts;
 create policy "blog: public read published" on blog_posts for select using (status = 'PUBLISHED' or is_admin());
+drop policy if exists "careers: public read published" on career_openings;
 create policy "careers: public read published" on career_openings for select using (status = 'PUBLISHED' or is_admin());
+drop policy if exists "services: public read" on services;
 create policy "services: public read" on services for select using (is_active or is_admin());
+drop policy if exists "faqs: public read" on faqs;
 create policy "faqs: public read" on faqs for select using (is_active or is_admin());
+drop policy if exists "site_content: public read" on site_content;
 create policy "site_content: public read" on site_content for select using (true);
 
 -- Candidates see and edit their own record and applications
+drop policy if exists "candidates: own read" on candidates;
 create policy "candidates: own read" on candidates for select using (user_id = auth.uid() or is_admin());
+drop policy if exists "candidates: own update" on candidates;
 create policy "candidates: own update" on candidates for update using (user_id = auth.uid() or is_admin());
+drop policy if exists "applications: own read" on applications;
 create policy "applications: own read" on applications for select
   using (is_admin() or exists (select 1 from candidates c where c.id = candidate_id and c.user_id = auth.uid()));
 
 -- Admin full access (public form inserts go through the server with the service role)
+drop policy if exists "categories: admin" on categories;
 create policy "categories: admin" on categories for all using (is_admin()) with check (is_admin());
+drop policy if exists "subcategories: admin" on subcategories;
 create policy "subcategories: admin" on subcategories for all using (is_admin()) with check (is_admin());
+drop policy if exists "jobs: admin" on jobs;
 create policy "jobs: admin" on jobs for all using (is_admin()) with check (is_admin());
+drop policy if exists "candidates: admin" on candidates;
 create policy "candidates: admin" on candidates for all using (is_admin()) with check (is_admin());
+drop policy if exists "applications: admin" on applications;
 create policy "applications: admin" on applications for all using (is_admin()) with check (is_admin());
+drop policy if exists "employer_enquiries: admin" on employer_enquiries;
 create policy "employer_enquiries: admin" on employer_enquiries for all using (is_admin()) with check (is_admin());
+drop policy if exists "vendor_enquiries: admin" on vendor_enquiries;
 create policy "vendor_enquiries: admin" on vendor_enquiries for all using (is_admin()) with check (is_admin());
+drop policy if exists "contact_messages: admin" on contact_messages;
 create policy "contact_messages: admin" on contact_messages for all using (is_admin()) with check (is_admin());
+drop policy if exists "testimonials: admin" on testimonials;
 create policy "testimonials: admin" on testimonials for all using (is_admin()) with check (is_admin());
+drop policy if exists "blog: admin" on blog_posts;
 create policy "blog: admin" on blog_posts for all using (is_admin()) with check (is_admin());
+drop policy if exists "careers: admin" on career_openings;
 create policy "careers: admin" on career_openings for all using (is_admin()) with check (is_admin());
+drop policy if exists "services: admin" on services;
 create policy "services: admin" on services for all using (is_admin()) with check (is_admin());
+drop policy if exists "faqs: admin" on faqs;
 create policy "faqs: admin" on faqs for all using (is_admin()) with check (is_admin());
+drop policy if exists "site_content: admin" on site_content;
 create policy "site_content: admin" on site_content for all using (is_admin()) with check (is_admin());
 
 -- ---------- Storage ----------
@@ -336,10 +376,15 @@ insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
   ('media',     'media',     true,  3145728, array['image/jpeg','image/png','image/webp','image/svg+xml'])
 on conflict (id) do nothing;
 
+drop policy if exists "media: public read" on storage.objects;
 create policy "media: public read" on storage.objects for select using (bucket_id = 'media');
-create policy "media: admin write" on storage.objects for insert with check (bucket_id = 'media' and is_admin());
-create policy "media: admin delete" on storage.objects for delete using (bucket_id = 'media' and is_admin());
-create policy "private files: admin read" on storage.objects for select using (bucket_id in ('resumes','documents') and is_admin());
+drop policy if exists "media: admin write" on storage.objects;
+create policy "media: admin write" on storage.objects for insert with check (bucket_id = 'media' and public.is_admin());
+drop policy if exists "media: admin delete" on storage.objects;
+create policy "media: admin delete" on storage.objects for delete using (bucket_id = 'media' and public.is_admin());
+drop policy if exists "private files: admin read" on storage.objects;
+create policy "private files: admin read" on storage.objects for select using (bucket_id in ('resumes','documents') and public.is_admin());
+drop policy if exists "resumes: own read" on storage.objects;
 create policy "resumes: own read" on storage.objects for select
   using (bucket_id = 'resumes' and exists (select 1 from candidates c where c.user_id = auth.uid() and c.resume_path = name));
 

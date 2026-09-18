@@ -25,8 +25,9 @@ export function Footer({ content }: { content: FooterContent }) {
           <div><h4>Company</h4><ul><li><Link href="/about">About Amani Tech</Link></li><li><Link href="/careers">Careers</Link></li><li><Link href="/blog">Blog</Link></li><li><Link href="/write-a-review">Write a Review</Link></li><li><Link href="/contact">Contact</Link></li></ul></div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Amani Tech. All rights reserved.</span>
-          <div className="row"><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms of Use</Link><Link href="/admin/login">Admin</Link></div>
+          <span className="footer-copy">© {new Date().getFullYear()} Amani Tech. All rights reserved.</span>
+          <div className="row footer-legal"><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms of Use</Link><Link href="/admin/login">Admin</Link></div>
+          <span className="built-by">Built by <a href="https://www.imperialtechinnovations.com/" target="_blank" rel="noopener">Imperial</a></span>
         </div>
       </div>
     </footer>

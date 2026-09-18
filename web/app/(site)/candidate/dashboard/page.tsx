@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Icon } from '@/components/Icon';
 import { StatusBadge } from '@/components/cards';
-import { ProfileForm, ResumeForm } from '@/components/forms/DashboardForms';
 import { requireCandidate } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { signOut } from '@/lib/actions/public';
+import { signedUrl } from '@/lib/files';
 import { fmtDate, initials } from '@/lib/format';
 import type { Application, Candidate } from '@/lib/types';
 
@@ -19,29 +19,40 @@ export default async function Dashboard() {
   const { data: apps } = c ? await sb.from('applications').select('*, job:jobs(id,title,company_name,location,slug)').eq('candidate_id', c.id).order('applied_at', { ascending: false }) : { data: [] };
   const applications = (apps || []) as Application[];
   const name = c?.name || user.user_metadata?.name || user.email || 'Candidate';
+  const photo = c?.photo_path ? await signedUrl('photos', c.photo_path).catch(() => null) : null;
+  const skills = c?.skills || [];
+  const checks: [string, boolean][] = [
+    ['Basic details', !!c], ['Profile photo', !!c?.photo_path], ['Resume', !!c?.resume_path],
+    ['Skills', skills.length > 0], ['Education', (c?.education || []).length > 0], ['Summary', !!c?.summary],
+  ];
+  const pct = Math.round((checks.filter(([, ok]) => ok).length / checks.length) * 100);
 
   return (
     <>
       <section className="page-hero" style={{ padding: '32px 0' }}><div className="container row between">
-        <div className="profile-head"><div className="avatar">{initials(name)}</div><div><h1>{name}</h1><p className="muted" style={{ margin: 0 }}>{[c?.current_title, c?.location, c?.profile_type].filter(Boolean).join(' · ')}</p></div></div>
-        <form action={signOut}><button className="btn btn-ghost" type="submit"><Icon name="logout" />Sign out</button></form>
+        <div className="profile-head"><div className="avatar">{photo ? <img src={photo} alt="" /> : initials(name)}</div><div><h1>{name}</h1><p className="muted" style={{ margin: 0 }}>{[c?.current_title, c?.location, c?.profile_type].filter(Boolean).join(' · ')}</p></div></div>
+        <div className="row"><Link className="btn btn-outline btn-sm" href="/candidate/settings"><Icon name="edit" className="icon-sm" />Edit profile</Link><form action={signOut}><button className="btn btn-ghost btn-sm" type="submit"><Icon name="logout" className="icon-sm" />Sign out</button></form></div>
       </div></section>
       <section className="section" style={{ paddingTop: 32 }}><div className="container dash-grid">
         <div className="stack" style={{ gap: 16 }}>
           <div className="card">
-            <h2 style={{ fontSize: 'var(--fs-lg)' }}>Profile</h2>
-            {c ? (<>
-              <dl className="dl">
+            <div className="row between"><h2 className="card-title" style={{ margin: 0 }}>Profile</h2><span className="small muted">{pct}% complete</span></div>
+            <div className="completeness" aria-hidden="true"><span style={{ width: `${pct}%` }} /></div>
+            <ul className="checklist">{checks.map(([label, ok]) => <li key={label} className={ok ? 'done' : ''}><Icon name={ok ? 'check' : 'plus'} />{label}</li>)}</ul>
+            {c ? (
+              <dl className="dl mt-16">
                 <div><dt>Email</dt><dd>{c.email}</dd></div><div><dt>Phone</dt><dd>{c.phone}</dd></div><div><dt>Location</dt><dd>{c.location}</dd></div>
-                <div><dt>Category</dt><dd>{c.category?.name || '—'}{c.subcategory ? ` · ${c.subcategory.name}` : ''}</dd></div><div><dt>Experience</dt><dd>{c.experience || '—'}</dd></div><div><dt>Member since</dt><dd>{fmtDate(c.created_at)}</dd></div>
+                <div><dt>Category</dt><dd>{c.category?.name || '—'}{c.subcategory ? ` · ${c.subcategory.name}` : ''}</dd></div><div><dt>Experience</dt><dd>{c.experience || '—'}</dd></div>
+                {skills.length > 0 && <div><dt>Skills</dt><dd className="skill-chips">{skills.map(s => <span key={s} className="tag">{s}</span>)}</dd></div>}
+                <div><dt>Member since</dt><dd>{fmtDate(c.created_at)}</dd></div>
               </dl>
-              <details className="mt-16"><summary className="link" style={{ cursor: 'pointer' }}>Edit details</summary><ProfileForm phone={c.phone} location={c.location} title={c.current_title || ''} /></details>
-            </>) : <p className="muted small">Complete your profile by applying to a job or <Link href="/register">registering</Link>.</p>}
+            ) : <p className="small muted mt-16">Add your details so recruiters can match you to roles.</p>}
+            <Link className="btn btn-secondary btn-sm mt-16" href="/candidate/settings">{c ? 'Edit profile' : 'Complete your profile'}</Link>
           </div>
           <div className="card">
-            <h2 style={{ fontSize: 'var(--fs-lg)' }}>Resume</h2>
-            {c?.resume_name && <div className="upload-file is-visible" style={{ margin: '0 0 12px' }}><Icon name="file" /><span className="name">{c.resume_name}</span></div>}
-            <ResumeForm />
+            <h2 className="card-title">Resume</h2>
+            {c?.resume_name ? <div className="upload-file is-visible" style={{ margin: 0 }}><Icon name="file" /><span className="name">{c.resume_name}</span></div> : <p className="small muted" style={{ margin: 0 }}>No resume on file yet.</p>}
+            <Link className="link mt-16" href="/candidate/settings" style={{ display: 'inline-flex' }}>{c?.resume_name ? 'Replace resume' : 'Upload resume'} <Icon name="arrow" /></Link>
           </div>
         </div>
         <div>

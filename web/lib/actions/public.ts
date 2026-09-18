@@ -96,6 +96,10 @@ export async function signIn(_: unknown, fd: FormData): Promise<ActionResult> {
   const sb = await createClient();
   const { error } = await sb.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
   if (error) return fail("We couldn't sign you in. Check your email and password and try again.");
+  // Same login form for everyone; staff accounts go to the admin panel, candidates to their dashboard.
+  const { data: { user } } = await sb.auth.getUser();
+  const { data: profile } = user ? await sb.from('profiles').select('role').eq('id', user.id).maybeSingle() : { data: null };
+  if (profile?.role === 'ADMIN' || profile?.role === 'EDITOR') redirect('/admin');
   redirect(parsed.data.next && parsed.data.next.startsWith('/') ? parsed.data.next : '/candidate/dashboard');
 }
 
@@ -110,13 +114,62 @@ export async function forgotPassword(_: unknown, fd: FormData): Promise<ActionRe
   return { ok: true };
 }
 
-/* ---------- Candidate dashboard ---------- */
-export async function updateProfile(_: unknown, fd: FormData): Promise<ActionResult> {
-  const parsed = z.object({ phone: phoneZ, location: str(), current_title: str() }).safeParse(Object.fromEntries(fd));
+/* ---------- Candidate profile settings ---------- */
+const eduZ = z.array(z.object({ degree: str(1), institution: str(1), year: z.string().trim().max(20) })).max(10);
+const workZ = z.array(z.object({ title: str(1), company: str(1), from: z.string().trim().max(20), to: z.string().trim().max(20), description: z.string().trim().max(600) })).max(15);
+const profileSchema = z.object({
+  name: str(2), phone: phoneZ, location: str(), profile_type: z.enum(['IT', 'Non-IT']),
+  category_id: str(1, 'Select a category.'), subcategory_id: str(1, 'Select a subcategory.'), experience: str(1, 'Select your experience.'),
+  current_title: z.string().trim().max(120).optional(), notice_period: z.string().trim().max(40).optional(),
+  linkedin_url: z.string().trim().max(200).refine(v => !v || /^https?:\/\//i.test(v), 'Enter the full URL, starting with https://').optional(),
+  summary: z.string().trim().max(1200).optional(), skills: z.string().optional(), education: z.string().optional(), work_history: z.string().optional(),
+});
+const parseRows = <T,>(raw: string | undefined, schema: z.ZodType<T>): T | null => { try { const r = schema.safeParse(JSON.parse(raw || '[]')); return r.success ? r.data : null; } catch { return null; } };
+
+export async function saveCandidateProfile(_: unknown, fd: FormData): Promise<ActionResult> {
+  const parsed = profileSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return fail('Please check the highlighted fields.', zodFields(parsed.error));
+  const v = parsed.data;
+  const education = parseRows(v.education, eduZ); if (!education) return fail('Each education entry needs a degree and an institution.');
+  const work_history = parseRows(v.work_history, workZ); if (!work_history) return fail('Each work history entry needs a job title and a company.');
+  const sb = await createClient(); const { data: { user } } = await sb.auth.getUser(); if (!user?.email) return fail('Please sign in again.');
+  const row = {
+    name: v.name, phone: v.phone, location: v.location, profile_type: v.profile_type, category_id: v.category_id, subcategory_id: v.subcategory_id,
+    experience: v.experience, current_title: v.current_title || null, notice_period: v.notice_period || null, linkedin_url: v.linkedin_url || null, summary: v.summary || null,
+    skills: (v.skills || '').split('|').map(s => s.trim()).filter(Boolean).slice(0, 30), education, work_history,
+  };
+  const db = adminClient(); const addr = user.email.toLowerCase();
+  // One candidate per person: reuse the row linked to this login, or the one created earlier by applying with the same email.
+  const { data: existing } = await db.from('candidates').select('id').or(`user_id.eq.${user.id},email.eq.${addr}`).limit(1).maybeSingle();
+  const { error } = existing
+    ? await db.from('candidates').update({ ...row, user_id: user.id }).eq('id', existing.id)
+    : await db.from('candidates').insert({ ...row, email: addr, user_id: user.id });
+  if (error) return fail('Could not save your profile. Please try again.');
+  await db.from('profiles').update({ name: v.name }).eq('id', user.id);
+  return { ok: true };
+}
+
+export async function uploadPhoto(_: unknown, fd: FormData): Promise<ActionResult> {
   const sb = await createClient(); const { data: { user } } = await sb.auth.getUser(); if (!user) return fail('Please sign in again.');
-  const { error } = await sb.from('candidates').update(parsed.data).eq('user_id', user.id);
-  return error ? fail('Could not save your changes.') : { ok: true };
+  const db = adminClient();
+  const { data: cand } = await db.from('candidates').select('id, photo_path').eq('user_id', user.id).maybeSingle();
+  if (!cand) return fail('Save your profile details first, then add a photo.');
+  try {
+    const photo = await storeFile(fd.get('photo') as File | null, 'photos', 'avatars', 'image', 2);
+    if (!photo) return fail('Please choose an image.', { photo: 'Please choose a JPG, PNG or WEBP image.' });
+    const { error } = await db.from('candidates').update({ photo_path: photo.path }).eq('id', cand.id);
+    if (error) return fail('Could not save your photo.');
+    if (cand.photo_path) await db.storage.from('photos').remove([cand.photo_path]);
+    return { ok: true };
+  } catch (e) { return fail(e instanceof Error ? e.message : 'Upload failed.'); }
+}
+
+export async function removePhoto(): Promise<ActionResult> {
+  const sb = await createClient(); const { data: { user } } = await sb.auth.getUser(); if (!user) return fail('Please sign in again.');
+  const db = adminClient();
+  const { data: cand } = await db.from('candidates').select('id, photo_path').eq('user_id', user.id).maybeSingle();
+  if (cand?.photo_path) { await db.storage.from('photos').remove([cand.photo_path]); await db.from('candidates').update({ photo_path: null }).eq('id', cand.id); }
+  return { ok: true };
 }
 
 export async function replaceResume(_: unknown, fd: FormData): Promise<ActionResult> {

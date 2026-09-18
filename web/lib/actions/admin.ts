@@ -104,7 +104,7 @@ export async function addLeadNote(table: LeadTable, id: string, text: string) {
   const notes: Note[] = [{ by: admin.name || admin.email, at: new Date().toISOString(), text: text.trim() }, ...((data?.notes as Note[]) || [])];
   await sb.from(table).update({ notes }).eq('id', id); revalidatePath('/admin', 'layout');
 }
-export async function fileLink(bucket: 'resumes' | 'documents', path: string) { await requireAdmin(); return signedUrl(bucket, path); }
+export async function fileLink(bucket: 'resumes' | 'documents' | 'photos', path: string) { await requireAdmin(); return signedUrl(bucket, path); }
 
 /* ---------- Testimonials ---------- */
 export async function moderateTestimonial(id: string, patch: { status?: ReviewStatus; is_featured?: boolean; review?: string }) {

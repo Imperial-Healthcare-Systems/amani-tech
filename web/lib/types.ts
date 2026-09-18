@@ -20,10 +20,14 @@ export interface Job {
   category?: { name: string; slug: string } | null; subcategory?: { name: string; slug: string } | null;
 }
 
+export type Education = { degree: string; institution: string; year: string };
+export type WorkItem = { title: string; company: string; from: string; to: string; description: string };
 export interface Candidate {
   id: string; user_id: string | null; name: string; email: string; phone: string; location: string;
   profile_type: 'IT' | 'Non-IT'; category_id: string | null; subcategory_id: string | null;
   experience: string | null; current_title: string | null; resume_path: string | null; resume_name: string | null;
+  photo_path: string | null; summary: string | null; skills: string[]; education: Education[]; work_history: WorkItem[];
+  linkedin_url: string | null; notice_period: string | null;
   created_at: string; updated_at: string;
   category?: { name: string } | null; subcategory?: { name: string } | null;
 }
@@ -76,7 +80,7 @@ export interface Faq { id: string; question: string; answer: string; group: stri
 
 export interface SiteContent<T = Record<string, unknown>> { key: string; payload: T; is_visible: boolean }
 
-export interface HeroContent { eyebrow: string; heading: string; accent: string; subheading: string; primary_cta: string; secondary_cta: string; secondary_url: string; popular: string[]; image?: string }
+export interface HeroContent { eyebrow: string; heading: string; accent: string; subheading: string; primary_cta: string; secondary_cta: string; secondary_url: string; popular?: string[]; image?: string }
 export interface TrustBandContent { heading: string; industries: string[]; logos: { url: string; alt: string }[] }
 export interface StatisticsContent { items: { number: number; suffix: string; label: string }[] }
 export interface EmployerCtaContent { heading: string; text: string; primary_cta: string; secondary_cta: string }

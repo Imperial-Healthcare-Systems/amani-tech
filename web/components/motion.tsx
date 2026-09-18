@@ -53,8 +53,3 @@ export function Counter({ value, suffix = '' }: { value: number; suffix?: string
   return <b ref={ref}>{n.toLocaleString('en-IN')}{suffix}</b>;
 }
 
-/** Gentle float for decorative cards. */
-export function Float({ children, className, style, duration = 6, reverse = false }: { children: ReactNode; className?: string; style?: React.CSSProperties; duration?: number; reverse?: boolean }) {
-  const reduce = useReducedMotion();
-  return <motion.div className={className} style={style} animate={reduce ? undefined : { y: reverse ? [0, 8, 0] : [0, -8, 0] }} transition={{ duration, repeat: Infinity, ease: 'easeInOut' }}>{children}</motion.div>;
-}

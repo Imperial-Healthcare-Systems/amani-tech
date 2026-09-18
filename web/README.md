@@ -1,18 +1,18 @@
 # Amani Tech — Production Web App
 
-Next.js 15 (App Router, TypeScript, Server Actions) + Supabase (Postgres, Auth, Storage) + framer-motion. Visually identical to `../prototype`, now data-driven, with real auth, uploads, email and an admin panel.
+Next.js 15 (App Router, TypeScript, Server Actions) + Supabase (Postgres, Auth, Storage) + framer-motion. The production site, data-driven, with real auth, uploads, email and an admin panel.
 
 ## 1. Create the Supabase project
 
 1. [supabase.com](https://supabase.com) → New project. Note the **Project URL**, **anon key** and **service_role key** (Project Settings → API).
-2. SQL Editor → paste and run `supabase/migrations/0001_init.sql` (tables, RLS, storage buckets, `admin_metrics()`).
+2. SQL Editor → run `supabase/migrations/0001_init.sql` (tables, RLS, storage buckets, `admin_metrics()`), then `0002_candidate_profile.sql` (profile photo, skills, education, work history). Run any later numbered files in order.
 3. SQL Editor → run `supabase/seed.sql` (categories, 17 jobs, services, FAQs, posts, openings, homepage content, sample leads). Skip it for an empty production database.
 4. Authentication → URL Configuration → add `http://localhost:3000/auth/callback` (and your production domain) to **Redirect URLs**. For development you may disable "Confirm email" under Authentication → Providers → Email.
 
 ## 2. Configure and run
 
 ```bash
-cp .env.example .env.local     # fill in NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+cp .env.example .env.local     # fill in NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY
 npm install
 npm run dev                    # http://localhost:3000
 ```

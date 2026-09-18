@@ -8,7 +8,7 @@ Premium staffing-company website + job discovery marketplace + candidate applica
 |---|---|---|
 | 1. Discovery documents | Done | `docs/01-website-architecture.md`, `docs/02-content-strategy.md` |
 | 2. Product specification | Done | `docs/03-product-specification.md` |
-| 3. HTML prototype (UX / visual / content validation) | Done | `prototype/` · notes in `docs/04-prototype-review.md` |
+| 3. HTML prototype (UX / visual / content validation) | Done, superseded by `web/` (folder removed) | notes in `docs/04-prototype-review.md` |
 | 4. Production build — Next.js 15 + Supabase | **Done — ready to configure** | `web/` · setup in `web/README.md` |
 
 ## Quick start (production app)
@@ -25,7 +25,6 @@ Run `web/supabase/migrations/0001_init.sql` then `web/supabase/seed.sql` in the 
 
 ```
 docs/           Architecture, content strategy, specification, prototype review
-prototype/      Static HTML/CSS/JS prototype (36 pages) — the visual reference
 web/            Next.js app (App Router, TypeScript) + Supabase schema/seed
 ```
 

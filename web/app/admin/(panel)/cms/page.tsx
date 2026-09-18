@@ -8,7 +8,7 @@ export default async function CmsPage() {
   const get = <T,>(key: string, fallback: T) => { const row = (content || []).find(c => c.key === key); return { payload: (row?.payload as T) || fallback, is_visible: row ? row.is_visible : true }; };
   return (
     <CmsEditor
-      hero={get<HeroContent>('hero', { eyebrow: '', heading: '', accent: '', subheading: '', primary_cta: 'Search Jobs', secondary_cta: '', secondary_url: '/employers', popular: [] })}
+      hero={get<HeroContent>('hero', { eyebrow: '', heading: '', accent: '', subheading: '', primary_cta: 'Search Jobs', secondary_cta: '', secondary_url: '/register' })}
       trust={get<TrustBandContent>('trust_band', { heading: 'Trusted by employers across industries', industries: [], logos: [] })}
       stats={get<StatisticsContent>('statistics', { items: [] })}
       cta={get<EmployerCtaContent>('employer_cta', { heading: '', text: '', primary_cta: 'Request Talent', secondary_cta: 'Become a staffing partner' })}

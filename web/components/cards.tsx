@@ -1,15 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CAT_ICON, Icon, Stars } from './Icon';
+import { CatArt, hasCatArt } from './CatArt';
 import { fmtDate, initials, label, timeAgo } from '@/lib/format';
 import type { BlogPost, CareerOpening, Category, Faq, Service, Testimonial } from '@/lib/types';
 
 export function CatTile({ c, count }: { c: Category; count: number }) {
+  const icon = CAT_ICON[c.slug] || 'briefcase';
+  const subs = c.subcategories.map(s => s.name);
+  const blurb = subs.length ? subs.slice(0, 3).join(' · ') + (subs.length > 3 ? ` +${subs.length - 3} more` : '') : 'Roles across all experience levels.';
   return (
     <Link className="cat-tile" href={`/jobs/category/${c.slug}`}>
-      <div className="ico"><Icon name={CAT_ICON[c.slug] || 'briefcase'} /></div>
-      <div><strong>{c.name}</strong><small>{count} open {count === 1 ? 'role' : 'roles'} · {c.subcategories.length} specialisations</small></div>
-      <Icon name="arrow" className="icon-arrow" />
+      <div className="ico">{hasCatArt(c.slug) ? <CatArt slug={c.slug} /> : <Icon name={icon} />}</div>
+      <strong>{c.name}</strong>
+      <small>{blurb}</small>
+      <span className="more">{count} open {count === 1 ? 'role' : 'roles'} <Icon name="arrow" /></span>
+      {hasCatArt(c.slug) ? <CatArt slug={c.slug} className="cat-art wm" /> : <Icon name={icon} className="wm" />}
     </Link>
   );
 }

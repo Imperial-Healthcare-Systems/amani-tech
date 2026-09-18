@@ -4,7 +4,9 @@ import { supabaseEnv } from '@/lib/supabase/env';
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
-/** Refreshes the Supabase session cookie and gates /admin and /candidate. */
+/** Refreshes the Supabase session cookie and gates /admin and /candidate.
+ *  One login system for everyone; `profiles.role` decides where an account may go:
+ *  ADMIN / EDITOR → /admin only, CANDIDATE → /candidate only. */
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
   const env = supabaseEnv();
@@ -17,14 +19,17 @@ export async function middleware(request: NextRequest) {
   });
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
+  const isAdminArea = pathname.startsWith('/admin') && pathname !== '/admin/login';
+  const isCandidateArea = pathname.startsWith('/candidate');
 
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    if (!user) return NextResponse.redirect(new URL('/admin/login', request.url));
+  if (isAdminArea && !user) return NextResponse.redirect(new URL('/admin/login', request.url));
+  if (isCandidateArea && !user) { const url = new URL('/login', request.url); url.searchParams.set('next', pathname); return NextResponse.redirect(url); }
+
+  if (user && (isAdminArea || isCandidateArea)) {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
-    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'EDITOR')) return NextResponse.redirect(new URL('/admin/login?error=forbidden', request.url));
-  }
-  if (pathname.startsWith('/candidate') && !user) {
-    const url = new URL('/login', request.url); url.searchParams.set('next', pathname); return NextResponse.redirect(url);
+    const isStaff = profile?.role === 'ADMIN' || profile?.role === 'EDITOR';
+    if (isAdminArea && !isStaff) return NextResponse.redirect(new URL('/admin/login?error=forbidden', request.url));
+    if (isCandidateArea && isStaff) return NextResponse.redirect(new URL('/admin', request.url));
   }
   return response;
 }
