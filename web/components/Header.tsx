@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon, Logo } from './Icon';
 
-const NAV = [['/', 'Home'], ['/about', 'About'], ['/services', 'Services'], ['/jobs', 'Find Jobs'], ['/employers', 'Employers'], null, ['/careers', 'Careers'], ['/contact', 'Contact']] as const;
+const NAV = [['/about', 'About'], ['/services', 'Services'], ['/jobs', 'Find Jobs'], ['/employers', 'Employers'], null, ['/careers', 'Careers'], ['/contact', 'Contact']] as const;
 const RESOURCES = [['/blog', 'Blog', 'Insights and career advice'], ['/blog?category=insights', 'Insights', 'Hiring trends and industry views'], ['/blog?category=career-advice', 'Career Advice', 'Resumes, interviews, growth'], ['/faqs', 'FAQs', 'Answers for candidates and employers']];
 
 export function Header({ user }: { user: { name: string } | null }) {

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 const ICONS: Record<string, string> = {
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   pin: '<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
@@ -73,12 +74,12 @@ export const TAGLINE = ['Technology', 'Talent', 'Training'];
 /** Lockup: bird + lowercase wordmark + tagline. `light` is handled by .site-footer CSS; kept for call-site clarity. */
 export function Logo({ href = '/', tagline = true }: { href?: string; light?: boolean; tagline?: boolean }) {
   return (
-    <a className="logo" href={href} aria-label="Amani Tech home">
+    <Link className="logo" href={href} aria-label="Amani Tech home">
       <LogoMark />
       <span className="logo-text">
         <span className="logo-name">amani tech</span>
         {tagline && <span className="logo-tag">{TAGLINE.map((t, i) => <span key={t}>{i > 0 && <i>|</i>}{t}</span>)}</span>}
       </span>
-    </a>
+    </Link>
   );
 }
