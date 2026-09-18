@@ -1,12 +1,15 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { supabaseEnv } from '@/lib/supabase/env';
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
 /** Refreshes the Supabase session cookie and gates /admin and /candidate. */
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
-  const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const env = supabaseEnv();
+  if (!env.configured) return response; // no Supabase yet: let the public site render; auth-gated areas cannot work until env vars are set
+  const supabase = createServerClient(env.url, env.anonKey, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (all: CookieToSet[]) => { all.forEach(({ name, value }) => request.cookies.set(name, value)); response = NextResponse.next({ request }); all.forEach(({ name, value, options }) => response.cookies.set(name, value, options)); },
