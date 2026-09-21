@@ -17,7 +17,8 @@ export async function middleware(request: NextRequest) {
       setAll: (all: CookieToSet[]) => { all.forEach(({ name, value }) => request.cookies.set(name, value)); response = NextResponse.next({ request }); all.forEach(({ name, value, options }) => response.cookies.set(name, value, options)); },
     },
   });
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: claims } = await supabase.auth.getClaims(); // verified locally against cached signing keys; still refreshes the cookie when expired
+  const user = claims?.claims;
   const { pathname } = request.nextUrl;
   const isAdminArea = pathname.startsWith('/admin') && pathname !== '/admin/login';
   const isCandidateArea = pathname.startsWith('/candidate');
@@ -26,7 +27,7 @@ export async function middleware(request: NextRequest) {
   if (isCandidateArea && !user) { const url = new URL('/login', request.url); url.searchParams.set('next', pathname); return NextResponse.redirect(url); }
 
   if (user && (isAdminArea || isCandidateArea)) {
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.sub).maybeSingle();
     const isStaff = profile?.role === 'ADMIN' || profile?.role === 'EDITOR';
     if (isAdminArea && !isStaff) return NextResponse.redirect(new URL('/admin/login?error=forbidden', request.url));
     if (isCandidateArea && isStaff) return NextResponse.redirect(new URL('/admin', request.url));

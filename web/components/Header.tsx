@@ -9,14 +9,13 @@ const NAV = [['/jobs', 'Find Jobs'], ['/employers', 'Employers'], ['/services', 
 // Secondary pages: mobile drawer + footer only, to keep the desktop bar uncluttered.
 const MORE = [['/careers', 'Careers at Amani Tech'], ['/faqs', 'FAQs']] as const;
 
-export type HeaderUser = { name: string; isStaff: boolean } | null;
+export type HeaderUser = { name: string } | null;
 
 export function Header({ user }: { user: HeaderUser }) {
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const active = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
-  const account = user ? (user.isStaff ? { href: '/admin', label: 'Admin panel', icon: 'settings' } : { href: '/candidate/dashboard', label: user.name.split(' ')[0], icon: 'user' }) : null;
 
   useEffect(() => { const f = () => setScrolled(window.scrollY > 8); f(); window.addEventListener('scroll', f, { passive: true }); return () => window.removeEventListener('scroll', f); }, []);
   useEffect(() => { setOpen(false); }, [path]);
@@ -33,7 +32,7 @@ export function Header({ user }: { user: HeaderUser }) {
             <ul>{NAV.map(n => <li key={n[0]}><Link href={n[0]} className={active(n[0]) ? 'is-active' : ''}>{n[1]}</Link></li>)}</ul>
           </nav>
           <div className="header-actions">
-            {account ? <Link className="btn btn-ghost btn-sm" href={account.href}><Icon name={account.icon} className="icon-sm" />{account.label}</Link>
+            {user ? <Link className="btn btn-ghost btn-sm" href="/candidate/dashboard"><Icon name="user" className="icon-sm" />{user.name.split(' ')[0]}</Link>
               : <><Link className="btn btn-ghost btn-sm" href="/login">Login</Link><Link className="btn btn-primary btn-sm" href="/register">Register</Link></>}
             <Link className="btn btn-outline btn-sm" href="/employers#request-talent">Request Talent</Link>
           </div>
@@ -50,9 +49,9 @@ export function Header({ user }: { user: HeaderUser }) {
                   {MORE.map(n => <li key={n[0]}><Link href={n[0]} className={active(n[0]) ? 'is-active' : ''}>{n[1]}</Link></li>)}
                 </ul>
                 <div className="panel-foot">
-                  {account ? <Link className="btn btn-primary" href={account.href}>{user?.isStaff ? 'Admin panel' : 'My dashboard'}</Link> : <Link className="btn btn-primary" href="/register">Register as a candidate</Link>}
+                  {user ? <Link className="btn btn-primary" href="/candidate/dashboard">My dashboard</Link> : <Link className="btn btn-primary" href="/register">Register as a candidate</Link>}
                   <Link className="btn btn-outline" href="/employers#request-talent">Request Talent</Link>
-                  {!account && <Link className="btn btn-ghost" href="/login">Login</Link>}
+                  {!user && <Link className="btn btn-ghost" href="/login">Login</Link>}
                 </div>
               </motion.div>
             </div>

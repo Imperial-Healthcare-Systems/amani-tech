@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
@@ -14,11 +14,11 @@ const fail = (error: string, fields?: Record<string, string>): ActionResult<neve
 const zodFields = (e: z.ZodError) => Object.fromEntries(e.issues.map(i => [String(i.path[0]), i.message]));
 
 async function db() { await requireAdmin(); return createClient(); }
-function revalidateSite() { ['/', '/jobs', '/blog', '/careers', '/services', '/faqs', '/employers', '/about', '/contact'].forEach(p => revalidatePath(p, 'layout')); revalidatePath('/admin', 'layout'); }
+function revalidateSite() { revalidateTag('site'); ['/', '/jobs', '/blog', '/careers', '/services', '/faqs', '/employers', '/about', '/contact'].forEach(p => revalidatePath(p, 'layout')); revalidatePath('/admin', 'layout'); }
 
 /* ---------- Jobs ---------- */
 const jobSchema = z.object({
-  title: z.string().trim().min(2, 'Title is required.'), company_name: z.string().trim().min(1, 'Company name is required.'),
+  title: z.string().trim().min(2, 'Title is required.'), company_name: z.string().trim().min(1, 'Company name is required.'), company_logo: z.string().trim().max(500).optional(),
   location: z.string().trim().min(1, 'Location is required.'), category_id: z.string().min(1, 'Select a category.'), subcategory_id: z.string().min(1, 'Select a subcategory.'),
   work_mode: z.enum(['On-site', 'Hybrid', 'Remote']), employment_type: z.enum(['Full-time', 'Contract', 'Part-time', 'Internship']),
   exp_min: z.coerce.number().int().min(0), exp_max: z.coerce.number().int().min(0),
@@ -36,7 +36,7 @@ export async function saveJob(id: string | null, status: JobStatus, _: unknown, 
   if (status === 'PUBLISHED' && !skills.length) return fail('Add at least one skill before publishing.', { skills: 'Add at least one skill before publishing.' });
   const sb = await db();
   const row = {
-    title: v.title, company_name: v.company_name, location: v.location, category_id: v.category_id, subcategory_id: v.subcategory_id,
+    title: v.title, company_name: v.company_name, company_logo: v.company_logo || null, location: v.location, category_id: v.category_id, subcategory_id: v.subcategory_id,
     work_mode: v.work_mode, employment_type: v.employment_type, exp_min: v.exp_min, exp_max: Math.max(v.exp_max, v.exp_min),
     salary_min: v.salary_min === '' ? null : v.salary_min, salary_max: v.salary_max === '' ? null : v.salary_max,
     description: v.description, responsibilities: lines(v.responsibilities), requirements: lines(v.requirements), benefits: lines(v.benefits),

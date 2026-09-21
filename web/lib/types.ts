@@ -10,7 +10,7 @@ export interface Subcategory { id: string; category_id: string; name: string; sl
 export interface Category { id: string; name: string; slug: string; sort_order: number; is_active: boolean; subcategories: Subcategory[] }
 
 export interface Job {
-  id: string; slug: string; title: string; company_name: string; description: string;
+  id: string; slug: string; title: string; company_name: string; company_logo: string | null; description: string;
   category_id: string | null; subcategory_id: string | null;
   location: string; work_mode: WorkMode; employment_type: EmploymentType;
   exp_min: number; exp_max: number; salary_min: number | null; salary_max: number | null;

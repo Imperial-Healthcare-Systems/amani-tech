@@ -7,12 +7,14 @@ import { CategorySelects } from '../CategorySelects';
 import { Field, FormStatus, useFormAction } from '../form';
 import { useToast } from '../Toast';
 import { PageHead, TagInput } from './shared';
+import { ImagePicker } from './ImagePicker';
 import { saveJob } from '@/lib/actions/admin';
 import type { Category, Job, JobStatus } from '@/lib/types';
 
 export function JobForm({ job, categories }: { job: Job | null; categories: Category[] }) {
   const [status, setStatus] = useState<JobStatus>(job?.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT');
   const [dirty, setDirty] = useState(false);
+  const [logo, setLogo] = useState(job?.company_logo || '');
   const ref = useRef<HTMLFormElement>(null);
   const router = useRouter(); const toast = useToast();
   const { formAction, onSubmit, pending, errors, error, success, clear } = useFormAction(saveJob.bind(null, job?.id ?? null, status));
@@ -30,6 +32,7 @@ export function JobForm({ job, categories }: { job: Job | null; categories: Cate
             <Field label="Job title" name="title" required error={errors.title} onClear={clear} className="span-2"><input className="input" id="title" name="title" required defaultValue={job?.title} placeholder="e.g. Senior Java Developer" /></Field>
             <Field label="Company name" name="company_name" required error={errors.company_name} hint="Shown publicly. Use a descriptor (e.g. “Finserv Product Company”) if the client is confidential." onClear={clear}><input className="input" id="company_name" name="company_name" required defaultValue={job?.company_name} /></Field>
             <Field label="Location" name="location" required error={errors.location} onClear={clear}><input className="input" id="location" name="location" required defaultValue={job?.location} placeholder="City or Remote" /></Field>
+            <div className="span-2"><ImagePicker label="Company logo (optional)" prefix="jobs" shape="square" value={logo} onChange={u => { setLogo(u); setDirty(true); }} hint="Square PNG/SVG works best. Shown on the job card and job page; initials are used when empty." /><input type="hidden" name="company_logo" value={logo} /></div>
             <CategorySelects categories={cats} errors={errors} onClear={clear} defaultCategory={job?.category_id || ''} defaultSubcategory={job?.subcategory_id || ''} />
             <Field label="Work mode" name="work_mode" required onClear={clear}><select className="select" id="work_mode" name="work_mode" defaultValue={job?.work_mode || 'On-site'}><option>On-site</option><option>Hybrid</option><option>Remote</option></select></Field>
             <Field label="Employment type" name="employment_type" required onClear={clear}><select className="select" id="employment_type" name="employment_type" defaultValue={job?.employment_type || 'Full-time'}><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select></Field>

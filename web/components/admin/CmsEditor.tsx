@@ -4,24 +4,14 @@ import { useRouter } from 'next/navigation';
 import { Icon } from '../Icon';
 import { useToast } from '../Toast';
 import { PageHead } from './shared';
-import { deleteService, saveContent, saveFaqs, saveServices, uploadMedia } from '@/lib/actions/admin';
+import { ImagePicker } from './ImagePicker';
+import { deleteService, saveContent, saveFaqs, saveServices } from '@/lib/actions/admin';
 import { slugify } from '@/lib/format';
 import type { EmployerCtaContent, Faq, FooterContent, HeroContent, Service, StatisticsContent, TrustBandContent } from '@/lib/types';
 
 type Sec<T> = { payload: T; is_visible: boolean };
 const SECTIONS = [['hero', 'Hero'], ['trust', 'Trust Band'], ['services', 'Services'], ['stats', 'Statistics'], ['faq', 'FAQ'], ['cta', 'Employer CTA'], ['footer', 'Footer']] as const;
 
-function ImagePicker({ value, onChange, prefix, label }: { value: string; onChange: (url: string) => void; prefix: string; label: string }) {
-  const toast = useToast(); const [busy, setBusy] = useState(false);
-  const pick = async (f: File | undefined) => { if (!f) return; setBusy(true); const fd = new FormData(); fd.set('file', f); fd.set('prefix', prefix); const r = await uploadMedia(null, fd); setBusy(false); if (r.ok && r.data) { onChange(r.data.url); toast('Image uploaded.'); } else if (!r.ok) toast(r.error, 'error'); };
-  return (
-    <div className="field"><span className="label">{label}</span>
-      {value && <img src={value} alt="" style={{ width: '100%', maxHeight: 160, objectFit: 'cover', borderRadius: 8, marginBottom: 8 }} />}
-      <div className="row" style={{ gap: 8 }}><label className={`btn btn-outline btn-sm ${busy ? 'is-loading' : ''}`}><span className="spinner" /><Icon name="upload" className="icon-sm" />{value ? 'Replace image' : 'Upload image'}<input type="file" accept=".jpg,.jpeg,.png,.webp,.svg" hidden onChange={e => pick(e.target.files?.[0])} /></label>{value && <button type="button" className="btn btn-ghost btn-sm" onClick={() => onChange('')}>Remove</button>}</div>
-      <input className="input mt-8" placeholder="…or paste an image URL" value={value} onChange={e => onChange(e.target.value)} />
-    </div>
-  );
-}
 
 export function CmsEditor(p: { hero: Sec<HeroContent>; trust: Sec<TrustBandContent>; stats: Sec<StatisticsContent>; cta: Sec<EmployerCtaContent>; footer: Sec<FooterContent>; services: Service[]; faqs: Faq[] }) {
   const [sec, setSec] = useState<string>('hero');

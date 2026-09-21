@@ -34,7 +34,7 @@ export default async function JobDetail({ params }: Props) {
       <section className="job-head"><div className="container" id="job-head">
         <ol className="breadcrumb"><li><Link href="/">Home</Link></li><li><Link href="/jobs">Jobs</Link></li>{j.category && <li><Link href={`/jobs/category/${j.category.slug}`}>{j.category.name}</Link></li>}<li aria-current="page">{j.title}</li></ol>
         <div className="top">
-          <div className="co-mark" aria-hidden="true">{initials(j.company_name)}</div>
+          <div className={`co-mark ${j.company_logo ? 'has-logo' : ''}`} aria-hidden="true">{j.company_logo ? <img src={j.company_logo} alt="" /> : initials(j.company_name)}</div>
           <div style={{ flex: 1 }}>
             <div className="row" style={{ gap: 8, marginBottom: 6 }}>{j.is_featured && <span className="badge badge-featured">Featured</span>}{j.subcategory && <span className="badge badge-neutral">{j.subcategory.name}</span>}</div>
             <h1>{j.title}</h1><div className="co">{j.company_name}</div>

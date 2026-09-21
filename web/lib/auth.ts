@@ -1,16 +1,21 @@
 import { redirect } from 'next/navigation';
 import { createClient } from './supabase/server';
 
-export async function getUser() {
+export type SessionUser = { id: string; email: string; user_metadata?: { name?: string } };
+
+/** The signed-in user from the session cookie. The JWT is verified locally against the project's signing keys
+ *  (fetched once, then cached in memory), so this costs no round trip to Supabase Auth — unlike auth.getUser(). */
+export async function getUser(): Promise<SessionUser | null> {
   const sb = await createClient();
-  const { data: { user } } = await sb.auth.getUser();
-  return user;
+  const { data } = await sb.auth.getClaims();
+  const c = data?.claims;
+  return c ? { id: c.sub, email: c.email || '', user_metadata: c.user_metadata } : null;
 }
 
 export async function getProfile() {
-  const sb = await createClient();
-  const { data: { user } } = await sb.auth.getUser();
+  const user = await getUser();
   if (!user) return null;
+  const sb = await createClient();
   const { data } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
   return data as { id: string; email: string; name: string | null; role: 'ADMIN' | 'EDITOR' | 'CANDIDATE' } | null;
 }

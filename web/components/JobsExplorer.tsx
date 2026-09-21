@@ -37,15 +37,17 @@ export function JobsExplorer({ jobs, categories, locations, preset }: { jobs: Jo
     if (preset?.category) p.delete('category'); if (preset?.sub) p.delete('sub');
     router.replace(`${pathname}${p.toString() ? `?${p}` : ''}`, { scroll: false });
     setLoading(true); const t = setTimeout(() => setLoading(false), 180); return () => clearTimeout(t);
-  }, [state, pathname, router, preset]);
+  // Depend on the preset's values, not the object: category pages pass a new object each render, which re-ran this effect and kept the list on its loading skeleton.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, pathname, router, preset?.category, preset?.sub]);
   useEffect(() => { document.body.classList.toggle('modal-open', railOpen && window.innerWidth < 768); return () => document.body.classList.remove('modal-open'); }, [railOpen]);
 
   const set = (patch: Partial<State>) => setState(s => ({ ...s, ...patch, page: patch.page ?? 1 }));
   const toggle = (k: typeof LIST_KEYS[number], v: string) => setState(s => {
     const arr = s[k].includes(v) ? s[k].filter(x => x !== v) : [...s[k], v];
-    let sub = s.sub;
-    if (k === 'category' && !arr.includes(v)) { const c = categories.find(c => c.id === v); sub = sub.filter(x => !c?.subcategories.some(sc => sc.id === x)); }
-    return { ...s, [k]: arr, sub: k === 'category' ? sub : s.sub, page: 1 };
+    if (k === 'category') { const c = categories.find(c => c.id === v); return { ...s, category: arr, sub: s.sub.filter(x => !c?.subcategories.some(sc => sc.id === x)), page: 1 }; }
+    if (k === 'sub') { const parent = categories.find(c => c.subcategories.some(sc => sc.id === v)); return { ...s, sub: arr, category: s.category.filter(x => x !== parent?.id), page: 1 }; }
+    return { ...s, [k]: arr, page: 1 };
   });
   const clearAll = () => setState({ ...EMPTY, category: preset?.category ? [preset.category] : [], sub: preset?.sub ? [preset.sub] : [] });
 
@@ -55,8 +57,7 @@ export function JobsExplorer({ jobs, categories, locations, preset }: { jobs: Jo
       const hay = [j.title, j.company_name, j.location, ...j.skills, j.category?.name, j.subcategory?.name].join(' ').toLowerCase();
       if (q && !q.split(/\s+/).every(w => hay.includes(w))) return false;
       if (l && !(j.location.toLowerCase().includes(l) || (l === 'remote' && j.work_mode === 'Remote'))) return false;
-      if (state.category.length && !state.category.includes(j.category_id || '')) return false;
-      if (state.sub.length && !state.sub.includes(j.subcategory_id || '')) return false;
+      if ((state.category.length || state.sub.length) && !(state.category.includes(j.category_id || '') || state.sub.includes(j.subcategory_id || ''))) return false;
       if (state.loc.length && !state.loc.includes(j.location)) return false;
       if (state.exp.length && !state.exp.some(b => { const band = EXP_BANDS.find(x => x[0] === b)!; return j.exp_min <= band[3] && j.exp_max >= band[2]; })) return false;
       if (state.salary && !(Number(j.salary_max) >= +state.salary)) return false;
@@ -65,10 +66,13 @@ export function JobsExplorer({ jobs, categories, locations, preset }: { jobs: Jo
       if (state.posted && daysAgo(j.published_at) > +state.posted) return false;
       return true;
     });
-    const score = (j: Job) => (q ? (j.title.toLowerCase().includes(q) ? 3 : 0) + (j.skills.some(s => s.toLowerCase().includes(q)) ? 2 : 0) : 0) + (j.is_featured ? 1 : 0) - daysAgo(j.published_at) / 100;
-    if (state.sort === 'newest') out.sort((a, b) => new Date(b.published_at || 0).getTime() - new Date(a.published_at || 0).getTime());
-    else if (state.sort === 'salary') out.sort((a, b) => Number(b.salary_max || 0) - Number(a.salary_max || 0));
-    else out.sort((a, b) => score(b) - score(a));
+    const score = (j: Job) => (q ? (j.title.toLowerCase().includes(q) ? 3 : 0) + (j.skills.some(s => s.toLowerCase().includes(q)) ? 2 : 0) : 0) - daysAgo(j.published_at) / 100;
+    const by: (a: Job, b: Job) => number =
+      state.sort === 'newest' ? (a, b) => new Date(b.published_at || 0).getTime() - new Date(a.published_at || 0).getTime()
+      : state.sort === 'salary' ? (a, b) => Number(b.salary_max || 0) - Number(a.salary_max || 0)
+      : (a, b) => score(b) - score(a);
+    // Featured jobs always form the first tier, whatever filters or sort are active; the chosen sort orders within each tier.
+    out.sort((a, b) => Number(b.is_featured) - Number(a.is_featured) || by(a, b));
     return out;
   }, [jobs, state]);
 
@@ -86,8 +90,8 @@ export function JobsExplorer({ jobs, categories, locations, preset }: { jobs: Jo
   if (state.posted) chips.push(['posted', '', POSTED.find(p => p[0] === state.posted)![1]]);
   const removeChip = (k: string, v: string) => { if ((LIST_KEYS as readonly string[]).includes(k)) toggle(k as typeof LIST_KEYS[number], v); else set({ [k]: '' } as Partial<State>); };
 
-  const Check = ({ name, value, label, count }: { name: typeof LIST_KEYS[number]; value: string; label: string; count?: number }) => (
-    <label className="check"><input type="checkbox" checked={state[name].includes(value)} onChange={() => toggle(name, value)} /><span>{label}</span>{count != null && <span className="count">{count}</span>}</label>
+  const Check = ({ name, value, label, count, partial }: { name: typeof LIST_KEYS[number]; value: string; label: string; count?: number; partial?: boolean }) => (
+    <label className="check"><input type="checkbox" checked={state[name].includes(value)} ref={el => { if (el) el.indeterminate = !!partial; }} onChange={() => toggle(name, value)} /><span>{label}</span>{count != null && <span className="count">{count}</span>}</label>
   );
 
   return (
@@ -108,8 +112,8 @@ export function JobsExplorer({ jobs, categories, locations, preset }: { jobs: Jo
               {!preset?.category && (
                 <details className="filter-group" open><summary>Category <Icon name="chevron" /></summary><div className="fg-body">
                   {categories.map(c => (<div key={c.id}>
-                    <Check name="category" value={c.id} label={c.name} count={count(j => j.category_id === c.id)} />
-                    <div className={`sub-list ${state.category.includes(c.id) ? 'is-open' : ''}`}>{c.subcategories.map(s => <Check key={s.id} name="sub" value={s.id} label={s.name} count={count(j => j.subcategory_id === s.id)} />)}</div>
+                    <Check name="category" value={c.id} label={c.name} count={count(j => j.category_id === c.id)} partial={!state.category.includes(c.id) && c.subcategories.some(s => state.sub.includes(s.id))} />
+                    <div className="sub-list is-open">{c.subcategories.map(s => <Check key={s.id} name="sub" value={s.id} label={s.name} count={count(j => j.subcategory_id === s.id)} />)}</div>
                   </div>))}
                 </div></details>
               )}

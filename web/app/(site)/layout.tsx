@@ -10,7 +10,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const [profile, footer] = await Promise.all([getProfile(), getContent<FooterContent>('footer', FOOTER_FALLBACK)]);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header user={profile ? { name: profile.name || profile.email, isStaff: profile.role === 'ADMIN' || profile.role === 'EDITOR' } : null} />
+      <Header user={profile?.role === 'CANDIDATE' ? { name: profile.name || profile.email } : null} />
       <main id="main" style={{ flex: 1 }}>{children}</main>
       <Footer content={footer.payload} />
     </div>
