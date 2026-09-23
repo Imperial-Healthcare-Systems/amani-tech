@@ -1,0 +1,292 @@
+/* "How it runs" on the GCC page — a five-stage lifecycle on one timeline. Scoped to this section. */
+
+.section {
+  --mk: 50px;       /* timeline marker diameter */
+  --gap: 16px;      /* space between stages */
+  --drop: 12px;     /* how far the cards sit below the timeline */
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0 88px;
+  background: linear-gradient(180deg, #F4F7FE 0%, #FAFBFF 55%, #FFFFFF 100%);
+}
+/* Atmosphere: cool washes, one wide arc, and a faint curtain-wall grid in the top right. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 50% at 86% 6%, rgba(37, 99, 235, .07), transparent 72%),
+    radial-gradient(40% 46% at 6% 92%, rgba(139, 143, 232, .06), transparent 74%);
+  pointer-events: none;
+}
+.arc {
+  position: absolute;
+  left: -20%;
+  bottom: -62%;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 64px solid rgba(219, 232, 255, .36);
+  pointer-events: none;
+}
+.facade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44%;
+  height: 72%;
+  background-image:
+    linear-gradient(90deg, rgba(37, 99, 235, .075) 1px, transparent 1px),
+    linear-gradient(rgba(37, 99, 235, .05) 1px, transparent 1px);
+  background-size: 38px 100%, 100% 24px;
+  -webkit-mask-image: radial-gradient(85% 90% at 100% 0%, #000 0%, transparent 68%);
+  mask-image: radial-gradient(85% 90% at 100% 0%, #000 0%, transparent 68%);
+  pointer-events: none;
+}
+.inner { position: relative; z-index: 1; }
+
+/* ---------- header ---------- */
+.head { max-width: 760px; margin-bottom: 44px; }
+.head h2 {
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -.035em;
+  margin: 0;
+}
+.rule {
+  display: block;
+  width: 62px; height: 3px;
+  margin-top: 20px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--navy-700), var(--accent-500));
+}
+
+/* ---------- journey (phones and tablets: a vertical timeline) ---------- */
+.journey { position: relative; }
+.track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: var(--gap); }
+
+.stage { position: relative; display: flex; flex-direction: column; padding-left: calc(var(--mk) + 16px); }
+
+.marker {
+  position: absolute;
+  z-index: 3;
+  left: 0; top: 14px;
+  width: var(--mk); height: var(--mk);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(37, 99, 235, .18);
+  color: var(--accent-600);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  letter-spacing: -.02em;
+  box-shadow: 0 8px 20px -10px rgba(37, 99, 235, .45);
+  transition: background .4s ease, color .4s ease, border-color .4s ease, box-shadow .4s ease;
+}
+.reached .marker { border-color: rgba(37, 99, 235, .6); }
+.isHover .marker, .isActive .marker {
+  background: linear-gradient(160deg, #3B82F6, #2563EB);
+  border-color: #2563EB;
+  color: #fff;
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, .12), 0 12px 26px -10px rgba(37, 99, 235, .75);
+}
+
+/* the vertical connector from this marker down to the next */
+.seg {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--mk) / 2 - 1px);
+  top: calc(14px + var(--mk));
+  bottom: calc(-1 * (var(--gap) + 14px));
+  width: 2px;
+  background: rgba(37, 99, 235, .16);
+}
+.stage:last-child .seg { display: none; }
+.seg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--navy-700), var(--accent-600));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+.segOn .seg::after { transform: scaleY(1); }
+
+/* ---------- the stage panel ---------- */
+.card {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  padding: 20px 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .84);
+  border: 1px solid rgba(201, 216, 255, .72);
+  box-shadow: 0 1px 2px rgba(20, 26, 74, .03), 0 16px 34px -28px rgba(20, 26, 74, .35);
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1), background .45s ease, border-color .45s ease, box-shadow .45s ease;
+}
+.isHover .card {
+  transform: translateY(-5px);
+  background: #fff;
+  border-color: rgba(37, 99, 235, .38);
+  box-shadow: 0 2px 5px rgba(20, 26, 74, .05), 0 26px 50px -26px rgba(37, 99, 235, .5), 0 0 0 4px rgba(37, 99, 235, .05);
+}
+.isActive .card {
+  background: linear-gradient(165deg, #0D1B52 0%, #07143F 55%, #050F30 100%);
+  border-color: rgba(96, 165, 250, .32);
+  box-shadow: 0 30px 60px -30px rgba(5, 15, 48, .85), 0 0 0 1px rgba(37, 99, 235, .16);
+}
+.card::after {
+  content: "";
+  position: absolute;
+  right: -30%; top: -24%;
+  width: 80%; height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, .3), transparent 72%);
+  opacity: 0;
+  transition: opacity .45s ease;
+  pointer-events: none;
+}
+.isActive .card::after { opacity: 1; }
+
+.artWrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  margin-bottom: 12px;
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+.isHover .artWrap, .isActive .artWrap { transform: translateY(-3px) scale(1.04); }
+.art { width: 100%; max-width: 172px; height: auto; display: block; overflow: visible; }
+
+.text { position: relative; z-index: 1; display: flex; flex-direction: column; min-width: 0; }
+.title {
+  font-size: var(--fs-lg);
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  margin: 0 0 8px;
+  color: var(--navy-800);
+  transition: color .35s ease;
+}
+.isHover .title { color: var(--navy-900); }
+.body { margin: 0 0 14px; font-size: var(--fs-sm); line-height: 1.58; color: var(--muted); transition: color .35s ease; }
+
+/* margin-top: auto keeps the capability rows level across the row of stages */
+.divider { display: block; height: 1px; margin: auto 0 14px; background: rgba(37, 99, 235, .12); transition: background .35s ease; }
+.caps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cap {
+  display: flex; align-items: center; gap: 10px;
+  font-size: var(--fs-sm); line-height: 1.35;
+  color: var(--text);
+  opacity: .8;
+  transform: translateX(-3px);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.22, .61, .36, 1), color .35s ease;
+}
+.cap svg { width: 16px; height: 16px; flex: none; color: var(--accent-600); transition: color .35s ease; }
+.isHover .cap, .isActive .cap { opacity: 1; transform: none; }
+.isHover .cap:nth-child(2), .isActive .cap:nth-child(2) { transition-delay: .05s; }
+.isHover .cap:nth-child(3), .isActive .cap:nth-child(3) { transition-delay: .1s; }
+
+.isActive .title { color: #fff; }
+.isActive .body { color: rgba(226, 236, 255, .8); }
+.isActive .divider { background: rgba(255, 255, 255, .14); }
+.isActive .cap { color: rgba(240, 245, 255, .95); }
+.isActive .cap svg { color: #93C5FD; }
+
+/* the whole stage is one button; the focus ring is drawn on the panel */
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 18px;
+}
+.hit:focus-visible { outline: none; }
+.stage:has(.hit:focus-visible) .card { outline: 3px solid var(--accent-600); outline-offset: 4px; }
+
+.line { display: none; }
+
+/* ---------- tablets: text beside the illustration ---------- */
+@media (min-width: 600px) and (max-width: 1199px) {
+  .card { grid-template-columns: minmax(0, 1fr) 180px; grid-template-rows: auto; grid-template-areas: "text art"; column-gap: 24px; align-items: center; }
+  .artWrap { grid-area: art; margin: 0; }
+  .text { grid-area: text; }
+  .divider { margin-top: 0; }
+}
+@media (min-width: 720px) {
+  .section { padding: 96px 0 104px; }
+}
+
+/* ---------- desktop: all five stages on one horizontal timeline ---------- */
+@media (min-width: 1200px) {
+  .section { --mk: 52px; --gap: 16px; padding: 112px 0 120px; }
+  .head { margin-bottom: 56px; }
+
+  .track { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+  .stage { padding-left: 0; padding-top: calc(var(--mk) / 2 + var(--drop)); }
+  .marker { left: 50%; top: 0; transform: translateX(-50%); }
+  .seg { display: none; }
+
+  /* one line from the first marker's centre to the last, running behind the markers */
+  .line {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--mk) / 2 - 1px);
+    left: calc((100% - (var(--n) - 1) * var(--gap)) / (2 * var(--n)));
+    width: calc((100% + var(--gap)) * (var(--n) - 1) / var(--n));
+    height: 2px;
+    border-radius: 1px;
+    background: rgba(37, 99, 235, .18);
+    transform-origin: left center;
+  }
+  .lineFill {
+    position: absolute;
+    inset: 0;
+    border-radius: 1px;
+    background: linear-gradient(90deg, var(--navy-700), var(--accent-600));
+    transform-origin: left center;
+    transition: transform .55s cubic-bezier(.22, .61, .36, 1);
+  }
+
+  .card { padding: 22px 16px 22px; }
+  .cap { font-size: var(--fs-xs); gap: 8px; }
+  .cap svg { width: 15px; height: 15px; }
+  .artWrap { min-height: 104px; margin: 4px 0 16px; }
+  .title { font-size: var(--fs-xl); }
+}
+
+/* ---------- entrance: header, then the line draws, markers arrive, stages follow ---------- */
+.head, .line, .marker, .card, .artWrap { animation-play-state: paused; }
+.started .head, .started .line, .started .marker, .started .card, .started .artWrap { animation-play-state: running; }
+
+.head { animation: rjUp .6s cubic-bezier(.22, .61, .36, 1) both; }
+.line { animation: rjDraw .85s cubic-bezier(.22, .61, .36, 1) .15s both; }
+.marker { animation: rjPop .45s ease-out both; animation-delay: calc(.28s + var(--i) * .11s); }
+.card { animation: rjIn .6s cubic-bezier(.22, .61, .36, 1) both; animation-delay: calc(.36s + var(--i) * .11s); }
+.artWrap { animation: rjArt .7s cubic-bezier(.22, .61, .36, 1) both; animation-delay: calc(.46s + var(--i) * .11s); }
+
+@keyframes rjUp { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: none; } }
+@keyframes rjDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes rjPop { from { opacity: 0; scale: .7; } to { opacity: 1; scale: 1; } }
+@keyframes rjIn { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: none; } }
+@keyframes rjArt { from { opacity: 0; scale: .94; } to { opacity: 1; scale: 1; } }
+
+/* ---------- reduced motion: everything in place, state changes without movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .head, .line, .marker, .card, .artWrap { animation: none; }
+  .card, .artWrap, .cap, .lineFill, .seg::after, .marker { transition-duration: .15s; }
+  .isHover .card { transform: none; }
+  .isHover .artWrap, .isActive .artWrap { transform: none; }
+  .cap { transform: none; transition-delay: 0s !important; }
+}

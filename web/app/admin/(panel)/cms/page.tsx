@@ -12,7 +12,7 @@ export default async function CmsPage() {
       trust={get<TrustBandContent>('trust_band', { heading: 'Trusted by employers across industries', industries: [], logos: [] })}
       stats={get<StatisticsContent>('statistics', { items: [] })}
       cta={get<EmployerCtaContent>('employer_cta', { heading: '', text: '', primary_cta: 'Request Talent', secondary_cta: 'Become a staffing partner' })}
-      footer={get<FooterContent>('footer', { description: '', address: '', phone: '', email: '', hours: '', social: { linkedin: '', instagram: '', x: '', youtube: '' } })}
+      footer={get<FooterContent>('footer', { description: '', address: '', phone: '', email: '', hours: '', social: { linkedin: '', instagram: '', x: '', facebook: '' } })}
       services={(services || []) as Service[]} faqs={(faqs || []) as Faq[]}
     />
   );

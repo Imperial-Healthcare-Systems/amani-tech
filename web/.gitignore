@@ -17,3 +17,7 @@ supabase/.temp/
 Thumbs.db
 .vscode/
 .idea/
+
+# e2e test artefacts
+tests/fixtures/
+tests/failure-*.png

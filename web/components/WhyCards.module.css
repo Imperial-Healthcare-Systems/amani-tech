@@ -1,0 +1,191 @@
+/* "Why Amani Tech" on the IT consulting page. Scoped: nothing here affects other sections. */
+
+.section {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 76px;
+  background: #FCFDFF;
+}
+
+/* Atmosphere: soft blue washes, a wide translucent arc, and a dotted field top-right. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(48% 52% at 12% 6%, rgba(37, 99, 235, .06), transparent 70%),
+    radial-gradient(42% 48% at 92% 88%, rgba(139, 143, 232, .07), transparent 72%);
+  pointer-events: none;
+}
+.arc {
+  position: absolute;
+  top: -56%;
+  right: -22%;
+  width: 82%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 80px solid rgba(219, 232, 255, .34);
+  pointer-events: none;
+}
+.dots {
+  position: absolute;
+  top: 78px;
+  right: 3%;
+  width: 176px;
+  height: 128px;
+  background-image: radial-gradient(rgba(37, 99, 235, .22) 1.4px, transparent 1.4px);
+  background-size: 17px 17px;
+  -webkit-mask-image: linear-gradient(115deg, #000, transparent 78%);
+  mask-image: linear-gradient(115deg, #000, transparent 78%);
+  pointer-events: none;
+}
+.inner { position: relative; z-index: 1; }
+
+/* ---------- header ---------- */
+.head { max-width: 700px; margin-bottom: 52px; }
+.head h2 {
+  font-size: clamp(2.1rem, 4vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -.035em;
+  margin: 0;
+  max-width: 660px;
+}
+.rule {
+  display: block;
+  width: 62px;
+  height: 3px;
+  margin: 20px 0 20px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--navy-700), var(--accent-500));
+}
+.lead {
+  max-width: 640px;
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* ---------- cards ---------- */
+.grid { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: stretch; }
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 28px 26px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, .86);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(201, 216, 255, .85);
+  box-shadow: 0 1px 2px rgba(20, 26, 74, .03), 0 14px 30px -24px rgba(20, 26, 74, .3);
+  text-decoration: none !important;
+  color: inherit;
+  transition: transform .45s cubic-bezier(.22, .61, .36, 1), border-color .45s ease, box-shadow .45s ease, background .45s ease;
+}
+.card:hover, .card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, .45);
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(20, 26, 74, .04), 0 26px 50px -28px rgba(37, 99, 235, .55), 0 0 0 4px rgba(37, 99, 235, .05);
+}
+.card:focus-visible { outline: 3px solid var(--accent-600); outline-offset: 3px; }
+
+.num {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.85rem;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: rgba(37, 99, 235, .18);
+  transition: color .45s ease;
+}
+.card:hover .num { color: rgba(37, 99, 235, .78); }
+
+.artWrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  min-height: 116px;
+  margin-bottom: 22px;
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+.card:hover .artWrap { transform: translateY(-6px) scale(1.03); }
+.art { width: 100%; max-width: 208px; height: auto; display: block; overflow: visible; }
+
+.title {
+  font-size: var(--fs-xl);
+  line-height: 1.22;
+  margin: 0 0 10px;
+  color: var(--navy-900);
+}
+.body { margin: 0 0 26px; font-size: var(--fs-base); line-height: 1.6; color: var(--muted); }
+
+/* ---------- learn more ---------- */
+.cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--accent-700);
+}
+.ctaDot {
+  width: 38px; height: 38px;
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-50);
+  color: var(--accent-600);
+  transition: background .4s ease, color .4s ease, transform .4s cubic-bezier(.22, .61, .36, 1);
+}
+.ctaDot svg { width: 17px; height: 17px; transition: transform .4s cubic-bezier(.22, .61, .36, 1); }
+.card:hover .ctaDot { background: var(--accent-600); color: #fff; }
+.card:hover .ctaDot svg { transform: translateX(3px); }
+.card:hover .cta { color: var(--accent-600); }
+.ctaText { transition: transform .4s cubic-bezier(.22, .61, .36, 1); }
+.card:hover .ctaText { transform: translateX(3px); }
+
+/* ---------- responsive ---------- */
+@media (min-width: 720px) {
+  .section { padding: 92px 0 96px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+}
+@media (min-width: 1100px) {
+  .section { padding: 116px 0 120px; }
+  .head { margin-bottom: 62px; }
+  .grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .card { padding: 30px 28px 26px; }
+}
+
+/* fewer decorations on small screens */
+@media (max-width: 719px) {
+  .arc { display: none; }
+  .dots { width: 110px; height: 88px; opacity: .6; top: 40px; }
+}
+
+/* ---------- idle motion in the illustrations ---------- */
+.floatSlow { animation: wFloat 7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.floatFast { animation: wFloat 5.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.pulse { animation: wPulse 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.bar { animation: wBar 4.6s ease-in-out infinite; }
+.tick { animation: wTick 4.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.dash { animation: wDash 3.4s linear infinite; }
+
+@keyframes wFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes wPulse { 0%, 100% { opacity: .3; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes wBar { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(.9); } }
+@keyframes wTick { 0%, 100% { opacity: .82; } 45% { opacity: 1; } }
+@keyframes wDash { to { stroke-dashoffset: -14; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .artWrap, .ctaDot, .ctaDot svg, .ctaText { transition-duration: .15s; }
+  .card:hover { transform: none; }
+  .card:hover .artWrap { transform: none; }
+  .floatSlow, .floatFast, .pulse, .bar, .tick, .dash { animation: none; }
+}

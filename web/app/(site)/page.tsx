@@ -11,11 +11,20 @@ import { BlogCard, CatTile, FaqList } from '@/components/cards';
 import { getCategories, getContent, getFaqs, getFeaturedJobs, getJobCountsByCategory, getPosts, getServices, getTestimonials } from '@/lib/queries';
 import type { EmployerCtaContent, HeroContent, StatisticsContent, TrustBandContent } from '@/lib/types';
 
-const HERO: HeroContent = { eyebrow: 'Technology • Talent • Training', heading: 'From profile to placement, we’re with you every step.', accent: 'we’re with you every step.', subheading: 'Amani Tech connects skilled professionals with the right opportunities while supporting you through profile review, career assessment, skill development, job applications and placement.', primary_cta: 'Find Jobs', secondary_cta: 'Build My Profile', secondary_url: '/register', image: '/hero_section/hero_img.png' };
+const HERO: HeroContent = { eyebrow: 'Technology • Talent • Training', heading: 'From profile to placement, we’re with you every step.', accent: 'we’re with you every step.', subheading: 'Amani Tech connects skilled professionals with the right opportunities — and helps companies worldwide hire teams, build technology and train the people who run it.', primary_cta: 'Find Jobs', secondary_cta: 'Build My Profile', secondary_url: '/register', image: '/hero_section/hero_img.png' };
 const STAT_ICONS = ['briefcase', 'building', 'users', 'graduation', 'star'];
 const TRUST: TrustBandContent = { heading: 'Trusted by employers across industries', industries: ['IT Services', 'Banking & Finance', 'Manufacturing', 'Healthcare', 'Retail & E-commerce', 'Education', 'Logistics', 'Telecom'], logos: [] };
 const STATS: StatisticsContent = { items: [{ number: 1200, suffix: '+', label: 'Candidates placed' }, { number: 180, suffix: '+', label: 'Client companies' }, { number: 25, suffix: '+', label: 'Job categories' }, { number: 9, suffix: '', label: 'Years in staffing' }] };
 const CTA: EmployerCtaContent = { heading: 'Looking for the right talent?', text: 'Tell us about the role. Our recruiters will source, screen and shortlist candidates for you.', primary_cta: 'Request Talent', secondary_cta: 'Become a staffing partner' };
+
+// The landing page says who we are and what we offer in a line each; the detail lives on the service pages.
+const ABOUT_LINE = 'Amani Tech is a technology, talent and training company based in Hyderabad, working with clients worldwide. We build software, we staff teams, and we train the people who run them.';
+const PILLARS = [
+  ['zap', 'Technology', 'AI and automation, cloud, security, software and data — delivered for growing businesses.', '/services/it-consulting', 'Explore consulting'],
+  ['users', 'Talent', 'IT and non-IT staffing, contract to permanent, plus capability centres built in India.', '/services', 'Explore staffing'],
+  ['graduation', 'Training', 'Role-ready upskilling tracks, built around what employers are hiring for now.', '/lms', 'Coming soon'],
+];
+const TECH = [['zap', 'AI & Automation'], ['layers', 'Cloud & DevOps'], ['shield', 'Cybersecurity'], ['code', 'Custom Software'], ['chart', 'Data & Analytics']];
 
 const WHY = [['user', 'Human recruiters, not just algorithms', 'Every application is reviewed by a person who understands the role.'], ['layers', 'IT and non-IT under one roof', 'From software teams to plant engineers and finance staff.'], ['shield', 'Verified employers only', 'We work directly with hiring companies. No unverified listings.'], ['eye', 'Transparent process', 'You always know where your application or requirement stands.']];
 
@@ -53,6 +62,19 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="section section-pillars" id="what-we-do">
+        <div className="container">
+          <Reveal><div className="section-head center"><span className="eyebrow">Who we are</span><h2>Technology, talent and training — under one roof</h2><p className="lead">{ABOUT_LINE}</p></div></Reveal>
+          <Stagger className="grid grid-3">{PILLARS.map(([i, t, d, href, cta]) => (
+            <Item key={t}><Link className="pillar-card" href={href}>
+              <div className="ico"><Icon name={i} /></div>
+              <h3>{t}</h3><p>{d}</p>
+              <span className="link">{cta} <Icon name="arrow" className="icon-arrow" /></span>
+            </Link></Item>
+          ))}</Stagger>
+        </div>
+      </section>
+
       {trust.is_visible && (
         <section className="trust-band" aria-label="Industries served">
           <div className="container">
@@ -63,12 +85,11 @@ export default async function HomePage() {
                 : industries.map((x, i) => <span key={i} className="chip">{x}</span>)}
             </div></div>
             <p className="more">and many more…</p>
+            {stats.is_visible && stats.payload.items.length > 0 && (
+              <Reveal className="trust-stats"><div className="stats">{stats.payload.items.map((s, i) => <div key={s.label} className="stat"><span className="stat-icon"><Icon name={STAT_ICONS[i % STAT_ICONS.length]} /></span><div><Counter value={s.number} suffix={s.suffix} /><span>{s.label}</span></div></div>)}</div></Reveal>
+            )}
           </div>
         </section>
-      )}
-
-      {stats.is_visible && stats.payload.items.length > 0 && (
-        <section className="section-tight"><div className="container"><Reveal><div className="stats">{stats.payload.items.map((s, i) => <div key={s.label} className="stat"><span className="stat-icon"><Icon name={STAT_ICONS[i % STAT_ICONS.length]} /></span><div><Counter value={s.number} suffix={s.suffix} /><span>{s.label}</span></div></div>)}</div></Reveal></div></section>
       )}
 
       <section className="section section-cats" id="categories">
@@ -90,12 +111,24 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <FeaturedJobs jobs={featured} />
+
+      <section className="section section-tech" id="technology">
+        <div className="container">
+          <Reveal><div className="section-head section-head-row">
+            <div><span className="eyebrow">Technology services</span><h2>Enterprise-grade delivery, sized for growing businesses</h2></div>
+            <Link className="btn btn-outline" href="/services/it-consulting">See our consulting practice <Icon name="arrow" /></Link>
+          </div></Reveal>
+          <Stagger className="tech-strip">{TECH.map(([i, t]) => <Item key={t}><Link className="tech-chip" href="/services/it-consulting#niches"><span className="ico"><Icon name={i} /></span><span>{t}</span><Icon name="arrow" className="icon-arrow" /></Link></Item>)}</Stagger>
+        </div>
+      </section>
+
       <section className="section section-services" id="services">
         <div className="container">
           <span className="svc-dots" aria-hidden="true" />
           <div className="svc-layout">
             <Stagger className="svc-copy">
-              <Item><span className="eyebrow">What we do</span></Item>
+              <Item><span className="eyebrow">Talent solutions</span></Item>
               <Item><h2>Staffing services built around <span className="accent">how you hire</span></h2></Item>
               <Item><p className="lead">Whether you need one expert or an entire team, we provide flexible staffing solutions that save time, reduce hiring risk and connect you with the right talent, faster.</p></Item>
               <Item><Link className="btn btn-primary btn-lg" href="/services">Explore Our Services <Icon name="arrow" /></Link></Item>
@@ -114,9 +147,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HowItWorks />
+      <section className="section-tight">
+        <div className="container"><Reveal>
+          <div className="gcc-band">
+            <div>
+              <span className="eyebrow">Global capability centres</span>
+              <h2>Building a team in India?</h2>
+              <p>We are your landing partner — entity, office, compliance and people, on one plan. Delivered for clients worldwide from Hyderabad.</p>
+            </div>
+            <Link className="btn btn-primary btn-lg" href="/gcc">See the GCC practice <Icon name="arrow" /></Link>
+          </div>
+        </Reveal></div>
+      </section>
 
-      <FeaturedJobs jobs={featured} />
+      <HowItWorks />
 
       <section className="section section-dark">
         <div className="container">

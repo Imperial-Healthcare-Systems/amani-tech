@@ -23,7 +23,8 @@ export default function AboutPage() {
       <section className="section"><div className="container split">
         <Reveal><span className="eyebrow">Our story</span><h2>From a small recruitment desk to IT and non-IT placements across India</h2>
           <p>Amani Tech began as a small IT recruitment desk in Hyderabad. Today we place candidates across technology, finance, engineering and operations for companies ranging from start-ups to established enterprises.</p>
-          <p>Our approach has not changed: understand the role, understand the person, and only make an introduction when both fit.</p></Reveal>
+          <p>Our approach has not changed: understand the role, understand the person, and only make an introduction when both fit.</p>
+          <p>We work from Hyderabad with clients in India and overseas — including companies in North America, Europe, the Middle East and APAC who hire here, build technology with us, or set up a capability centre of their own.</p></Reveal>
         <Reveal delay={0.1}><div className="grid grid-2" style={{ gap: 12 }}>
           <div style={{ position: 'relative', aspectRatio: '3/4', borderRadius: 12, overflow: 'hidden' }}><Image src={PHOTOS[0]} alt="Amani Tech team" fill sizes="(max-width:768px) 50vw, 300px" style={{ objectFit: 'cover' }} /></div>
           <div className="stack">{PHOTOS.slice(1).map(p => <div key={p} style={{ position: 'relative', aspectRatio: '4/3', borderRadius: 12, overflow: 'hidden' }}><Image src={p} alt="" fill sizes="(max-width:768px) 50vw, 300px" style={{ objectFit: 'cover' }} /></div>)}</div>

@@ -23,10 +23,33 @@ async function rateLimit(scope: string): Promise<string | null> {
 }
 
 const fail = (error: string, fields?: Record<string, string>): ActionResult => ({ ok: false, error, fields });
+/** "priya@gmail.com" -> "p***a@gmail.com" — enough to recognise your own address, not enough to harvest one. */
+const maskEmail = (a: string) => { const [u, d] = a.split('@'); return `${u[0]}${'*'.repeat(Math.max(1, u.length - 2))}${u.length > 1 ? u.at(-1) : ''}@${d}`; };
 const zodFields = (e: z.ZodError) => Object.fromEntries(e.issues.map(i => [String(i.path[0]), i.message]));
 const str = (min = 1, msg = 'This field is required.') => z.string().trim().min(min, msg);
 const emailZ = z.string().trim().email('Enter a valid email address.');
 const phoneZ = z.string().trim().regex(/^[+\d][\d\s-]{7,}$/, 'Enter a valid phone number.');
+
+/* ---------- Identity: one person = one candidate record ----------
+   The candidates table is unique on lower(email) and on phone_norm (the last 10 digits of the phone), so the
+   database is the final word. These lookups run first only to return a helpful message instead of a constraint error. */
+const normPhone = (p: string) => p.replace(/\D/g, '').slice(-10) || null;
+type CandidateRow = { id: string; email: string; user_id: string | null };
+
+async function findByIdentity(db: ReturnType<typeof adminClient>, address: string, phone: string) {
+  const ph = normPhone(phone);
+  const [{ data: byEmail }, { data: byPhone }] = await Promise.all([
+    db.from('candidates').select('id,email,user_id').eq('email', address).maybeSingle(),
+    ph ? db.from('candidates').select('id,email,user_id').eq('phone_norm', ph).maybeSingle() : Promise.resolve({ data: null }),
+  ]);
+  return { byEmail: byEmail as CandidateRow | null, byPhone: byPhone as CandidateRow | null };
+}
+
+const EMAIL_TAKEN = 'An account with this email already exists. Please sign in instead.';
+const PHONE_TAKEN = 'This phone number is already registered with another account. Sign in, or use a different number.';
+/** Postgres unique-violation on the email or phone index, surfaced in the user's language. */
+const duplicateMessage = (e: { code?: string; message?: string } | null) =>
+  e?.code === '23505' ? (e.message?.includes('phone') ? PHONE_TAKEN : EMAIL_TAKEN) : null;
 
 /* ---------- Candidate application ---------- */
 const applySchema = z.object({
@@ -46,13 +69,16 @@ export async function submitApplication(_: unknown, fd: FormData): Promise<Actio
     if (!job || job.status !== 'PUBLISHED') return fail('This job is no longer accepting applications.');
     const resume = await storeFile(fd.get('resume') as File | null, 'resumes', 'applications');
     if (!resume) return fail('Please upload your resume.', { resume: 'Please upload a PDF, DOC or DOCX resume.' });
+    const { byEmail, byPhone } = await findByIdentity(db, v.email.toLowerCase(), v.phone);
+    if (byPhone && byPhone.email !== v.email.toLowerCase()) return fail(`This phone number is already registered with ${maskEmail(byPhone.email)}. Please apply with that email, or use a different number.`, { phone: 'Already used by another profile.' });
+    if (byEmail?.user_id) { const sb0 = await createClient(); const { data: { user: u0 } } = await sb0.auth.getUser(); if (u0?.id !== byEmail.user_id) return fail('This email already has an account with us. Please sign in first, then apply.', { email: 'Account exists — please sign in.' }); }
     const sb = await createClient(); const { data: { user } } = await sb.auth.getUser();
     const { data: candidate, error: cErr } = await db.from('candidates').upsert({
       email: v.email.toLowerCase(), name: v.name, phone: v.phone, location: v.location, profile_type: v.profile_type,
       category_id: v.category_id, subcategory_id: v.subcategory_id, experience: v.experience, current_title: v.current_title,
       resume_path: resume.path, resume_name: resume.name, ...(user ? { user_id: user.id } : {}),
     }, { onConflict: 'email' }).select('id').single();
-    if (cErr || !candidate) throw cErr;
+    if (cErr || !candidate) { const m = duplicateMessage(cErr); if (m) return fail(m); throw cErr; }
     const { error: aErr } = await db.from('applications').insert({ job_id: job.id, candidate_id: candidate.id, resume_path: resume.path, resume_name: resume.name });
     if (aErr) return aErr.code === '23505' ? fail('You have already applied for this job. We will be in touch.') : (() => { throw aErr; })();
     await Promise.all([email.registrationCompleted(v.email, v.name, { title: job.title, company: job.company_name }), email.applicationNotifyAdmin(v.name, job.title)]);
@@ -65,26 +91,39 @@ export async function submitApplication(_: unknown, fd: FormData): Promise<Actio
 /* ---------- Registration / auth ---------- */
 const registerSchema = applySchema.omit({ job_id: true }).extend({ password: z.string().min(8, 'At least 8 characters.') });
 
-export async function registerCandidate(_: unknown, fd: FormData): Promise<ActionResult<{ email: string }>> {
+export async function registerCandidate(_: unknown, fd: FormData): Promise<ActionResult<{ email: string; signedIn: boolean }>> {
   const limited = await rateLimit('register'); if (limited) return fail(limited);
   const parsed = registerSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return fail('Please check the highlighted fields.', zodFields(parsed.error));
   const v = parsed.data;
   try {
+    const addr = v.email.toLowerCase();
+    const db = adminClient();
+    // Reject duplicates before an auth user is created, so a blocked signup leaves nothing behind.
+    const { byEmail, byPhone } = await findByIdentity(db, addr, v.phone);
+    if (byEmail?.user_id) return fail(EMAIL_TAKEN, { email: 'Already registered.' });
+    if (byPhone && byPhone.email !== addr) return fail(PHONE_TAKEN, { phone: 'Already registered.' });
+
     const resume = await storeFile(fd.get('resume') as File | null, 'resumes', 'profiles');
     if (!resume) return fail('Please upload your resume.', { resume: 'Please upload a PDF, DOC or DOCX resume.' });
     const sb = await createClient();
-    const { data: auth, error: authErr } = await sb.auth.signUp({ email: v.email.toLowerCase(), password: v.password, options: { data: { name: v.name }, emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback` } });
-    if (authErr) return fail(authErr.message.includes('already') ? 'An account with this email already exists. Please sign in.' : authErr.message);
-    const db = adminClient();
+    const { data: auth, error: authErr } = await sb.auth.signUp({ email: addr, password: v.password, options: { data: { name: v.name }, emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback` } });
+    if (authErr) return fail(authErr.message.toLowerCase().includes('already') ? EMAIL_TAKEN : authErr.message);
+    // With email confirmation on, Supabase hides existing accounts behind a success with no identities.
+    if (auth.user && auth.user.identities?.length === 0) return fail(EMAIL_TAKEN, { email: 'Already registered.' });
     const { error } = await db.from('candidates').upsert({
-      email: v.email.toLowerCase(), name: v.name, phone: v.phone, location: v.location, profile_type: v.profile_type,
+      email: addr, name: v.name, phone: v.phone, location: v.location, profile_type: v.profile_type,
       category_id: v.category_id, subcategory_id: v.subcategory_id, experience: v.experience, current_title: v.current_title,
       resume_path: resume.path, resume_name: resume.name, user_id: auth.user?.id ?? null,
     }, { onConflict: 'email' });
-    if (error) throw error;
-    await email.registrationCompleted(v.email, v.name);
-    return { ok: true, data: { email: v.email } };
+    if (error) {
+      // The profile could not be stored, so the half-made login is removed rather than blocking a retry.
+      if (auth.user && !auth.session) await db.auth.admin.deleteUser(auth.user.id).catch(() => {});
+      const m = duplicateMessage(error); if (m) return fail(m);
+      throw error;
+    }
+    await email.registrationCompleted(addr, v.name);
+    return { ok: true, data: { email: v.email, signedIn: !!auth.session } };
   } catch (e) {
     return fail(e instanceof Error && !('code' in e) ? e.message : "We couldn't complete your registration right now. Please try again.");
   }
@@ -95,6 +134,7 @@ export async function signIn(_: unknown, fd: FormData): Promise<ActionResult> {
   if (!parsed.success) return fail('Please check the highlighted fields.', zodFields(parsed.error));
   const sb = await createClient();
   const { error } = await sb.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
+  if (error?.message === 'Email not confirmed') return fail('Please confirm your email first — open the link we sent when you registered (check spam too), then sign in.');
   if (error) return fail("We couldn't sign you in. Check your email and password and try again.");
   // Same login form for everyone; staff accounts go to the admin panel, candidates to their dashboard.
   const { data: { user } } = await sb.auth.getUser();
@@ -144,7 +184,7 @@ export async function saveCandidateProfile(_: unknown, fd: FormData): Promise<Ac
   const { error } = existing
     ? await db.from('candidates').update({ ...row, user_id: user.id }).eq('id', existing.id)
     : await db.from('candidates').insert({ ...row, email: addr, user_id: user.id });
-  if (error) return fail('Could not save your profile. Please try again.');
+  if (error) return fail(duplicateMessage(error) || 'Could not save your profile. Please try again.', error.code === '23505' ? { phone: 'Already used by another profile.' } : undefined);
   await db.from('profiles').update({ name: v.name }).eq('id', user.id);
   return { ok: true };
 }

@@ -7,7 +7,8 @@ export type SessionUser = { id: string; email: string; user_metadata?: { name?: 
  *  (fetched once, then cached in memory), so this costs no round trip to Supabase Auth — unlike auth.getUser(). */
 export async function getUser(): Promise<SessionUser | null> {
   const sb = await createClient();
-  const { data } = await sb.auth.getClaims();
+  // A revoked or expired refresh token makes the client throw; that is a signed-out visitor, not a server error.
+  const { data } = await sb.auth.getClaims().catch(() => ({ data: null }));
   const c = data?.claims;
   return c ? { id: c.sub, email: c.email || '', user_metadata: c.user_metadata } : null;
 }

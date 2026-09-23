@@ -17,8 +17,8 @@ export function RegisterForm({ categories }: { categories: Category[] }) {
   const next = () => { const el = ref.current?.querySelector<HTMLElement>(`[data-step="${step}"]`); if (!el) return; const e = validateFields(el); setLocal(e); if (!Object.keys(e).length) setStep(s => s + 1); };
 
   if (success) return (
-    <div className="form-card"><SuccessPanel title="Registration completed" actions={<><Link className="btn btn-primary" href="/jobs">Find jobs</Link><Link className="btn btn-outline" href="/login">Sign in to your dashboard</Link></>}>
-      Check <strong>{success.data?.email}</strong> to confirm your email. Our recruiters will contact you when a suitable role comes up — and you can start applying right away.
+    <div className="form-card"><SuccessPanel title="Registration completed" actions={<><Link className="btn btn-primary" href="/jobs">Find jobs</Link><Link className="btn btn-outline" href={success.data?.signedIn ? '/candidate/dashboard' : '/login'}>{success.data?.signedIn ? 'Go to your dashboard' : 'Sign in to your dashboard'}</Link></>}>
+      {success.data?.signedIn ? <>You&apos;re signed in as <strong>{success.data.email}</strong>. </> : <>Check <strong>{success.data?.email}</strong> to confirm your email before signing in. </>}Our recruiters will contact you when a suitable role comes up — and you can start applying right away.
     </SuccessPanel></div>
   );
 

@@ -84,7 +84,7 @@ export interface HeroContent { eyebrow: string; heading: string; accent: string;
 export interface TrustBandContent { heading: string; industries: string[]; logos: { url: string; alt: string }[] }
 export interface StatisticsContent { items: { number: number; suffix: string; label: string }[] }
 export interface EmployerCtaContent { heading: string; text: string; primary_cta: string; secondary_cta: string }
-export interface FooterContent { description: string; address: string; phone: string; email: string; hours: string; social: { linkedin: string; instagram: string; x: string; youtube: string } }
+export interface FooterContent { description: string; address: string; phone: string; email: string; hours: string; social: { linkedin: string; instagram: string; x: string; facebook: string } }
 export interface SettingsContent { site_name: string; seo_suffix: string; seo_description: string; employer_sla: string; notify_emails: string }
 
 export type ActionResult<T = undefined> = { ok: true; data?: T } | { ok: false; error: string; fields?: Record<string, string> };

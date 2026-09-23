@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
       setAll: (all: CookieToSet[]) => { all.forEach(({ name, value }) => request.cookies.set(name, value)); response = NextResponse.next({ request }); all.forEach(({ name, value, options }) => response.cookies.set(name, value, options)); },
     },
   });
-  const { data: claims } = await supabase.auth.getClaims(); // verified locally against cached signing keys; still refreshes the cookie when expired
+  const { data: claims } = await supabase.auth.getClaims().catch(() => ({ data: null })); // verified locally against cached signing keys; still refreshes the cookie when expired
   const user = claims?.claims;
   const { pathname } = request.nextUrl;
   const isAdminArea = pathname.startsWith('/admin') && pathname !== '/admin/login';

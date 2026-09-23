@@ -9,7 +9,7 @@ import type { FooterContent } from '@/lib/types';
 export const metadata: Metadata = { title: 'Contact Amani Tech', description: 'Get in touch with Amani Tech — whether you are looking for a job, looking to hire, or have a question.', alternates: { canonical: '/contact' } };
 
 export default async function ContactPage() {
-  const { payload: c } = await getContent<FooterContent>('footer', { description: '', address: 'Hyderabad, India', phone: '+91 40 0000 0000', email: 'hello@amanitech.in', hours: 'Mon–Sat, 9:30 AM – 6:30 PM IST', social: { linkedin: '', instagram: '', x: '', youtube: '' } });
+  const { payload: c } = await getContent<FooterContent>('footer', { description: '', address: 'Hyderabad, India', phone: '+91 40 0000 0000', email: 'hello@amanitech.in', hours: 'Mon–Sat, 9:30 AM – 6:30 PM IST', social: { linkedin: '', instagram: '', x: '', facebook: '' } });
   return (
     <>
       <section className="page-hero"><div className="container">

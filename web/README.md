@@ -5,7 +5,7 @@ Next.js 15 (App Router, TypeScript, Server Actions) + Supabase (Postgres, Auth, 
 ## 1. Create the Supabase project
 
 1. [supabase.com](https://supabase.com) → New project. Note the **Project URL**, **anon key** and **service_role key** (Project Settings → API).
-2. SQL Editor → run `supabase/migrations/0001_init.sql` (tables, RLS, storage buckets, `admin_metrics()`), then `0002_candidate_profile.sql` (profile photo, skills, education, work history), then `0003_job_logo.sql` (company logo on jobs). Run any later numbered files in order.
+2. SQL Editor → run `supabase/migrations/0001_init.sql` (tables, RLS, storage buckets, `admin_metrics()`), then `0002_candidate_profile.sql` (profile photo, skills, education, work history), then `0003_job_logo, then `0004_identity_unique.sql` (one candidate per email and phone).sql` (company logo on jobs). Run any later numbered files in order.
 3. SQL Editor → run `supabase/seed.sql` (categories, 17 jobs, services, FAQs, posts, openings, homepage content, sample leads). Skip it for an empty production database.
 4. Authentication → URL Configuration → add `http://localhost:3000/auth/callback` (and your production domain) to **Redirect URLs**. For development you may disable "Confirm email" under Authentication → Providers → Email.
 
@@ -51,6 +51,28 @@ middleware.ts         session refresh + /admin and /candidate gating
 - Public form submissions run on the server with the service role after zod validation and per-IP rate limiting; the browser never holds the service key.
 - Resumes and JDs live in **private** buckets; admins fetch them through 5-minute signed URLs.
 - Security headers are set in `next.config.ts`.
+
+## Tests
+
+```bash
+npm run dev                  # the suite drives the running site
+npm run test:e2e             # headless
+npm run test:e2e -- --show   # watch it in a browser window
+```
+
+`tests/e2e.mjs` walks the real candidate journey in a real browser: registration, duplicate email and
+duplicate phone rejection, sign-in (wrong and right password), the dashboard, saving a profile, applying to
+a job, applying twice, applying as a first-time visitor, sign-out, and the admin/candidate separation. Set
+`E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD` to include the admin checks, and `BASE_URL` to run against a
+deployed site instead of localhost. `tests/browser.mjs` drives Edge or Chrome over the DevTools Protocol,
+so there is no test framework or browser download to install.
+
+Every record a run creates is tracked by id and deleted at the end — candidates, applications, logins and
+uploaded files. It counts the rows before and after and fails if anything it made is still there, so running
+it against the live project leaves no residue. It never deletes anything it did not create.
+
+A test reported as **BLOCKED** is not a code failure: a Supabase setting stopped that step (most often the
+built-in mailer's limit of a couple of confirmation emails per hour). The message says what to change.
 
 ## Deploy
 

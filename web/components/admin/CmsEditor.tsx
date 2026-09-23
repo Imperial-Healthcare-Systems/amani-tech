@@ -132,12 +132,12 @@ export function CmsEditor(p: { hero: Sec<HeroContent>; trust: Sec<TrustBandConte
             <div className="field"><label htmlFor="f-phone">Phone</label><input className="input" id="f-phone" value={footer.payload.phone} onChange={e => F({ ...footer, payload: { ...footer.payload, phone: e.target.value } })} /></div>
             <div className="field"><label htmlFor="f-email">Email</label><input className="input" id="f-email" value={footer.payload.email} onChange={e => F({ ...footer, payload: { ...footer.payload, email: e.target.value } })} /></div>
             <div className="field span-2"><label htmlFor="f-hours">Office hours</label><input className="input" id="f-hours" value={footer.payload.hours} onChange={e => F({ ...footer, payload: { ...footer.payload, hours: e.target.value } })} /></div>
-            {(['linkedin', 'instagram', 'x', 'youtube'] as const).map(k => <div key={k} className="field"><label htmlFor={`f-${k}`}>{k === 'x' ? 'X' : k.charAt(0).toUpperCase() + k.slice(1)} URL</label><input className="input" id={`f-${k}`} value={footer.payload.social?.[k] || ''} onChange={e => F({ ...footer, payload: { ...footer.payload, social: { ...footer.payload.social, [k]: e.target.value } } })} /></div>)}
+            {(['linkedin', 'instagram', 'x', 'facebook'] as const).map(k => <div key={k} className="field"><label htmlFor={`f-${k}`}>{k === 'x' ? 'X' : k.charAt(0).toUpperCase() + k.slice(1)} URL</label><input className="input" id={`f-${k}`} value={footer.payload.social?.[k] || ''} onChange={e => F({ ...footer, payload: { ...footer.payload, social: { ...footer.payload.social, [k]: e.target.value } } })} /></div>)}
             <div className="field span-2"><label htmlFor="f-desc">Footer description</label><textarea className="textarea" id="f-desc" style={{ minHeight: 70 }} value={footer.payload.description} onChange={e => F({ ...footer, payload: { ...footer.payload, description: e.target.value } })} /></div>
           </div>
           <Save label="footer" onClick={() => save(() => saveContent('footer', footer.payload as unknown as Record<string, unknown>, true), 'Footer')} />
         </div>
-        <div className="preview-box a-sticky">Contact details here also feed the Contact page. Empty social fields hide that icon.</div>
+        <div className="preview-box a-sticky">Contact details here also feed the Contact page. A social URL lights up that icon in the footer and in the floating buttons; leave it empty and the icon shows as "coming soon".</div>
       </div>}
     </>
   );
