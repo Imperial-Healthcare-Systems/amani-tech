@@ -1,0 +1,136 @@
+/* Phones and reduced-motion get a plain swipeable row; the pinned rail is opt-in below. */
+.track { position: relative; }
+
+.stage { position: relative; }
+.head { flex: none; }
+.head :global(.section-head) { margin-bottom: 0; }
+
+.rail {
+  display: flex;
+  gap: 18px;
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(78vw, 400px);
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
+  overflow: hidden;
+  scroll-snap-align: center;
+  background: var(--navy-900);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-card);
+  isolation: isolate;
+}
+
+.shot { position: absolute; inset: 0; }
+.shot img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 70% center;
+  transition: transform .5s var(--ease);
+}
+/* The picture is lit; a wash from the foot keeps the panel legible over it. */
+.card::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(11, 42, 95, .1) 0%, transparent 30%, rgba(7, 24, 56, .58) 68%, rgba(6, 20, 48, .92) 100%);
+}
+
+
+.reveal {
+  position: absolute; inset: auto 14px 14px; z-index: 2;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(8, 24, 56, .62);
+  --glass: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: var(--glass); backdrop-filter: var(--glass);
+  border: 1px solid rgba(255, 255, 255, .16);
+  transition: translate .5s var(--ease), opacity .4s var(--ease);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .reveal { background: rgba(8, 24, 56, .93); }
+}
+.reveal h3 { font-size: var(--fs-lg); color: #fff; margin: 0 0 6px; letter-spacing: -.01em; }
+.reveal p { margin: 0 0 14px; font-size: var(--fs-sm); color: rgba(255, 255, 255, .8); line-height: 1.55; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0 0 12px; padding: 0; }
+.tags li {
+  padding: 4px 10px; border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .16);
+  font-size: var(--fs-xs); font-weight: 600; color: rgba(255, 255, 255, .92);
+}
+
+.go {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-weight: 700; font-size: var(--fs-sm); color: #fff; text-decoration: none !important;
+}
+.go :global(.icon) { width: 15px; height: 15px; transition: transform .2s var(--ease); }
+.go:hover :global(.icon) { transform: translateX(3px); }
+
+/* The card's name, shown at rest on a pointer device and handed to the panel on hover. Where there
+   is no hover the panel is always open, so the name would only double up — it stays hidden. */
+.resting {
+  display: none;
+  position: absolute; inset: auto 20px 22px; z-index: 2; margin: 0;
+  font-size: var(--fs-xl); color: #fff; letter-spacing: -.015em;
+  text-shadow: 0 2px 18px rgba(6, 18, 44, .7);
+  transition: opacity .3s var(--ease), translate .4s var(--ease);
+}
+
+
+.progress { display: none; }
+
+/* ---- pointer devices: the detail hides until the card is hovered ---- */
+@media (hover: hover) and (pointer: fine) {
+  .resting { display: block; }
+  .reveal { translate: 0 118%; opacity: 0; }
+  .card:hover .reveal, .card:focus-within .reveal { translate: 0; opacity: 1; }
+  .card:hover .shot img { transform: scale(1.06); }
+  .card:hover .resting, .card:focus-within .resting { opacity: 0; translate: 0 -10px; }
+}
+
+/* ---- the pinned rail ---- */
+@media (min-width: 1024px) {
+  .isDriven { height: 260vh; }
+  .isDriven .stage {
+    position: sticky; top: 0; left: 0;
+    height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; gap: 30px;
+    overflow: hidden;
+  }
+  .isDriven .rail { overflow: visible; scroll-snap-type: none; padding-inline: 0; }
+  /* Symmetric padding of half the leftover width puts the first card in the middle at rest and,
+     because the travel is measured card to card, leaves the last card in the middle when it stops. */
+  .isDriven .rail { padding-inline: calc((100% - var(--card-w)) / 2); }
+
+  /* The card whose turn it is opens itself and lifts slightly out of the row. */
+  .isActive { box-shadow: 0 2px 8px rgba(11, 42, 95, .1), 0 30px 60px -26px rgba(11, 42, 95, .45), 0 40px 80px -50px rgba(0, 145, 255, .55); }
+  .isActive .reveal { translate: 0 !important; opacity: 1 !important; }
+  .isActive .resting { opacity: 0; translate: 0 -10px; }
+  .isActive .shot img { transform: scale(1.06); }
+
+  .rail { gap: 24px; }
+  .rail { --card-w: min(42vw, 600px); }
+  .card { width: var(--card-w); aspect-ratio: 5 / 4; }
+
+
+  .isDriven .progress {
+    display: block; margin-inline: var(--gutter);
+    height: 4px; border-radius: var(--r-pill); overflow: hidden;
+    background: var(--navy-100);
+  }
+  .isDriven .progress span {
+    display: block; width: 100%; height: 100%; transform-origin: left;
+    border-radius: var(--r-pill);
+    background: linear-gradient(90deg, var(--accent-600), var(--accent-400));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shot img, .reveal, .go :global(.icon) { transition: none; }
+}

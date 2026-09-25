@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Icon } from '@/components/Icon';
 import { Enter, Item, Reveal, Stagger } from '@/components/motion';
 import { WhyCards } from '@/components/WhyCards';
-import { EngageJourney } from '@/components/EngageJourney';
+import { EngageTimeline } from '@/components/EngageTimeline';
 
 export const metadata: Metadata = {
   title: 'Digital Transformation — Growth & Operations Automation',
@@ -68,12 +68,15 @@ export default function TransformationPage() {
         points={WHY}
       />
 
-      <EngageJourney
-        eyebrow="How we engage"
-        heading="From process audit to a system that runs"
-        lead="Four steps, each with something you can see and sign off before the next begins."
-        stages={HOW}
-      />
+      <section className="section-engage" id="how-we-engage">
+        <EngageTimeline
+          eyebrow="How we engage"
+          heading="From process audit to a system that runs"
+          period="Four steps · audit to running system"
+          image="/practices/04.webp"
+          stages={HOW}
+        />
+      </section>
 
       <section className="section-tight"><div className="container"><Reveal>
         <div className="cta-band"><span className="eyebrow">Start a conversation</span><h2>Tell us what your team keeps doing by hand</h2><p>Describe the repetitive work in a few lines. We will come back with an honest view of what can be automated and what cannot.</p><div className="row"><Link className="btn btn-primary btn-lg" href="/contact">Contact us</Link><Link className="btn btn-outline-light btn-lg" href="/services/it-consulting">Need engineering instead?</Link></div></div>

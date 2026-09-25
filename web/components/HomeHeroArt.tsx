@@ -1,6 +1,6 @@
 import s from './HomeHeroArt.module.css';
 
-const NAVY = '#141A4A', NAVY_MID = '#242D78', BLUE = '#2563EB', BLUE_LIGHT = '#60A5FA';
+const NAVY = '#0B2A5F', NAVY_MID = '#134087', BLUE = '#0091FF', BLUE_LIGHT = '#5CB8FF';
 const CX = 262, CY = 252, R = 142;
 const ROUTE = 'M186 182 C 252 132, 330 178, 336 292';
 
@@ -14,13 +14,13 @@ export function HomeHeroArt() {
     <svg className={s.art} viewBox="0 0 524 500" role="img" aria-label="Amani Tech works from Hyderabad and Toronto, delivering technology, talent, GCC and transformation services worldwide">
       <defs>
         <radialGradient id="hh-glow" cx="50%" cy="42%">
-          <stop offset="0%" stopColor="#DCE8FF" stopOpacity=".95" />
-          <stop offset="100%" stopColor="#DCE8FF" stopOpacity="0" />
+          <stop offset="0%" stopColor="#DCF1FF" stopOpacity=".95" />
+          <stop offset="100%" stopColor="#DCF1FF" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="hh-globe" x1="18%" y1="6%" x2="86%" y2="96%">
-          <stop offset="0%" stopColor="#F4F8FF" />
-          <stop offset="58%" stopColor="#E4EDFF" />
-          <stop offset="100%" stopColor="#CFDEFF" />
+          <stop offset="0%" stopColor="#F4FBFF" />
+          <stop offset="58%" stopColor="#E4F4FF" />
+          <stop offset="100%" stopColor="#CFEAFF" />
         </linearGradient>
         <linearGradient id="hh-deep" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={NAVY_MID} />
@@ -28,7 +28,7 @@ export function HomeHeroArt() {
         </linearGradient>
         <linearGradient id="hh-tile" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="100%" stopColor="#F3F7FF" />
+          <stop offset="100%" stopColor="#F3FAFF" />
         </linearGradient>
         <clipPath id="hh-sphere"><circle cx={CX} cy={CY} r={R} /></clipPath>
       </defs>
@@ -36,15 +36,15 @@ export function HomeHeroArt() {
       <ellipse cx={CX} cy={CY - 6} rx="250" ry="216" fill="url(#hh-glow)" />
 
       {/* the globe */}
-      <circle cx={CX} cy={CY} r={R} fill="url(#hh-globe)" stroke="#C3D5FF" />
-      <g clipPath="url(#hh-sphere)" stroke="#B4C9FA" strokeWidth="1" fill="none" opacity=".85">
+      <circle cx={CX} cy={CY} r={R} fill="url(#hh-globe)" stroke="#C3E4FF" />
+      <g clipPath="url(#hh-sphere)" stroke="#B4DBFA" strokeWidth="1" fill="none" opacity=".85">
         {LATS.map(l => <ellipse key={l.dy} cx={CX} cy={CY + l.dy} rx={l.rx} ry={l.ry} />)}
         <g className={s.spin}>
           {[R, R * 0.66, R * 0.3].map((rx, i) => <ellipse key={i} cx={CX} cy={CY} rx={rx} ry={R} />)}
           <line x1={CX} y1={CY - R} x2={CX} y2={CY + R} />
         </g>
       </g>
-      <circle cx={CX} cy={CY} r={R} fill="none" stroke="#A9C1F7" strokeWidth="1.5" />
+      <circle cx={CX} cy={CY} r={R} fill="none" stroke="#A9D5F7" strokeWidth="1.5" />
 
       {/* the corridor we actually run: Toronto to Hyderabad */}
       <path d={ROUTE} fill="none" stroke={BLUE_LIGHT} strokeWidth="2" opacity=".55" />
@@ -68,8 +68,8 @@ export function HomeHeroArt() {
         ['Transformation', 350, 404, 2.1, 'M1 13.5 6 8l4 3.5L17 4M17 4h-5M17 4v5'],
       ] as const).map(([label, x, y, delay, d]) => (
         <g key={label} className={s.float} style={{ animationDelay: `${delay}s` }}>
-          <rect x={x} y={y} width="158" height="52" rx="14" fill="url(#hh-tile)" stroke="#C9D8FF" />
-          <rect x={x + 12} y={y + 12} width="28" height="28" rx="9" fill="#EAF1FF" />
+          <rect x={x} y={y} width="158" height="52" rx="14" fill="url(#hh-tile)" stroke="#C9E6FF" />
+          <rect x={x + 12} y={y + 12} width="28" height="28" rx="9" fill="#EAF6FF" />
           <g transform={`translate(${x + 21} ${y + 21})`} stroke={BLUE} strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></g>
           <text x={x + 50} y={y + 31} fontSize="13" fontWeight="600" fill={NAVY}>{label}</text>
         </g>

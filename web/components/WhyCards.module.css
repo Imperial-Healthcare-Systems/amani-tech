@@ -4,7 +4,7 @@
   position: relative;
   overflow: hidden;
   padding: 72px 0 76px;
-  background: #FCFDFF;
+  background: #FCFEFF;
 }
 
 /* Atmosphere: soft blue washes, a wide translucent arc, and a dotted field top-right. */
@@ -13,8 +13,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(48% 52% at 12% 6%, rgba(37, 99, 235, .06), transparent 70%),
-    radial-gradient(42% 48% at 92% 88%, rgba(139, 143, 232, .07), transparent 72%);
+    radial-gradient(48% 52% at 12% 6%, rgba(0, 145, 255, .06), transparent 70%),
+    radial-gradient(42% 48% at 92% 88%, rgba(139, 167, 232, .07), transparent 72%);
   pointer-events: none;
 }
 .arc {
@@ -24,7 +24,7 @@
   width: 82%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 80px solid rgba(219, 232, 255, .34);
+  border: 80px solid rgba(219, 241, 255, .34);
   pointer-events: none;
 }
 .dots {
@@ -33,7 +33,7 @@
   right: 3%;
   width: 176px;
   height: 128px;
-  background-image: radial-gradient(rgba(37, 99, 235, .22) 1.4px, transparent 1.4px);
+  background-image: radial-gradient(rgba(0, 145, 255, .22) 1.4px, transparent 1.4px);
   background-size: 17px 17px;
   -webkit-mask-image: linear-gradient(115deg, #000, transparent 78%);
   mask-image: linear-gradient(115deg, #000, transparent 78%);
@@ -78,17 +78,17 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, .86);
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(201, 216, 255, .85);
-  box-shadow: 0 1px 2px rgba(20, 26, 74, .03), 0 14px 30px -24px rgba(20, 26, 74, .3);
+  border: 1px solid rgba(201, 230, 255, .85);
+  box-shadow: 0 1px 2px rgba(11, 42, 95, .03), 0 14px 30px -24px rgba(11, 42, 95, .3);
   text-decoration: none !important;
   color: inherit;
   transition: transform .45s cubic-bezier(.22, .61, .36, 1), border-color .45s ease, box-shadow .45s ease, background .45s ease;
 }
 .card:hover, .card:focus-visible {
   transform: translateY(-5px);
-  border-color: rgba(37, 99, 235, .45);
+  border-color: rgba(0, 145, 255, .45);
   background: #fff;
-  box-shadow: 0 2px 4px rgba(20, 26, 74, .04), 0 26px 50px -28px rgba(37, 99, 235, .55), 0 0 0 4px rgba(37, 99, 235, .05);
+  box-shadow: 0 2px 4px rgba(11, 42, 95, .04), 0 26px 50px -28px rgba(0, 145, 255, .55), 0 0 0 4px rgba(0, 145, 255, .05);
 }
 .card:focus-visible { outline: 3px solid var(--accent-600); outline-offset: 3px; }
 
@@ -101,10 +101,10 @@
   font-size: 1.85rem;
   line-height: 1;
   letter-spacing: -.04em;
-  color: rgba(37, 99, 235, .18);
+  color: rgba(0, 145, 255, .18);
   transition: color .45s ease;
 }
-.card:hover .num { color: rgba(37, 99, 235, .78); }
+.card:hover .num { color: rgba(0, 145, 255, .78); }
 
 .artWrap {
   display: flex;

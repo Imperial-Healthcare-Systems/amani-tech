@@ -1,0 +1,125 @@
+.wrap { display: grid; gap: 40px; align-items: center; }
+
+.copy { display: flex; flex-direction: column; }
+.head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.head > div { flex: 1 1 26rem; min-width: 0; }
+.head :global(h2) { margin-bottom: 0; font-size: clamp(1.55rem, 2.25vw, 2.05rem); }
+.lead { color: var(--muted); font-size: var(--fs-md); line-height: 1.6; max-width: 40ch; margin: 10px 0 0; }
+
+.grid { display: grid; gap: 14px; margin-top: 30px; }
+
+/* ---- the card ---- */
+/* Each card carries a soft-light spotlight that follows the cursor: the border brightens where the
+   pointer is, the tile lifts, and the arrow fills. It is one gesture rather than a flat highlight. */
+.card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 16px 16px 18px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+  text-decoration: none !important;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 1px 2px rgba(11, 42, 95, .04);
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+}
+/* The lit edge. A masked ring means only the border glows, not the whole card. */
+.card::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0; border-radius: inherit; padding: 1px;
+  background: radial-gradient(180px circle at var(--mx) var(--my), var(--accent-500), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity .35s var(--ease);
+}
+/* A faint wash of the same light inside the card. */
+.card::after {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: radial-gradient(240px circle at var(--mx) var(--my), rgba(0, 145, 255, .1), transparent 62%);
+  opacity: 0; transition: opacity .35s var(--ease);
+}
+.card:hover, .card:focus-visible {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(11, 42, 95, .05), 0 22px 44px -22px rgba(11, 42, 95, .3), 0 30px 60px -40px rgba(0, 145, 255, .6);
+}
+.card:hover::before, .card:focus-visible::before, .card:hover::after, .card:focus-visible::after { opacity: 1; }
+
+.tile {
+  flex: none; width: 46px; height: 46px; border-radius: 14px;
+  display: grid; place-items: center;
+  color: var(--accent-600);
+  background: linear-gradient(150deg, #EAF4FF, #D6E9FF);
+  border: 1px solid rgba(0, 145, 255, .16);
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease);
+}
+.tile :global(.icon) { width: 22px; height: 22px; }
+.card:hover .tile, .card:focus-visible .tile {
+  transform: translateY(-2px) scale(1.06) perspective(520px) rotateY(-14deg);
+  box-shadow: 0 12px 22px -12px rgba(0, 145, 255, .6);
+}
+
+.text { flex: 1; min-width: 0; }
+.text b {
+  display: block; font-family: var(--font-head); font-weight: 700;
+  font-size: var(--fs-base); color: var(--navy-900); line-height: 1.25; letter-spacing: -.015em; text-wrap: balance;
+}
+.text span { display: block; margin-top: 3px; font-size: var(--fs-sm); color: var(--muted); }
+
+.arrow {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--border); color: var(--accent-600); background: #fff;
+  transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
+}
+.arrow :global(.icon) { width: 15px; height: 15px; }
+.card:hover .arrow, .card:focus-visible .arrow {
+  background: var(--accent-600); border-color: var(--accent-600); color: #fff; transform: translateX(3px);
+}
+
+/* ---- the picture ---- */
+.art { position: relative; border-radius: 22px; overflow: hidden; }
+.art img { width: 100%; height: auto; display: block; }
+
+/* ---- the platforms strip ---- */
+.strip { margin-top: 48px; padding-top: 34px; border-top: 1px solid var(--border); }
+.strip p { margin: 0 0 26px; font-size: var(--fs-sm); font-weight: 600; color: var(--muted); text-align: center; }
+/* Wider spacing between marks, and a longer dissolve at both ends. */
+.strip :global(.marquee) { mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.strip :global(.marquee-track) { gap: 56px; animation-duration: 52s; }
+
+/* The marks sit straight on the page — no plate, no border, no padding — so the strip reads as a
+   logo wall rather than a row of buttons. */
+.chip {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-head); font-weight: 700; font-size: var(--fs-md);
+  color: var(--navy-900); white-space: nowrap;
+  opacity: .78;
+  transition: opacity .25s var(--ease);
+}
+.chip:hover { opacity: 1; }
+.chip svg { width: 39px; height: 39px; flex: none; }
+
+@media (min-width: 640px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px) {
+  .wrap { grid-template-columns: 1.38fr .62fr; gap: 48px; }
+  .grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  /* The source picture leaves its left third empty, so the panel crops to the lit side. */
+  .art { aspect-ratio: 3 / 4; margin-right: -3vw; border-radius: 26px; }
+  .art img { height: 100%; object-fit: cover; object-position: 78% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .tile, .arrow { transition: none; }
+  .card:hover, .card:focus-visible { transform: none; }
+  .card:hover .tile, .card:focus-visible .tile { transform: none; }
+}

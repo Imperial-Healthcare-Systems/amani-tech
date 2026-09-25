@@ -11,7 +11,7 @@ function Facade() {
   const rows = Array.from({ length: 16 }, (_, i) => i);
   return (
     <svg className={s.building} viewBox="0 0 300 420" aria-hidden="true">
-      <g fill="none" stroke="#2563EB" strokeOpacity=".12" strokeWidth="1">
+      <g fill="none" stroke="#0091FF" strokeOpacity=".12" strokeWidth="1">
         <path d="M40 420V70L170 20L300 60V420" />
         <path d="M170 20V420" />
         {cols.map(c => <path key={`l${c}`} d={`M${40 + c * 14.4} ${70 - c * 5.55}V420`} />)}

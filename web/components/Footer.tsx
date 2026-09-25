@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Icon, Logo } from './Icon';
+import { Icon } from './Icon';
+import { BrandLogo } from './BrandLogo';
 import { socials } from '@/lib/socials';
 import type { FooterContent } from '@/lib/types';
 
@@ -10,7 +11,7 @@ export function Footer({ content }: { content: FooterContent }) {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <Logo light />
+            <BrandLogo onDark />
             <p className="small mt-16" style={{ maxWidth: 320 }}>{content.description}</p>
             <div className="footer-contact">
               <div><Icon name="pin" /><span>{content.address}</span></div>

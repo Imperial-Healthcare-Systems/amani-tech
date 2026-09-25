@@ -2,16 +2,16 @@ import s from './ScopeCards.module.css';
 
 /** Four visuals for the GCC scope cards — one system: glass planes, silver edges, electric-blue accents. */
 
-const NAVY = '#141A4A', NAVY_MID = '#242D78', BLUE = '#2563EB', BLUE_LIGHT = '#60A5FA', STEEL = '#C9D8FF', LAV = '#8B8FE8';
+const NAVY = '#0B2A5F', NAVY_MID = '#134087', BLUE = '#0091FF', BLUE_LIGHT = '#5CB8FF', STEEL = '#C9E6FF', LAV = '#8BA7E8';
 
 function Defs({ id }: { id: string }) {
   return (
     <defs>
       <linearGradient id={`${id}-glass`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#FFFFFF" stopOpacity=".97" /><stop offset="1" stopColor="#DFE8FF" stopOpacity=".85" />
+        <stop offset="0" stopColor="#FFFFFF" stopOpacity=".97" /><stop offset="1" stopColor="#DFF0FF" stopOpacity=".85" />
       </linearGradient>
       <linearGradient id={`${id}-pane`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#F5F8FF" /><stop offset="1" stopColor="#D7E3FF" />
+        <stop offset="0" stopColor="#F5FBFF" /><stop offset="1" stopColor="#D7EDFF" />
       </linearGradient>
       <linearGradient id={`${id}-blue`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor={BLUE_LIGHT} /><stop offset="1" stopColor={BLUE} />
@@ -35,7 +35,7 @@ export function ScopeArt({ name }: { name: string }) {
     <svg {...box}><Defs id={id} />
       <ellipse cx="90" cy="98" rx="66" ry="17" fill={`url(#${id}-glow)`} />
       <g className={s.floatSlow}>
-        <rect x="42" y="16" width="70" height="86" rx="7" fill="#EAF0FF" stroke={STEEL} transform="rotate(-7 77 59)" />
+        <rect x="42" y="16" width="70" height="86" rx="7" fill="#EAF5FF" stroke={STEEL} transform="rotate(-7 77 59)" />
         <rect x="50" y="12" width="70" height="86" rx="7" fill={`url(#${id}-glass)`} stroke={STEEL} />
         <rect x="60" y="24" width="34" height="5" rx="2.5" fill={NAVY_MID} opacity=".5" />
         {[0, 1, 2, 3].map(i => <rect key={i} x="60" y={38 + i * 10} width={i === 3 ? 28 : 50} height="4" rx="2" fill={STEEL} />)}
@@ -63,7 +63,7 @@ export function ScopeArt({ name }: { name: string }) {
         <path d="M90 104 L34 76 L90 48 L146 76 Z" fill={`url(#${id}-pane)`} stroke={STEEL} />
         {/* tower */}
         <path d="M74 74 L74 26 L98 14 L98 62 Z" fill={`url(#${id}-glass)`} stroke={STEEL} />
-        <path d="M98 62 L98 14 L118 26 L118 74 Z" fill="#DCE6FF" stroke={STEEL} />
+        <path d="M98 62 L98 14 L118 26 L118 74 Z" fill="#DCEFFF" stroke={STEEL} />
         {[0, 1, 2, 3].map(i => (
           <g key={i} className={s.tick} style={{ animationDelay: `${i * .4}s` }}>
             <rect x="79" y={34 + i * 10} width="14" height="5" rx="1.5" fill={BLUE_LIGHT} opacity=".65" />
@@ -72,7 +72,7 @@ export function ScopeArt({ name }: { name: string }) {
         ))}
         {/* low block */}
         <path d="M44 84 L44 62 L68 52 L68 74 Z" fill={`url(#${id}-glass)`} stroke={STEEL} />
-        <path d="M68 74 L68 52 L84 60 L84 82 Z" fill="#D2DEFF" stroke={STEEL} />
+        <path d="M68 74 L68 52 L84 60 L84 82 Z" fill="#D2E9FF" stroke={STEEL} />
       </g>
       <g className={s.floatFast}>
         <rect x="132" y="28" width="32" height="26" rx="7" fill="#fff" stroke={STEEL} />
@@ -95,7 +95,7 @@ export function ScopeArt({ name }: { name: string }) {
             <rect x="40" y={40 + i * 17} width="11" height="11" rx="3.5" fill={`url(#${id}-blue)`} />
             <path d={`M43 ${45.5 + i * 17} l2.5 2.5 l3.5 -4.5`} stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             <rect x="57" y={42 + i * 17} width="22" height="3.5" rx="1.75" fill={STEEL} />
-            <rect x="57" y={48 + i * 17} width="14" height="3.5" rx="1.75" fill="#E2EAFF" />
+            <rect x="57" y={48 + i * 17} width="14" height="3.5" rx="1.75" fill="#E2F1FF" />
           </g>
         ))}
       </g>
@@ -112,7 +112,7 @@ export function ScopeArt({ name }: { name: string }) {
   return (
     <svg {...box}><Defs id={id} />
       <ellipse cx="90" cy="100" rx="68" ry="16" fill={`url(#${id}-glow)`} />
-      <g stroke="#B9CCFF" strokeWidth="1.4" fill="none">
+      <g stroke="#B9DEFF" strokeWidth="1.4" fill="none">
         <path d="M90 52 v14 M56 82 v-10 h68 v10" />
       </g>
       <g className={s.floatSlow}>
@@ -129,7 +129,7 @@ export function ScopeArt({ name }: { name: string }) {
         <rect x="128" y="18" width="42" height="28" rx="7" fill="#fff" stroke={STEEL} />
         <circle cx="140" cy="32" r="6" fill={LAV} opacity=".8" />
         <rect x="150" y="27" width="14" height="3.5" rx="1.75" fill={STEEL} />
-        <rect x="150" y="34" width="9" height="3.5" rx="1.75" fill="#E2EAFF" />
+        <rect x="150" y="34" width="9" height="3.5" rx="1.75" fill="#E2F1FF" />
       </g>
       <circle className={s.pulse} cx="18" cy="46" r="3" fill={BLUE} />
       <circle className={s.pulse} style={{ animationDelay: '.7s' }} cx="166" cy="66" r="3" fill={BLUE} />

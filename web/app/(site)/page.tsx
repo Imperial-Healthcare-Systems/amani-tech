@@ -1,49 +1,94 @@
 import Link from 'next/link';
 import { Icon } from '@/components/Icon';
-import { Counter, Enter, Item, Reveal, Stagger } from '@/components/motion';
-import { HeroVisual } from '@/components/HeroVisual';
-import { EngageJourney } from '@/components/EngageJourney';
+import { Enter, Item, Reveal, Stagger } from '@/components/motion';
+import { HeroCarousel, type HeroSlide } from '@/components/HeroCarousel';
+import { ServiceTicker } from '@/components/ServiceTicker';
+import { TechSection } from '@/components/TechSection';
+import { PracticeShowcase, type Practice } from '@/components/PracticeShowcase';
+import { EngageTimeline } from '@/components/EngageTimeline';
 import { JobCard } from '@/components/JobCard';
 import { BlogCard, FaqList } from '@/components/cards';
 import { getContent, getFaqs, getFeaturedJobs, getPosts } from '@/lib/queries';
-import type { EmployerCtaContent, HeroContent, StatisticsContent, TrustBandContent } from '@/lib/types';
+import type { EmployerCtaContent, HeroContent, TrustBandContent } from '@/lib/types';
 
-const HERO: HeroContent = { eyebrow: 'Technology • Talent • Transform', heading: 'Building global teams. Powering digital transformation.', accent: 'Powering digital transformation.', subheading: 'Amani Tech is a global staffing and technology partner helping enterprises build world-class teams and digital capabilities — from Global Capability Centers in Hyderabad to end-to-end technology services delivered worldwide.', primary_cta: 'For Employers', secondary_cta: 'For Candidates', secondary_url: '/candidates', image: '' };
-const STAT_ICONS = ['briefcase', 'building', 'users', 'graduation', 'star'];
+const HERO: HeroContent = { eyebrow: 'Technology • Talent • Transform', heading: 'Building global teams. Powering digital transformation.', accent: 'Powering digital transformation.', subheading: 'A global staffing and technology partner: world-class teams, real engineering delivery, and Global Capability Centers in Hyderabad.', primary_cta: 'For Employers', secondary_cta: 'For Candidates', secondary_url: '/candidates', image: '' };
+// Slides 2-4 are the practices, each on the frame it was shot for. Slide 1 comes from
+// Admin -> Website CMS -> Hero, so the opening claim stays editable.
+const SLIDES: HeroSlide[] = [
+  {
+    image: '/hero/2.webp',
+    alt: 'A cloud platform rendered as a lit data centre beneath a global network',
+    eyebrow: 'Technology Services',
+    heading: 'Cloud, code and security, delivered end to end.', accent: 'delivered end to end.',
+    body: 'Six engineering capabilities under one team — cloud, applications, QA automation, DevOps, security and applied AI.',
+    primary: { label: 'Explore Technology Services', href: '/services/it-consulting' },
+    secondary: { label: 'Talk to a consultant', href: '/contact' },
+  },
+  {
+    image: '/hero/4.webp',
+    alt: 'A recruiter reviewing candidate profiles projected across a connected globe',
+    eyebrow: 'Talent Solutions',
+    heading: 'The right skills, found by people who read every profile.', accent: 'read every profile.',
+    body: 'Permanent, contract and executive search across IT and non-IT — with a recruiter who reads every profile.',
+    primary: { label: 'Explore Talent Solutions', href: '/services/talent' },
+    secondary: { label: 'Request Talent', href: '/employers#request-talent' },
+  },
+  {
+    image: '/hero/3.webp',
+    alt: 'Laptops, dashboards and cloud services connected as one working system',
+    eyebrow: 'Digital Transformation',
+    heading: 'Scale the business without scaling the admin.', accent: 'without scaling the admin.',
+    body: 'One inbox, automated pipelines, onboarding that triggers itself, and AI replacing the repetitive work.',
+    primary: { label: 'Explore Digital Transformation', href: '/services/transformation' },
+    secondary: { label: 'Book a process audit', href: '/contact' },
+  },
+];
+
 const TRUST: TrustBandContent = { heading: 'Trusted by employers across industries', industries: ['IT Services', 'Banking & Finance', 'Manufacturing', 'Healthcare', 'Retail & E-commerce', 'Education', 'Logistics', 'Telecom'], logos: [] };
-const STATS: StatisticsContent = { items: [{ number: 1200, suffix: '+', label: 'Candidates placed' }, { number: 180, suffix: '+', label: 'Client companies' }, { number: 25, suffix: '+', label: 'Job categories' }, { number: 9, suffix: '', label: 'Years in staffing' }] };
 const CTA: EmployerCtaContent = { heading: 'Looking for the right talent?', text: 'Tell us about the role. Our recruiters will source, screen and shortlist candidates for you.', primary_cta: 'Request Talent', secondary_cta: 'Become a staffing partner' };
 
 // Where we work from, and who we serve from there. Kept to one line each — the detail is on /about.
 const FOOTPRINT = [
-  ['Hyderabad, India', 'Headquarters and delivery'],
-  ['Toronto, Canada', 'North American operations'],
-  ['Worldwide', 'Clients across four continents'],
+  ['building', 'Hyderabad, India', 'Headquarters and delivery'],
+  ['pin', 'Toronto, Canada', 'North American operations'],
+  ['globe', 'Worldwide', 'Clients across four continents'],
+  ['user', 'Human recruiters', 'A person reads every profile'],
 ] as const;
 
 /** The four practices. These names are the spine of the site — the menu, the service pages and
  *  the footer all use the same four and no others. */
-const PRACTICES = [
-  ['zap', 'Technology Services', 'Cloud, application development, QA automation, DevOps, cybersecurity and applied AI.', '/services/it-consulting', 'Explore technology'],
-  ['users', 'Talent Solutions', 'Permanent recruitment, contract staffing and executive search across IT and non-IT.', '/services/talent', 'Explore talent'],
-  ['globe', 'GCC Practice', 'End-to-end advisory and talent partner for companies building capability centers in Hyderabad.', '/gcc', 'Explore GCC'],
-  ['trend', 'Digital Transformation', 'Automation and growth systems that help businesses scale their operations.', '/services/transformation', 'Explore transformation'],
-] as const;
-
-const TECH = [
-  ['layers', 'Cloud Platforms', 'AWS, Azure and GCP'],
-  ['code', 'Custom Web & App Development', 'Web and mobile products'],
-  ['usercheck', 'Software Testing / QA Automation', 'Playwright frameworks'],
-  ['zap', 'DevOps & CI/CD Pipelines', 'Faster, safer releases'],
-  ['shield', 'Cybersecurity & Data Protection', 'Audits and compliance'],
-  ['chart', 'Applied AI & Data Analytics', 'Insight and reporting'],
-] as const;
+const PRACTICES: Practice[] = [
+  {
+    id: 'technology', title: 'Technology Services',
+    body: 'Six engineering capabilities under one delivery team, from architecture through to the release pipeline.',
+    services: ['Cloud', 'App development', 'QA automation', 'DevOps', 'Security', 'Applied AI'],
+    image: '/practices/01.webp', href: '/services/it-consulting', cta: 'Explore technology',
+  },
+  {
+    id: 'talent', title: 'Talent Solutions',
+    body: 'Permanent, contract and executive search across IT and non-IT — every profile read by a recruiter, not a keyword filter.',
+    services: ['Permanent', 'Contract', 'Executive search', 'IT & non-IT'],
+    image: '/practices/02.webp', href: '/services/talent', cta: 'Explore talent',
+  },
+  {
+    id: 'gcc', title: 'GCC Practice',
+    body: 'A landing partner for a capability centre in Hyderabad: incorporation, office, compliance, then the team that fills it.',
+    services: ['Incorporation', 'Office leasing', 'Compliance', 'Team build'],
+    image: '/practices/03.webp', href: '/gcc', cta: 'Explore GCC',
+  },
+  {
+    id: 'transformation', title: 'Digital Transformation',
+    body: 'One inbox, automated pipelines, onboarding that triggers itself, and AI taking over the repetitive work.',
+    services: ['Unified comms', 'Pipeline automation', 'Onboarding', 'AI automation'],
+    image: '/practices/04.webp', href: '/services/transformation', cta: 'Explore transformation',
+  },
+];
 
 const ENGAGE = [
-  { art: 'discovery', title: 'Discovery', body: 'A short, focused review of what you are trying to build, hire or move — no obligation.', points: ['Understand your goals', 'Assess the current setup', 'Identify the fastest route'] },
-  { art: 'proposal', title: 'Proposal', body: 'A scoped plan with timelines, team and cost, written in plain language.', points: ['Clear scope and deliverables', 'Transparent pricing', 'Timeline and team structure'] },
-  { art: 'build', title: 'Deliver', body: 'A dedicated team delivers in increments you can see, whether that is software or a shortlist.', points: ['Milestone-driven delivery', 'Regular updates', 'Continuous feedback'] },
-  { art: 'handover', title: 'Partner', body: 'We stay on after go-live — support, extra hands, and the next phase when you are ready.', points: ['Knowledge transfer', 'Ongoing support', 'Scale up on demand'] },
+  { title: 'Discovery', body: 'A short, focused review of what you are trying to build, hire or move — no obligation.', points: ['Understand your goals', 'Assess the current setup', 'Identify the fastest route'] },
+  { title: 'Proposal', body: 'A scoped plan with timelines, team and cost, written in plain language.', points: ['Clear scope and deliverables', 'Transparent pricing', 'Timeline and team structure'] },
+  { title: 'Deliver', body: 'A dedicated team delivers in increments you can see, whether that is software or a shortlist.', points: ['Milestone-driven delivery', 'Regular updates', 'Continuous feedback'] },
+  { title: 'Partner', body: 'We stay on after go-live — support, extra hands, and the next phase when you are ready.', points: ['Knowledge transfer', 'Ongoing support', 'Scale up on demand'] },
 ];
 
 const WHY = [
@@ -54,66 +99,43 @@ const WHY = [
 ] as const;
 
 export default async function HomePage() {
-  const [hero, trust, stats, cta, featured, posts, faqs] = await Promise.all([
-    getContent<HeroContent>('hero', HERO), getContent<TrustBandContent>('trust_band', TRUST), getContent<StatisticsContent>('statistics', STATS), getContent<EmployerCtaContent>('employer_cta', CTA),
+  const [hero, trust, cta, featured, posts, faqs] = await Promise.all([
+    getContent<HeroContent>('hero', HERO), getContent<TrustBandContent>('trust_band', TRUST), getContent<EmployerCtaContent>('employer_cta', CTA),
     getFeaturedJobs(2), getPosts(), getFaqs(),
   ]);
   const h = hero.payload;
-  const headingParts = h.accent && h.heading.endsWith(h.accent) ? [h.heading.slice(0, -h.accent.length), h.accent] : [h.heading, ''];
   const industries = [...trust.payload.industries, ...trust.payload.industries];
 
   return (
     <>
-      <section className="hero">
-        <div className="container">
-          <div className="hero-grid">
-            <div>
-              <Enter><span className="eyebrow">{h.eyebrow}</span></Enter>
-              <Enter delay={0.08}><h1>{headingParts[0]}{headingParts[1] && <span className="accent">{headingParts[1]}</span>}</h1></Enter>
-              <Enter delay={0.16}><p className="lead">{h.subheading}</p></Enter>
-              <Enter delay={0.22}>
-                <div className="hero-actions">
-                  <Link className="btn btn-primary btn-lg" href="/employers">{h.primary_cta} <Icon name="arrow" /></Link>
-                  <Link className="btn btn-outline btn-lg" href={h.secondary_url || '/candidates'}>{h.secondary_cta}</Link>
-                </div>
-              </Enter>
-            </div>
-            <HeroVisual image={h.image} />
-          </div>
-          <Enter delay={0.3}>
-            <div className="hero-trust"><span><Icon name="globe" />Delivered worldwide</span><span><Icon name="building" />Hyderabad &amp; Toronto</span><span><Icon name="shield" />Verified employers</span><span><Icon name="user" />Human recruiters</span></div>
-          </Enter>
-        </div>
-      </section>
+      <HeroCarousel slides={[{
+        image: '/hero/1.webp',
+        alt: 'A global network linking Hyderabad and Toronto',
+        eyebrow: h.eyebrow,
+        heading: h.heading,
+        accent: h.accent,
+        body: h.subheading,
+        primary: { label: h.primary_cta, href: '/employers' },
+        secondary: { label: h.secondary_cta, href: h.secondary_url || '/candidates' },
+      }, ...SLIDES]} />
+
+      <ServiceTicker />
 
       <section className="footprint" aria-label="Our global footprint">
         <div className="container">
-          {FOOTPRINT.map(([place, what]) => <div key={place}><strong>{place}</strong><span>{what}</span></div>)}
+          {FOOTPRINT.map(([icon, place, what]) => <div key={place}><Icon name={icon} /><div><strong>{place}</strong><span>{what}</span></div></div>)}
           <Link className="link" href="/about">Our footprint <Icon name="arrow" className="icon-arrow" /></Link>
         </div>
       </section>
 
-      <section className="section section-pillars" id="what-we-do">
-        <div className="container">
-          <Reveal><div className="section-head center"><span className="eyebrow">What we do</span><h2>Four practices, one partner</h2><p className="lead">Amani Tech helps enterprises build, scale and transform their teams and operations — combining talent acquisition expertise with real technical delivery capability.</p></div></Reveal>
-          <Stagger className="grid grid-4">{PRACTICES.map(([i, t, d, href, label]) => (
-            <Item key={t}><Link className="pillar-card" href={href}>
-              <div className="ico"><Icon name={i} /></div>
-              <h3>{t}</h3><p>{d}</p>
-              <span className="link">{label} <Icon name="arrow" className="icon-arrow" /></span>
-            </Link></Item>
-          ))}</Stagger>
-        </div>
+      <section className="section-pillars" id="what-we-do">
+        <PracticeShowcase items={PRACTICES} head={
+          <div className="section-head center"><span className="eyebrow">What we do</span><h2>Four practices, one partner</h2><p className="lead">Amani Tech helps enterprises build, scale and transform their teams and operations — combining talent acquisition expertise with real technical delivery capability.</p></div>
+        } />
       </section>
 
       <section className="section section-tech" id="technology">
-        <div className="container">
-          <Reveal><div className="section-head section-head-row">
-            <div><span className="eyebrow">Technology Services</span><h2>Six engineering capabilities</h2><p className="lead">High-impact technology that helps organisations build, secure and scale their digital infrastructure.</p></div>
-            <Link className="btn btn-outline" href="/services/it-consulting">See the practice <Icon name="arrow" /></Link>
-          </div></Reveal>
-          <Stagger className="tech-strip">{TECH.map(([i, t, note]) => <Item key={t}><Link className="tech-chip" href="/services/it-consulting#niches"><span className="ico"><Icon name={i} /></span><span>{t}<small>{note}</small></span><Icon name="arrow" className="icon-arrow" /></Link></Item>)}</Stagger>
-        </div>
+        <div className="container"><Reveal><TechSection /></Reveal></div>
       </section>
 
       <section className="section-tight">
@@ -139,19 +161,19 @@ export default async function HomePage() {
                 : industries.map((x, i) => <span key={i} className="chip">{x}</span>)}
             </div></div>
             <p className="more">and many more…</p>
-            {stats.is_visible && stats.payload.items.length > 0 && (
-              <Reveal className="trust-stats"><div className="stats">{stats.payload.items.map((s, i) => <div key={s.label} className="stat"><span className="stat-icon"><Icon name={STAT_ICONS[i % STAT_ICONS.length]} /></span><div><Counter value={s.number} suffix={s.suffix} /><span>{s.label}</span></div></div>)}</div></Reveal>
-            )}
           </div>
         </section>
       )}
 
-      <EngageJourney
-        eyebrow="How we engage"
-        heading="From first conversation to long-term partner"
-        lead="The same four steps whether you are hiring one specialist, building a capability centre, or shipping a product."
-        stages={ENGAGE}
-      />
+      <section className="section-engage" id="how-we-engage">
+        <EngageTimeline
+          eyebrow="How we engage"
+          heading="From first conversation to long-term partner"
+          period="Four steps · every engagement"
+          image="/practices/03.webp"
+          stages={ENGAGE}
+        />
+      </section>
 
       <section className="section section-candidates" id="candidates">
         <div className="container">

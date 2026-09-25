@@ -1,0 +1,18 @@
+/* The brand mark, straight from AMANI FINAL LOGO.svg. Its artboard carried a lot of empty space,
+   so the viewBox is cropped to the artwork's own bounding box — that is what keeps it aligned. */
+.logo { display: inline-flex; align-items: center; text-decoration: none !important; }
+
+.art { display: block; height: 46px; width: auto; }
+.markOnly { height: 36px; }
+
+.wm { fill: var(--logo-ink, #0B2A5F); }
+.mk { fill: var(--logo-accent, #0091FF); }
+.ey { fill: var(--logo-eye, #E6EFF8); }
+
+.tag { fill: var(--logo-ink, #0B2A5F); font-family: var(--font-body); font-weight: 600; }
+.bar { fill: var(--logo-accent, #0091FF); }
+
+/* On a dark bar or the footer the lockup reverses; the bird keeps the brand blue. */
+.onDark { --logo-ink: #fff; --logo-eye: #0B2A5F; --logo-accent: #2F9DFF; }
+
+@media (max-width: 479px) { .art { height: 40px; } }

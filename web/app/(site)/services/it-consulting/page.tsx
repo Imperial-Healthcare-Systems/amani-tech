@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon';
 import { Enter, Item, Reveal, Stagger } from '@/components/motion';
 import { PracticeGrid } from '@/components/PracticeGrid';
 import { WhyCards } from '@/components/WhyCards';
-import { EngageJourney } from '@/components/EngageJourney';
+import { EngageTimeline } from '@/components/EngageTimeline';
 import pg from '@/components/PracticeGrid.module.css';
 
 export const metadata: Metadata = {
@@ -43,7 +43,7 @@ const WHY = [
 export default function ItConsultingPage() {
   return (
     <>
-      <section className="page-hero dark has-photo">
+      <section className="page-hero dark has-photo" data-hero="dark">
         <Image src="/it_consulting/hero.png" alt="" fill priority sizes="100vw" className="page-hero-photo" />
         <span className="page-hero-tint" aria-hidden="true" />
         <div className="container">
@@ -70,12 +70,15 @@ export default function ItConsultingPage() {
         points={WHY}
       />
 
-      <EngageJourney
-        eyebrow="How we engage"
-        heading="From first call to handover"
-        lead="A clear, collaborative process designed to move you from idea to impact — with no confusion and no wasted time."
-        stages={HOW}
-      />
+      <section className="section-engage" id="how-we-engage">
+        <EngageTimeline
+          eyebrow="How we engage"
+          heading="From first call to handover"
+          period="Four steps · idea to impact"
+          image="/practices/01.webp"
+          stages={HOW}
+        />
+      </section>
 
       <section className="section-tight"><div className="container"><Reveal>
         <div className="cta-band"><span className="eyebrow">Start a conversation</span><h2>Tell us what you are trying to fix</h2><p>Describe the problem in a few lines. A consultant will come back within one business day with an honest view of what it takes.</p><div className="row"><Link className="btn btn-primary btn-lg" href="/contact">Contact us</Link><Link className="btn btn-outline-light btn-lg" href="/employers#request-talent">Need engineers instead?</Link></div></div>

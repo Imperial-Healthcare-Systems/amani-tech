@@ -39,7 +39,7 @@ export function PostEditor({ post }: { post: BlogPost | null }) {
           <div className="a-card"><h3>SEO</h3>
             <Field label="SEO title" name="seo_title" hint="Defaults to the post title. Up to 70 characters." onClear={clear}><input className="input" id="seo_title" name="seo_title" maxLength={70} value={seoTitle} onChange={e => setSeoTitle(e.target.value)} /></Field>
             <Field label="SEO description" name="seo_description" hint={`${seoDesc.length}/160`} onClear={clear}><textarea className="textarea" id="seo_description" name="seo_description" maxLength={160} style={{ minHeight: 70 }} value={seoDesc} onChange={e => setSeoDesc(e.target.value)} /></Field>
-            <div className="preview-box"><div style={{ color: '#1a0dab', fontSize: 16, fontWeight: 500 }}>{seoTitle || title || 'Post title'} | Amani Tech</div><div style={{ color: '#006621', fontSize: 12 }}>amanitech.in › blog › {slug || '…'}</div><div style={{ fontSize: 13 }}>{seoDesc || post?.excerpt || 'Meta description preview.'}</div></div>
+            <div className="preview-box"><div style={{ color: '#0D28AB', fontSize: 16, fontWeight: 500 }}>{seoTitle || title || 'Post title'} | Amani Tech</div><div style={{ color: '#006621', fontSize: 12 }}>amanitech.in › blog › {slug || '…'}</div><div style={{ fontSize: 13 }}>{seoDesc || post?.excerpt || 'Meta description preview.'}</div></div>
           </div>
         </div>
         <div className="stack a-sticky" style={{ gap: 16 }}>

@@ -7,7 +7,7 @@ import s from './GccHero.module.css';
  *  darkened on the left so the headline stays readable and left clear on the right. */
 export function GccHero() {
   return (
-    <section className={s.hero} aria-labelledby="gcc-hero-title">
+    <section className={s.hero} aria-labelledby="gcc-hero-title" data-hero="dark">
       <Image src="/gcc/hero.png" alt="" fill priority sizes="100vw" quality={88} className={s.photo} />
       <span className={s.tint} aria-hidden="true" />
 

@@ -36,7 +36,7 @@ export function AdminShell({ children, admin, counts }: { children: ReactNode; a
             </div>
           ))}</div>)}
         </nav>
-        <div className="foot"><div className="avatar">{admin.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'A'}</div><div><strong>{admin.name}</strong><small>{admin.email}</small></div><form action={adminSignOut}><button type="submit" aria-label="Sign out" style={{ background: 'none', border: 0, color: '#94A3B8', display: 'inline-flex', cursor: 'pointer' }}><Icon name="logout" /></button></form></div>
+        <div className="foot"><div className="avatar">{admin.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'A'}</div><div><strong>{admin.name}</strong><small>{admin.email}</small></div><form action={adminSignOut}><button type="submit" aria-label="Sign out" style={{ background: 'none', border: 0, color: '#94ACB8', display: 'inline-flex', cursor: 'pointer' }}><Icon name="logout" /></button></form></div>
       </aside>
       <div className={`a-backdrop ${open ? 'is-open' : ''}`} onClick={() => setOpen(false)} />
       <div className="a-main">

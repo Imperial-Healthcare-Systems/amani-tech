@@ -4,7 +4,8 @@ import { Icon } from '@/components/Icon';
 import { Item, Reveal, Stagger } from '@/components/motion';
 import { GccHero } from '@/components/GccHero';
 import { ScopeCards } from '@/components/ScopeCards';
-import { RunJourney, type RunStage } from '@/components/RunJourney';
+import { EngageTimeline } from '@/components/EngageTimeline';
+import type { RunStage } from '@/components/RunJourney';
 import { WhyGcc, type WhyGccPoint } from '@/components/WhyGcc';
 
 export const metadata: Metadata = {
@@ -96,7 +97,15 @@ export default function GccPage() {
         </div></Reveal>
       </div></section>
 
-      <RunJourney eyebrow="How it runs" heading="From plan to operating center" stages={STAGES} />
+      <section className="section-engage" id="how-it-runs">
+        <EngageTimeline
+          eyebrow="How it runs"
+          heading="From plan to operating center"
+          period="Five stages · plan to handover"
+          image="/practices/03.webp"
+          stages={STAGES.map(st => ({ title: st.title, body: st.body, points: st.caps.map(c => c[1]) }))}
+        />
+      </section>
 
       <WhyGcc eyebrow="Why Amani Tech" heading="A landing partner, not a vendor list" points={WHY} />
 

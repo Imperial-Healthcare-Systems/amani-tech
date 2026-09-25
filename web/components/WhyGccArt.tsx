@@ -14,7 +14,7 @@ const poly = (...ps: Pt[]) => 'M' + ps.map(q => `${r1(q[0])} ${r1(q[1])}`).join(
 const seg = (a: Pt, b: Pt) => `M${r1(a[0])} ${r1(a[1])}L${r1(b[0])} ${r1(b[1])}`;
 const open = (...ps: Pt[]) => 'M' + ps.map(q => `${r1(q[0])} ${r1(q[1])}`).join('L');
 
-const NAVY = '#141A4A', NAVY_MID = '#242D78', BLUE = '#2563EB', BLUE_LIGHT = '#60A5FA', SKY = '#93C5FD', STEEL = '#C9D8FF', EDGE = '#B6C8F2';
+const NAVY = '#0B2A5F', NAVY_MID = '#134087', BLUE = '#0091FF', BLUE_LIGHT = '#5CB8FF', SKY = '#93E0FD', STEEL = '#C9E6FF', EDGE = '#B6D7F2';
 
 function Defs({ id }: { id: string }) {
   const v = (name: string, a: string, b: string) => (
@@ -22,20 +22,20 @@ function Defs({ id }: { id: string }) {
   );
   return (
     <defs>
-      {v('gl', '#EAF2FF', '#B3CAFA')}
-      {v('gr', '#8DB0F4', '#4775DC')}
-      {v('wl', '#FFFFFF', '#E2EAFC')}
-      {v('wr', '#D8E3FB', '#B8C9F0')}
-      {v('sl', '#D3E0FB', '#9FBAF2')}
-      {v('sr', '#A8C0F4', '#6A91E4')}
-      {v('st', '#F9FBFF', '#EDF2FE')}
+      {v('gl', '#EAF7FF', '#B3DCFA')}
+      {v('gr', '#8DCAF4', '#479BDC')}
+      {v('wl', '#FFFFFF', '#E2F1FC')}
+      {v('wr', '#D8ECFB', '#B8D7F0')}
+      {v('sl', '#D3EAFB', '#9FCFF2')}
+      {v('sr', '#A8D3F4', '#6AB0E4')}
+      {v('st', '#F9FDFF', '#EDF6FE')}
       {v('deep', BLUE, NAVY_MID)}
       {v('blue', BLUE_LIGHT, BLUE)}
-      {v('arch', '#C5D5F8', '#93ACE7')}
-      <linearGradient id={`${id}-col`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#CFDCFA" /></linearGradient>
+      {v('arch', '#C5E2F8', '#93C1E7')}
+      <linearGradient id={`${id}-col`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#CFE7FA" /></linearGradient>
       <linearGradient id={`${id}-pin`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={BLUE_LIGHT} /><stop offset=".55" stopColor={BLUE} /><stop offset="1" stopColor={NAVY_MID} /></linearGradient>
       <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="50%"><stop offset="0" stopColor={BLUE} stopOpacity=".24" /><stop offset="1" stopColor={BLUE} stopOpacity="0" /></radialGradient>
-      <radialGradient id={`${id}-tree`} cx="35%" cy="30%" r="75%"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#BCCDF3" /></radialGradient>
+      <radialGradient id={`${id}-tree`} cx="35%" cy="30%" r="75%"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#BCDBF3" /></radialGradient>
       <filter id={`${id}-blur`} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2" /></filter>
     </defs>
   );
@@ -66,7 +66,7 @@ function Tower({ p, id, x, y, w, d, h, floors, cols = 3, glass = true }: { p: Is
   }
   return (
     <g>
-      <Box p={p} x={x} y={y} w={w} d={d} h={h} top={glass ? '#F3F8FF' : '#FFFFFF'} left={`url(#${id}-${glass ? 'gl' : 'wl'})`} right={`url(#${id}-${glass ? 'gr' : 'wr'})`} />
+      <Box p={p} x={x} y={y} w={w} d={d} h={h} top={glass ? '#F3FBFF' : '#FFFFFF'} left={`url(#${id}-${glass ? 'gl' : 'wl'})`} right={`url(#${id}-${glass ? 'gr' : 'wr'})`} />
       <path d={a.join('')} stroke="#FFFFFF" strokeOpacity={glass ? .7 : .9} strokeWidth=".55" />
       <path d={b.join('')} stroke="#FFFFFF" strokeOpacity={glass ? .35 : .6} strokeWidth=".55" />
     </g>
@@ -120,7 +120,7 @@ function Hyderabad() {
     return (
       <g key={`${x}-${y}`}>
         <Cyl p={p} x={x} y={y} z0={0} z1={42} r={2.3} fill={`url(#${id}-col)`} top="#FFFFFF" />
-        {[24, 34].map(z => <Cyl key={z} p={p} x={x} y={y} z0={z} z1={z + 1.2} r={3.1} fill="#E8EFFD" top="#FFFFFF" />)}
+        {[24, 34].map(z => <Cyl key={z} p={p} x={x} y={y} z0={z} z1={z + 1.2} r={3.1} fill="#E8F4FD" top="#FFFFFF" />)}
         <path d={`M${r1(tx - rx)} ${r1(ty)}C${r1(tx - rx * 1.25)} ${r1(ty - rx * 1.5)} ${r1(tx)} ${r1(ty - rx * 1.9)} ${r1(tx)} ${r1(ty - rx * 2.7)}C${r1(tx)} ${r1(ty - rx * 1.9)} ${r1(tx + rx * 1.25)} ${r1(ty - rx * 1.5)} ${r1(tx + rx)} ${r1(ty)}Z`} fill="#FFFFFF" stroke={EDGE} strokeWidth=".5" />
       </g>
     );
@@ -136,11 +136,11 @@ function Hyderabad() {
       <path d={poly(p(100, 100, -5), p(100, 0, -5), p(100, 0, 0), p(100, 100, 0))} fill={`url(#${id}-sr)`} />
       <path d={poly(...top)} fill={`url(#${id}-st)`} stroke={EDGE} strokeWidth=".6" />
       <path d={open(p(0, 100), p(100, 100), p(100, 0))} fill="none" stroke={BLUE_LIGHT} strokeWidth="3.4" opacity=".5" filter={`url(#${id}-blur)`} />
-      <path d={open(p(0, 100), p(100, 100), p(100, 0))} fill="none" stroke="#8DB8FF" strokeWidth="1" />
+      <path d={open(p(0, 100), p(100, 100), p(100, 0))} fill="none" stroke="#8DD5FF" strokeWidth="1" />
 
       {/* two roads crossing at the centre — Charminar stands at the crossroads */}
-      <path d={poly(p(0, 45), p(100, 45), p(100, 55), p(0, 55))} fill="#E1E9FB" />
-      <path d={poly(p(45, 0), p(55, 0), p(55, 100), p(45, 100))} fill="#E1E9FB" />
+      <path d={poly(p(0, 45), p(100, 45), p(100, 55), p(0, 55))} fill="#E1F0FB" />
+      <path d={poly(p(45, 0), p(55, 0), p(55, 100), p(45, 100))} fill="#E1F0FB" />
       <path d={seg(p(0, 50), p(100, 50)) + seg(p(50, 0), p(50, 100))} stroke="#FFFFFF" strokeWidth=".8" strokeDasharray="2.6 2.6" />
 
       {/* back of the district */}
@@ -156,10 +156,10 @@ function Hyderabad() {
       {minaret(40, 40)}
       <Box p={p} x={40} y={40} w={20} d={20} h={20} top="#FFFFFF" left={`url(#${id}-wl)`} right={`url(#${id}-wr)`} />
       <path d={arch(p, 'x', 50, 60, 6, 11)} fill={`url(#${id}-arch)`} />
-      <path d={arch(p, 'y', 50, 60, 6, 11)} fill="#8AA3E0" />
-      <Box p={p} x={42.5} y={42.5} w={15} d={15} h={5} z={20} top="#FFFFFF" left="#F4F7FF" right="#D5E0FA" />
-      {[45.5, 50, 54.5].map(u => <path key={`gx${u}`} d={arch(p, 'x', u, 57.5, 1.3, 1.2, 20.6)} fill="#B4C6F0" />)}
-      {[45.5, 50, 54.5].map(u => <path key={`gy${u}`} d={arch(p, 'y', u, 57.5, 1.3, 1.2, 20.6)} fill="#93AAE2" />)}
+      <path d={arch(p, 'y', 50, 60, 6, 11)} fill="#8AB9E0" />
+      <Box p={p} x={42.5} y={42.5} w={15} d={15} h={5} z={20} top="#FFFFFF" left="#F4FAFF" right="#D5E9FA" />
+      {[45.5, 50, 54.5].map(u => <path key={`gx${u}`} d={arch(p, 'x', u, 57.5, 1.3, 1.2, 20.6)} fill="#B4D5F0" />)}
+      {[45.5, 50, 54.5].map(u => <path key={`gy${u}`} d={arch(p, 'y', u, 57.5, 1.3, 1.2, 20.6)} fill="#93BEE2" />)}
       {minaret(40, 60)}
       {minaret(60, 40)}
       {minaret(60, 60)}
@@ -220,9 +220,9 @@ function OnePartner() {
     </g>
   );
   const layers: { z: number; top: string; left: string; right: string }[] = [
-    { z: 0, top: '#F6F9FF', left: `url(#${id}-wl)`, right: `url(#${id}-wr)` },
-    { z: 11, top: '#E3EDFF', left: `url(#${id}-gl)`, right: '#9DB9F2' },
-    { z: 22, top: '#8FB6FF', left: `url(#${id}-blue)`, right: `url(#${id}-deep)` },
+    { z: 0, top: '#F6FBFF', left: `url(#${id}-wl)`, right: `url(#${id}-wr)` },
+    { z: 11, top: '#E3F4FF', left: `url(#${id}-gl)`, right: '#9DCFF2' },
+    { z: 22, top: '#8FD3FF', left: `url(#${id}-blue)`, right: `url(#${id}-deep)` },
   ];
   return (
     <svg viewBox="0 0 240 160" role="presentation" aria-hidden="true">
@@ -296,7 +296,7 @@ function AnyHQ() {
       <Defs id={id} />
       <defs>
         <radialGradient id={`${id}-globe`} cx="36%" cy="30%" r="78%">
-          <stop offset="0" stopColor="#B4D0FF" /><stop offset=".42" stopColor="#3B82F6" /><stop offset="1" stopColor="#1B2F86" />
+          <stop offset="0" stopColor="#B4E3FF" /><stop offset=".42" stopColor="#2BA5FF" /><stop offset="1" stopColor="#1B4A86" />
         </radialGradient>
         <clipPath id={`${id}-clip`}><circle cx={cx} cy={cy} r={R} /></clipPath>
         <pattern id={`${id}-dots`} width="3.1" height="3.1" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".72" fill="#FFFFFF" /></pattern>
@@ -333,7 +333,7 @@ function AnyHQ() {
           return (
             <g key={`a${g.label}`}>
               <path d={`M${sx} ${sy}Q${r1(mx)} ${r1(my)} ${hyd[0]} ${hyd[1]}`} stroke={BLUE_LIGHT} strokeWidth="3" opacity=".22" />
-              <path d={`M${sx} ${sy}Q${r1(mx)} ${r1(my)} ${hyd[0]} ${hyd[1]}`} stroke="#DCEAFF" strokeWidth="1.05" />
+              <path d={`M${sx} ${sy}Q${r1(mx)} ${r1(my)} ${hyd[0]} ${hyd[1]}`} stroke="#DCF3FF" strokeWidth="1.05" />
               <circle cx={sx} cy={sy} r="1.8" fill={BLUE} stroke="none" />
             </g>
           );
@@ -373,7 +373,7 @@ function Control() {
       <path d={poly(p(0, 48, -3), p(60, 48, -3), p(60, 48, 0), p(0, 48, 0))} fill={`url(#${id}-sl)`} />
       <path d={poly(p(60, 48, -3), p(60, 0, -3), p(60, 0, 0), p(60, 48, 0))} fill={`url(#${id}-sr)`} />
       <path d={poly(p(0, 0), p(60, 0), p(60, 48), p(0, 48))} fill={`url(#${id}-st)`} stroke={EDGE} strokeWidth=".6" />
-      <path d={open(p(0, 48), p(60, 48), p(60, 0))} fill="none" stroke="#8DB8FF" strokeWidth=".9" />
+      <path d={open(p(0, 48), p(60, 48), p(60, 0))} fill="none" stroke="#8DD5FF" strokeWidth=".9" />
 
       {/* the dashboard */}
       <path d={seg(p(30, panelY, 0), p(30, panelY, panelTop - panelH))} stroke={EDGE} strokeWidth="1.6" />
@@ -390,17 +390,17 @@ function Control() {
       {/* the desk */}
       <Box p={p} x={10} y={14} w={2} d={20} h={15} top="#FFFFFF" left={`url(#${id}-wl)`} right={`url(#${id}-wr)`} />
       <Box p={p} x={44} y={14} w={2} d={20} h={15} top="#FFFFFF" left={`url(#${id}-wl)`} right={`url(#${id}-wr)`} />
-      <Box p={p} x={9} y={13} w={38} d={22} h={2} z={15} top="#FFFFFF" left="#F2F6FF" right="#D6E1FA" />
-      <Box p={p} x={21} y={19} w={16} d={9} h={.8} z={17} top="#DCE6FB" left="#C9D8F6" right="#B8CAF0" />
+      <Box p={p} x={9} y={13} w={38} d={22} h={2} z={15} top="#FFFFFF" left="#F2F9FF" right="#D6EAFA" />
+      <Box p={p} x={21} y={19} w={16} d={9} h={.8} z={17} top="#DCEEFB" left="#C9E3F6" right="#B8D8F0" />
 
       {/* the client, at their own desk */}
-      <Box p={p} x={28.4} y={40} w={1.2} d={1.2} h={8} top="#FFFFFF" left="#E6EDFD" right="#C9D6F4" />
+      <Box p={p} x={28.4} y={40} w={1.2} d={1.2} h={8} top="#FFFFFF" left="#E6F3FD" right="#C9E1F4" />
       <Box p={p} x={24} y={36} w={10} d={9.5} h={2} z={8} top="#FFFFFF" left={`url(#${id}-wl)`} right={`url(#${id}-wr)`} />
-      <Box p={p} x={25} y={36.8} w={8} d={6} h={13.5} z={10} top="#2D3B94" left={`url(#${id}-deep)`} right={NAVY} edge="none" />
+      <Box p={p} x={25} y={36.8} w={8} d={6} h={13.5} z={10} top="#2D5594" left={`url(#${id}-deep)`} right={NAVY} edge="none" />
       <path d={open(p(26, 37.5, 21), p(24, 30, 17.4), p(26, 27, 17.4))} fill="none" stroke={NAVY_MID} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
       <path d={open(p(32, 37.5, 21), p(34, 29, 17.4), p(31.5, 26.5, 17.4))} fill="none" stroke={NAVY} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
       <path d={seg(p(29, 40, 23.4), p(29, 40, 25))} stroke={NAVY} strokeWidth="2.4" strokeLinecap="round" />
-      <circle cx={r1(hx)} cy={r1(hy)} r="4.3" fill="#E6EDFD" />
+      <circle cx={r1(hx)} cy={r1(hy)} r="4.3" fill="#E6F3FD" />
       <circle cx={r1(hx + 1.2)} cy={r1(hy - .5)} r="4.2" fill={NAVY} />
       <Box p={p} x={24} y={45.5} w={10} d={1.4} h={8.5} z={10} top="#FFFFFF" left={`url(#${id}-wl)`} right={`url(#${id}-wr)`} />
 

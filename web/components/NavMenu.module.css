@@ -1,0 +1,127 @@
+/* A floating capsule rather than links loose in the bar. One panel is shared between the menus and
+   morphs from one to the next, so moving across the nav reads as a single object resizing. */
+.pill {
+  position: relative;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: 8px 8px 8px 22px;
+  border-radius: 18px;
+  /* Frosted glass in both contexts: the page blurs through the bar as it scrolls underneath. */
+  background: rgba(255, 255, 255, .62);
+  border: 1px solid rgba(255, 255, 255, .75);
+  --glass: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: var(--glass);
+  backdrop-filter: var(--glass);
+  box-shadow: 0 1px 1px rgba(11, 42, 95, .04), 0 10px 30px -16px rgba(11, 42, 95, .28), inset 0 1px 0 rgba(255, 255, 255, .6);
+}
+/* Without backdrop-filter the bar would be see-through and unreadable, so it falls back to solid. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pill { background: rgba(255, 255, 255, .96); border-color: var(--border); }
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 17px;
+  border-radius: 11px;
+  font-weight: 500;
+  font-size: var(--fs-base);
+  color: var(--text);
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background .22s var(--ease), color .22s var(--ease);
+}
+.item:hover, .item[data-open="true"] { background: var(--navy-50); color: var(--navy-900); }
+.item.isActive { color: var(--navy-900); font-weight: 600; }
+.item :global(.icon) { width: 13px; height: 13px; transition: transform .25s var(--ease); }
+.item[data-open="true"] :global(.icon) { transform: rotate(180deg); }
+
+/* Over a dark hero the capsule becomes glass. */
+.onDark {
+  background: rgba(13, 32, 70, .38);
+  border-color: rgba(255, 255, 255, .22);
+  --glass: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: var(--glass);
+  backdrop-filter: var(--glass);
+  box-shadow: 0 10px 34px -20px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .onDark { background: rgba(11, 42, 95, .92); }
+}
+.onDark .item { color: rgba(255, 255, 255, .88); }
+.onDark .item:hover, .onDark .item[data-open="true"], .onDark .item.isActive { background: rgba(255, 255, 255, .16); color: #fff; }
+
+/* ---- the shared panel ---- */
+/* The wrapper is padded on top so the cursor can cross the gap without the menu closing. */
+/* left is measured and clamped in NavMenu.tsx so a wide menu never runs off the screen. */
+.anchor { position: absolute; top: 100%; left: 0; padding-top: 14px; z-index: 60; }
+.panel {
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 16px rgba(11, 42, 95, .08), 0 28px 60px -26px rgba(11, 42, 95, .34);
+}
+.inner { width: max-content; max-width: min(1000px, calc(100vw - 32px)); padding: 22px; }
+
+.cols { display: grid; gap: 4px 22px; align-items: start; }
+.cols.four { grid-template-columns: repeat(4, minmax(196px, 1fr)); }
+.cols.one { grid-template-columns: minmax(230px, 1fr); }
+
+.colTitle {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 8px 0 6px; padding: 0 10px 8px;
+  font-family: var(--font-head); font-weight: 700; font-size: var(--fs-sm);
+  color: var(--navy-900); border-bottom: 1px solid var(--border);
+  text-decoration: none !important;
+}
+a.colTitle:hover { color: var(--accent-600); }
+a.colTitle :global(.icon) { width: 12px; height: 12px; opacity: 0; transform: translateX(-3px); transition: all .2s var(--ease); }
+a.colTitle:hover :global(.icon) { opacity: 1; transform: none; }
+
+.link {
+  display: block; padding: 9px 10px; border-radius: 10px;
+  font-size: var(--fs-sm); font-weight: 500; color: var(--text);
+  text-decoration: none !important;
+  transition: background .18s var(--ease), color .18s var(--ease);
+}
+.link small { display: block; font-size: var(--fs-xs); font-weight: 400; color: var(--muted); margin-top: 1px; }
+.link:hover { background: var(--navy-50); color: var(--navy-900); }
+.link:hover small { color: var(--accent-600); }
+
+@media (prefers-reduced-motion: reduce) {
+  .item :global(.icon), .link, .item { transition: none; }
+}
+
+/* ---- the bar's three zones ---- */
+.links { display: flex; align-items: center; gap: 2px; justify-content: center; }
+.actions { display: flex; align-items: center; gap: 6px; justify-self: end; }
+
+.cta {
+  display: inline-flex; align-items: center; padding: 10px 20px;
+  border-radius: 11px; background: var(--accent-600); color: #fff;
+  font-weight: 600; font-size: var(--fs-sm); white-space: nowrap;
+  text-decoration: none !important;
+  transition: background .2s var(--ease), transform .2s var(--ease);
+}
+.cta:hover { background: var(--accent-700); transform: translateY(-1px); }
+
+.ghost {
+  display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px;
+  border-radius: 11px; font-weight: 600; font-size: var(--fs-sm);
+  color: var(--text); white-space: nowrap; text-decoration: none !important;
+  transition: background .2s var(--ease);
+}
+.ghost:hover { background: var(--navy-50); }
+.ghost :global(.icon) { width: 15px; height: 15px; }
+.onDark .ghost { color: #fff; }
+.onDark .ghost:hover { background: rgba(255, 255, 255, .16); }
+
+@media (prefers-reduced-motion: reduce) { .cta:hover { transform: none; } }

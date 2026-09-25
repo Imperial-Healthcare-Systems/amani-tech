@@ -18,7 +18,7 @@ const WHY = [
   ['sliders', 'Flexible engagement', 'Contract, permanent, project or bulk. Hire the way you need.', '/services/contract-staffing'],
   ['message', 'Clear communication', 'A single point of contact and regular updates at every step.', '#request-talent'],
 ] as const;
-const WHY_COLORS = ['#2563EB', '#7C3AED', '#0E9F6E', '#EA580C'];
+const WHY_COLORS = ['#0091FF', '#0072CC', '#0E9F6E', '#EA580C'];
 // The three ways clients buy hiring from us, in the client's own language.
 const MODELS = [
   ['layers', 'RPO — Recruitment Process Outsourcing', 'End-to-end management of your recruitment function, run by a dedicated team as an extension of yours.'],

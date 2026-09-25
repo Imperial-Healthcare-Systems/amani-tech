@@ -25,7 +25,7 @@ const EMPLOYER: Stage[] = [
   { title: 'Interview & Hire', text: 'Coordinate interviews, offers and joining.', icon: 'users' },
   { title: 'Ongoing Support', text: 'Continue receiving recruitment support based on your hiring needs.', icon: 'message' },
 ];
-const COLORS = ['#2563EB', '#7C3AED', '#0E9F6E', '#EA580C'];
+const COLORS = ['#0091FF', '#0072CC', '#0E9F6E', '#EA580C'];
 const TABS = [['c', 'For Candidates', 'user'], ['e', 'For Employers', 'building']] as const;
 const EASE = [0.2, 0.7, 0.2, 1] as const;
 

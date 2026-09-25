@@ -1,0 +1,126 @@
+/* Phones and reduced-motion read it as an ordinary vertical list; the pinned track is opt-in below. */
+.track { position: relative; }
+.stage { position: relative; }
+
+.rail { display: grid; gap: 28px; padding-inline: var(--gutter); }
+
+.lead { display: flex; flex-direction: column; gap: 18px; }
+.photo { position: relative; border-radius: 20px; overflow: hidden; background: var(--navy-900); }
+.photo img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; display: block; }
+.lead h2 { margin: 0; }
+.period {
+  font-family: var(--font-head); font-size: var(--fs-sm); font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--accent-600);
+}
+
+/* ---- the axis ---- */
+.body { position: relative; }
+.axis { display: none; }
+
+.steps { display: grid; gap: 28px; list-style: none; margin: 0; padding: 0; }
+
+.step { position: relative; padding-left: 34px; }
+.dot {
+  position: absolute; left: 0; top: 7px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--accent-600);
+  box-shadow: 0 0 0 4px var(--accent-50);
+}
+.stem {
+  position: absolute; left: 6px; top: 20px; bottom: -28px;
+  width: 2px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent-500), rgba(0, 145, 255, .12));
+}
+.step:last-child .stem { display: none; }
+
+.num {
+  font-family: var(--font-head); font-size: var(--fs-xs); font-weight: 800;
+  letter-spacing: .16em; color: var(--accent-600);
+}
+.step h3 { margin: 4px 0 6px; font-size: var(--fs-xl); color: var(--navy-900); letter-spacing: -.015em; }
+.step p { margin: 0; color: var(--muted); font-size: var(--fs-sm); line-height: 1.6; max-width: 34ch; }
+
+.points {
+  display: block; margin-top: 12px;
+  font-size: var(--fs-xs); font-weight: 600; letter-spacing: .01em;
+  color: var(--accent-700); line-height: 1.6;
+}
+
+/* Masked line reveal — the same effect SplitText gives, without shipping a text splitter. */
+.mask { display: block; overflow: hidden; }
+.mask > * { display: block; }
+
+/* ---- pinned, horizontal ---- */
+@media (min-width: 1024px) {
+  .isDriven { height: 300vh; }
+  .isDriven .stage {
+    position: sticky; top: 0;
+    height: 100vh;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+
+  .isDriven .rail {
+    display: flex; align-items: center; gap: 5vw;
+    width: max-content; padding-inline: 7vw;
+  }
+
+  .isDriven .lead { flex: none; width: 26vw; max-width: 400px; gap: 22px; }
+  .isDriven .photo { height: 50vh; }
+
+  .isDriven .body { flex: none; height: 58vh; }
+  /* The axis runs the width of the steps and draws itself as the track slides. */
+  .isDriven .axis {
+    display: block; position: absolute; left: 0; right: 0; top: 50%;
+    height: 2px; border-radius: 2px; background: var(--navy-100);
+  }
+  .isDriven .axis span {
+    display: block; height: 100%; width: 100%; border-radius: 2px;
+    transform-origin: left; background: linear-gradient(90deg, var(--accent-600), var(--accent-400));
+  }
+
+  .isDriven .steps { display: flex; align-items: stretch; gap: 0; height: 100%; }
+  .isDriven .step { position: relative; width: 26vw; max-width: 400px; padding: 0 2.5vw 0 0; display: flex; flex-direction: column; }
+
+  /* The dot and stem are pinned to the axis at the step's midpoint; odd steps hang their copy
+     above it and even steps below, so the eye zigzags along the line. */
+  .isDriven .rule { position: absolute; left: 0; top: 0; bottom: 0; width: 14px; height: auto; }
+  .isDriven .dot {
+    left: 0; top: calc(50% - 7px); bottom: auto;
+    width: 14px; height: 14px;
+    transform: scale(0); transition: transform .5s var(--ease);
+  }
+  .isDriven .stem {
+    left: 6px; width: 2px; border-radius: 2px;
+    transform: scaleY(0); transition: transform .6s var(--ease);
+  }
+  .isDriven .step:nth-child(odd) .stem {
+    top: 16%; bottom: 50%; transform-origin: bottom;
+    background: linear-gradient(0deg, var(--accent-500), rgba(0, 145, 255, .12));
+  }
+  .isDriven .step:nth-child(even) .stem {
+    top: 50%; bottom: 16%; transform-origin: top;
+    background: linear-gradient(180deg, var(--accent-500), rgba(0, 145, 255, .12));
+  }
+  .isDriven .step:last-child .stem { display: block; }
+
+  /* flex: none keeps the masks at their natural height — squeezed, they clip their own text. */
+  .isDriven .inner { height: 50%; display: flex; flex-direction: column; padding-left: 30px; }
+  .isDriven .inner > * { flex: none; }
+  .isDriven .step:nth-child(odd) .inner { justify-content: flex-end; padding-bottom: 30px; }
+  /* auto, not 50%: a percentage margin resolves against the width, which put this half adrift. */
+  .isDriven .step:nth-child(even) .inner { margin-top: auto; justify-content: flex-start; padding-top: 30px; }
+
+  /* Copy waits below its mask until the step is reached. */
+  .isDriven .mask > * { transform: translateY(110%); opacity: 0; transition: transform .6s var(--ease), opacity .4s var(--ease); }
+  .isDriven .points { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
+
+  .isDriven .step[data-on='true'] .dot { transform: scale(1); }
+  .isDriven .step[data-on='true'] .stem { transform: scaleY(1); }
+  .isDriven .step[data-on='true'] .mask > * { transform: none; opacity: 1; }
+  .isDriven .step[data-on='true'] .points { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isDriven .dot, .isDriven .stem, .isDriven .mask > *, .isDriven .points { transition: none; }
+}

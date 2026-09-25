@@ -4,7 +4,7 @@ import { Item, Stagger } from './motion';
 import type { Service } from '@/lib/types';
 
 /** Restrained per-node accents (icon, dot, hover only). Brand navy + blue stays primary. */
-const ACCENTS = ['#2563EB', '#7C3AED', '#0E9F6E', '#EA580C'];
+const ACCENTS = ['#0091FF', '#0072CC', '#0E9F6E', '#EA580C'];
 const POS = ['n-tl', 'n-tr', 'n-bl', 'n-br'];
 // SVG space is 600×560. Paths run from the emblem to a point under each card; nodes sit 55% along each path.
 const PATHS = [[300, 280, 150, 110], [300, 280, 450, 110], [300, 280, 150, 450], [300, 280, 450, 450]];

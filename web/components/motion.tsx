@@ -47,7 +47,7 @@ export function Counter({ value, suffix = '' }: { value: number; suffix?: string
   useEffect(() => {
     if (!inView || reduce) return;
     const t0 = performance.now(); let raf = 0;
-    const tick = (now: number) => { const p = Math.min(1, (now - t0) / 1400); setN(Math.round(value * (1 - Math.pow(1 - p, 3)))); if (p < 1) raf = requestAnimationFrame(tick); };
+    const tick = (now: number) => { const p = Math.max(0, Math.min(1, (now - t0) / 1400)); setN(Math.round(value * (1 - Math.pow(1 - p, 3)))); if (p < 1) raf = requestAnimationFrame(tick); };
     raf = requestAnimationFrame(tick); return () => cancelAnimationFrame(raf);
   }, [inView, value, reduce]);
   return <b ref={ref}>{n.toLocaleString('en-IN')}{suffix}</b>;

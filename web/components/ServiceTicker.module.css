@@ -1,0 +1,75 @@
+/* Sits flush under the hero. The white wrapper is what the band's rounded bottom corners cut into. */
+.wrap { background: #fff; }
+
+.band {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 0 0 24px 24px;
+  background: linear-gradient(96deg, var(--navy-900) 0%, var(--navy-800) 26%, var(--navy-600) 68%, var(--accent-700) 100%);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+  padding: 0 24px 0 28px;
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent-400);
+  white-space: nowrap;
+}
+.label::after { content: ""; width: 1px; align-self: stretch; margin-block: 14px; background: rgba(255,255,255,.28); }
+
+.rail {
+  flex: 1; min-width: 0; padding-block: 16px;
+  overflow: hidden;
+  /* Items arrive and leave through a fade rather than a hard edge. */
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 92%, transparent);
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  animation: roll 48s linear infinite;
+}
+.item {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
+  white-space: nowrap;
+}
+.item::after {
+  content: "";
+  width: 5px; height: 5px; margin: 0 22px;
+  border-radius: 50%;
+  background: var(--accent-400);
+  flex: none;
+}
+@keyframes roll { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+
+@media (max-width: 767px) {
+  .label { padding-left: var(--gutter); padding-right: 16px; font-size: 10px; letter-spacing: .16em; }
+  .item::after { margin: 0 16px; }
+  .rail { padding-block: 13px; }
+  .label { display: none; }
+}
+
+/* A still band still has to read, so it simply stops rather than hiding half its items. */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+  .rail { overflow-x: auto; mask-image: none; }
+}

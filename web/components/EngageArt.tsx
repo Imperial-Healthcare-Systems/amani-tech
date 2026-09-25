@@ -3,16 +3,16 @@ import s from './EngageJourney.module.css';
 /** Four stage visuals for "How we engage" — one illustration system: glass planes, silver edges,
  *  electric-blue accents. Inline SVG, so there is nothing to download and the idle motion is CSS. */
 
-const NAVY = '#141A4A', NAVY_MID = '#242D78', BLUE = '#2563EB', BLUE_LIGHT = '#60A5FA', STEEL = '#C9D8FF';
+const NAVY = '#0B2A5F', NAVY_MID = '#134087', BLUE = '#0091FF', BLUE_LIGHT = '#5CB8FF', STEEL = '#C9E6FF';
 
 function Defs({ id }: { id: string }) {
   return (
     <defs>
       <linearGradient id={`${id}-glass`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#FFFFFF" stopOpacity=".96" /><stop offset="1" stopColor="#DFE8FF" stopOpacity=".82" />
+        <stop offset="0" stopColor="#FFFFFF" stopOpacity=".96" /><stop offset="1" stopColor="#DFF0FF" stopOpacity=".82" />
       </linearGradient>
       <linearGradient id={`${id}-pane`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#F4F8FF" /><stop offset="1" stopColor="#D8E4FF" />
+        <stop offset="0" stopColor="#F4FBFF" /><stop offset="1" stopColor="#D8EEFF" />
       </linearGradient>
       <linearGradient id={`${id}-blue`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor={BLUE_LIGHT} /><stop offset="1" stopColor={BLUE} />
@@ -68,7 +68,7 @@ export function EngageArt({ name }: { name: string }) {
             x={x} y={88 - Number(h)} width="9" height={h} rx="2.5" fill={i === 1 ? `url(#${id}-deep)` : `url(#${id}-blue)`} />
         ))}
         <path d="M74 110 h52 l-7 8 h-38 Z" fill={`url(#${id}-pane)`} stroke={STEEL} />
-        <rect x="86" y="102" width="28" height="8" fill="#E5EDFF" stroke={STEEL} />
+        <rect x="86" y="102" width="28" height="8" fill="#E5F4FF" stroke={STEEL} />
       </g>
       <g className={s.floatFast}>
         <rect x="140" y="22" width="44" height="26" rx="7" fill="#fff" stroke={STEEL} />
@@ -90,8 +90,8 @@ export function EngageArt({ name }: { name: string }) {
         {[[64, 78, .32], [98, 60, .5], [64, 44, .18], [98, 26, .28]].map(([x, y, op], i) => (
           <g key={i} className={s.block} style={{ animationDelay: `${i * .35}s` }}>
             <path d={`M${x} ${Number(y) + 28} L${Number(x) - 26} ${Number(y) + 14} L${x} ${y} L${Number(x) + 26} ${Number(y) + 14} Z`} fill={i % 2 ? `url(#${id}-blue)` : `url(#${id}-pane)`} opacity={i % 2 ? .95 : 1} stroke={STEEL} />
-            <path d={`M${Number(x) - 26} ${Number(y) + 14} L${x} ${Number(y) + 28} L${x} ${Number(y) + 44} L${Number(x) - 26} ${Number(y) + 30} Z`} fill={i % 2 ? BLUE : '#E4ECFF'} opacity={Number(op) + .45} />
-            <path d={`M${Number(x) + 26} ${Number(y) + 14} L${x} ${Number(y) + 28} L${x} ${Number(y) + 44} L${Number(x) + 26} ${Number(y) + 30} Z`} fill={i % 2 ? NAVY_MID : '#D2DEFF'} opacity={Number(op) + .5} />
+            <path d={`M${Number(x) - 26} ${Number(y) + 14} L${x} ${Number(y) + 28} L${x} ${Number(y) + 44} L${Number(x) - 26} ${Number(y) + 30} Z`} fill={i % 2 ? BLUE : '#E4F3FF'} opacity={Number(op) + .45} />
+            <path d={`M${Number(x) + 26} ${Number(y) + 14} L${x} ${Number(y) + 28} L${x} ${Number(y) + 44} L${Number(x) + 26} ${Number(y) + 30} Z`} fill={i % 2 ? NAVY_MID : '#D2E9FF'} opacity={Number(op) + .5} />
           </g>
         ))}
       </g>
