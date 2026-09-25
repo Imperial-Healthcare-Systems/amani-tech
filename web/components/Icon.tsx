@@ -74,7 +74,7 @@ export function LogoMark({ className = 'logo-mark', size }: { className?: string
   );
 }
 
-export const TAGLINE = ['Technology', 'Talent', 'Training'];
+export const TAGLINE = ['Technology', 'Talent', 'Transform'];
 
 /** Lockup: bird + lowercase wordmark + tagline. `light` is handled by .site-footer CSS; kept for call-site clarity. */
 export function Logo({ href = '/', tagline = true }: { href?: string; light?: boolean; tagline?: boolean }) {

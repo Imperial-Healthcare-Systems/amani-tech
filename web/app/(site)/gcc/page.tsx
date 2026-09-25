@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Reveal } from '@/components/motion';
+import { Icon } from '@/components/Icon';
+import { Item, Reveal, Stagger } from '@/components/motion';
 import { GccHero } from '@/components/GccHero';
 import { ScopeCards } from '@/components/ScopeCards';
 import { RunJourney, type RunStage } from '@/components/RunJourney';
@@ -11,6 +12,16 @@ export const metadata: Metadata = {
   description: 'A complete landing partner for companies worldwide establishing a Global Capability Center in Hyderabad: incorporation, office space, compliances, permissions and the team itself.',
   alternates: { canonical: '/gcc' },
 };
+
+// The technology domains a new capability centre hires into first.
+const GCC_TALENT = [
+  ['zap', 'Artificial Intelligence & Machine Learning', 'Applied AI, ML engineering and data science roles — the hardest hires in the Hyderabad market, and the ones we run most.'],
+  ['code', 'Software Engineering', 'Backend, frontend and full-stack engineers, plus the leads and architects who hold a new team together.'],
+  ['chart', 'Data', 'Data engineering, platform and analytics roles that turn a new centre into a reporting capability, not just a cost centre.'],
+  ['layers', 'Cloud / DevOps', 'Platform, infrastructure and reliability engineers to stand up the environments your teams build on.'],
+  ['shield', 'Cybersecurity', 'Security engineering and compliance roles, aligned to the frameworks your parent company already answers to.'],
+  ['users', 'Other high-demand domains', 'QA automation, ERP, product and programme management — the roles that appear once the centre finds its shape.'],
+] as const;
 
 const SCOPE = [
   {
@@ -72,12 +83,25 @@ export default function GccPage() {
         items={SCOPE}
       />
 
+      <section className="section section-alt" id="talent"><div className="container">
+        <Reveal><div className="section-head"><span className="eyebrow">GCC Talent &amp; Staffing</span><h2>The centre is the easy part. The team is the practice.</h2><p className="lead">We build specialised talent and staffing solutions for GCCs, helping new and expanding centres stand up technology teams quickly — then keep them staffed as the centre matures.</p></div></Reveal>
+        <Stagger className="grid grid-3">{GCC_TALENT.map(([i, t, d]) => <Item key={t}><div className="value-card"><div className="ico"><Icon name={i} /></div><h3>{t}</h3><p>{d}</p></div></Item>)}</Stagger>
+        <Reveal delay={0.1}><div className="gcc-band" style={{ marginTop: 28 }}>
+          <div>
+            <span className="eyebrow">Engagement model</span>
+            <h2>Permanent first, then whatever the centre needs</h2>
+            <p>Our engagement begins with permanent recruitment and scales into contract staffing and broader workforce solutions as your GCC matures — giving you a single partner across every stage of growth.</p>
+          </div>
+          <Link className="btn btn-primary btn-lg" href="/services/talent">See Talent Solutions <Icon name="arrow" /></Link>
+        </div></Reveal>
+      </div></section>
+
       <RunJourney eyebrow="How it runs" heading="From plan to operating center" stages={STAGES} />
 
       <WhyGcc eyebrow="Why Amani Tech" heading="A landing partner, not a vendor list" points={WHY} />
 
       <section className="section-tight"><div className="container"><Reveal>
-        <div className="cta-band"><span className="eyebrow">Considering India?</span><h2>Let&apos;s map your Hyderabad setup</h2><p>Tell us the function you want to build and the headcount you have in mind. We will come back with an indicative plan, timeline and cost.</p><div className="row"><Link className="btn btn-primary btn-lg" href="/contact">Start the conversation</Link><Link className="btn btn-outline-light btn-lg" href="/services">Our other services</Link></div></div>
+        <div className="cta-band"><span className="eyebrow">Considering India?</span><h2>Let&apos;s map your Hyderabad setup</h2><p>Tell us the function you want to build and the headcount you have in mind. We will come back with an indicative plan, timeline and cost.</p><div className="row"><Link className="btn btn-primary btn-lg" href="/contact">Start the conversation</Link><Link className="btn btn-outline-light btn-lg" href="/services">Our other practices</Link></div></div>
       </Reveal></div></section>
     </>
   );

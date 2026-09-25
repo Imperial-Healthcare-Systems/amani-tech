@@ -136,12 +136,14 @@ async function run() {
   const job = await pickPublishedJob();
 
   console.log('Public pages');
-  await test('home page renders with Login and Register, and no admin link anywhere', async () => {
+  await test('home page leads with the practices, not a job search, and shows no admin link', async () => {
     await page.goto(`${BASE}/`);
     const header = await page.text('.site-header');
-    contains(header, 'Login', 'header should offer Login');
-    contains(header, 'Register', 'header should offer Register');
+    contains(header, 'Candidates', 'header should offer the Candidates menu');
+    contains(header, 'Talk to us', 'header should offer the Talk to us action');
     assertEq(await page.count('a[href^="/admin"]'), 0, 'no admin link may appear on a public page');
+    assertEq(await page.count('.hero form[role="search"]'), 0, 'the hero must not carry a job search — that belongs on /candidates');
+    assertEq(await page.count('.site-header a[href="/services/it-consulting"]'), 1, 'the Services menu should link Technology Services');
   });
 
   console.log('\nRegistration');
@@ -337,7 +339,7 @@ async function run() {
     await page.waitForPath('/candidate/dashboard', { timeout: 20000 });
     await page.clickText('button', 'Sign out', { wait: 2000 }).catch(async () => { await page.clickText('a', 'Sign out', { wait: 2000 }); });
     await page.goto(`${BASE}/`);
-    contains(await page.text('.site-header'), 'Register', 'the visitor header should be back');
+    contains(await page.text('.site-header'), 'Talk to us', 'the visitor header should be back');
   });
 
   await test('the candidate area requires a login', async () => {

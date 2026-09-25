@@ -10,7 +10,7 @@ import { EmployerForm } from '@/components/forms/EmployerForm';
 import { getContent, getFaqs, getServices } from '@/lib/queries';
 import type { SettingsContent } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Hire Talent — Staffing Services for Employers', description: 'Submit a staffing requirement and receive a screened shortlist. Contract, permanent and project hiring across IT and non-IT roles.', alternates: { canonical: '/employers' } };
+export const metadata: Metadata = { title: 'For Employers — Engagement Models & Job Requisitions', description: 'RPO, contract staffing and permanent placement, backed by technology delivery and a GCC practice. Submit a requisition and receive a screened shortlist.', alternates: { canonical: '/employers' } };
 
 const WHY = [
   ['usercheck', 'Screened, not scraped', 'Every profile is reviewed by a recruiter before it reaches you.', '/services/permanent-recruitment'],
@@ -19,6 +19,18 @@ const WHY = [
   ['message', 'Clear communication', 'A single point of contact and regular updates at every step.', '#request-talent'],
 ] as const;
 const WHY_COLORS = ['#2563EB', '#7C3AED', '#0E9F6E', '#EA580C'];
+// The three ways clients buy hiring from us, in the client's own language.
+const MODELS = [
+  ['layers', 'RPO — Recruitment Process Outsourcing', 'End-to-end management of your recruitment function, run by a dedicated team as an extension of yours.'],
+  ['clock', 'Contract Staffing', "Scalable, flexible talent for project-based needs — professionals on Amani Tech's payroll, deployed to you."],
+  ['usercheck', 'Permanent Placement', 'Direct-hire recruitment for long-term roles, sourced and screened against your brief.'],
+];
+// A partner who understands both the people and the technology behind every hire.
+const PARTNER = [
+  ['zap', 'Technology Services', 'Cloud, applications, QA automation, DevOps, security and AI — delivered, not just staffed.', '/services/it-consulting'],
+  ['globe', 'GCC Practice', 'A complete landing partner for a capability centre in Hyderabad, from incorporation to the team.', '/gcc'],
+  ['trend', 'Digital Transformation', 'Automation and growth systems that reduce the admin load as you scale.', '/services/transformation'],
+];
 const NEXT = [['phone', 'We confirm the requirement', 'A recruiter calls to understand the role and priorities.'], ['search', 'We source and screen', 'From our network and active channels.'], ['file', 'You receive a shortlist', 'With recruiter notes on each candidate.'], ['usercheck', 'We coordinate interviews and joining', 'Right through to the first day.']];
 
 export default async function EmployersPage() {
@@ -35,7 +47,7 @@ export default async function EmployersPage() {
             <Enter delay={0.08}><h1 className="emp-h1">Looking for the<br /><span className="grad">Right Talent?</span></h1></Enter>
             <Enter delay={0.16}><p className="lead">Tell us what you need. Our recruiters source, screen and shortlist candidates so you can hire with confidence — on contract, permanent or project terms.</p></Enter>
             <Enter delay={0.24}>
-              <div className="row emp-actions"><a className="btn btn-primary btn-lg" href="#request-talent">Request Talent <Icon name="arrow" /></a><Link className="btn btn-outline-light btn-lg" href="/services">See our services</Link></div>
+              <div className="row emp-actions"><a className="btn btn-primary btn-lg" href="#request-talent">Request Talent <Icon name="arrow" /></a><Link className="btn btn-outline-light btn-lg" href="/services">See all four practices</Link></div>
               <ul className="emp-trust">
                 <li><span className="ico"><Icon name="users" /></span><div><strong>IT and non-IT</strong><small>Across industries</small></div></li>
                 <li><span className="ico"><Icon name="file" /></span><div><strong>Contract and permanent</strong><small>Flexible hiring</small></div></li>
@@ -57,9 +69,27 @@ export default async function EmployersPage() {
         </div>
       </section>
 
+      <section className="section" id="models"><div className="container">
+        <Reveal><div className="section-head"><span className="eyebrow">Engagement models</span><h2>Three ways to work with us</h2><p className="lead">Most clients start with one and add another as hiring changes shape. You keep the same recruiters either way.</p></div></Reveal>
+        <Stagger className="grid grid-3">{MODELS.map(([i, t, d]) => <Item key={t}><div className="value-card"><div className="ico"><Icon name={i} /></div><h3>{t}</h3><p>{d}</p></div></Item>)}</Stagger>
+      </div></section>
+
+      {services.length > 0 && (
+        <section className="section section-alt"><div className="container">
+          <Reveal><div className="section-head"><span className="eyebrow">What we staff</span><h2>Staffing services built around how you hire</h2></div></Reveal>
+          <Stagger className="grid grid-3">{services.map(s => <Item key={s.id}><ServiceCard s={s} /></Item>)}</Stagger>
+        </div></section>
+      )}
+
       <section className="section"><div className="container">
-        <Reveal><div className="section-head"><span className="eyebrow">What we offer</span><h2>Staffing services built around how you hire</h2></div></Reveal>
-        <Stagger className="grid grid-3">{services.map(s => <Item key={s.id}><ServiceCard s={s} /></Item>)}</Stagger>
+        <Reveal><div className="section-head"><span className="eyebrow">Beyond hiring</span><h2>One partner across recruitment, technology and India</h2><p className="lead">Amani Tech combines talent expertise with technical fluency — which means the same partner can staff the team, build the product, or set up the centre.</p></div></Reveal>
+        <Stagger className="grid grid-3">{PARTNER.map(([i, t, d, href]) => (
+          <Item key={t}><Link className="pillar-card" href={href}>
+            <div className="ico"><Icon name={i} /></div>
+            <h3>{t}</h3><p>{d}</p>
+            <span className="link">Explore <Icon name="arrow" className="icon-arrow" /></span>
+          </Link></Item>
+        ))}</Stagger>
       </div></section>
 
       <HowItWorks audience="employer" />

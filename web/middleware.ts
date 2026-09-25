@@ -21,7 +21,8 @@ export async function middleware(request: NextRequest) {
   const user = claims?.claims;
   const { pathname } = request.nextUrl;
   const isAdminArea = pathname.startsWith('/admin') && pathname !== '/admin/login';
-  const isCandidateArea = pathname.startsWith('/candidate');
+  // The signed-in area is /candidate/*. /candidates is the public hub and must stay open.
+  const isCandidateArea = pathname === '/candidate' || pathname.startsWith('/candidate/');
 
   if (isAdminArea && !user) return NextResponse.redirect(new URL('/admin/login', request.url));
   if (isCandidateArea && !user) { const url = new URL('/login', request.url); url.searchParams.set('next', pathname); return NextResponse.redirect(url); }

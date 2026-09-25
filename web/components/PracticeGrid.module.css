@@ -170,12 +170,16 @@
   .card { min-height: 304px; }
   .card { grid-column: span 2; }
   .card:nth-child(5) { grid-column: 2 / span 2; }
+  /* A sixth practice fills the row on its own, so the centring above no longer applies. */
+  .grid:has(> :nth-child(6)) .card:nth-child(5) { grid-column: span 2; }
 }
 @media (min-width: 1100px) {
   .grid { grid-template-columns: repeat(6, 1fr); }
   .card { grid-column: span 2; min-height: 304px; }
   .card:nth-child(4) { grid-column: 2 / span 2; }
   .card:nth-child(5) { grid-column: 4 / span 2; }
+  .grid:has(> :nth-child(6)) .card:nth-child(4),
+  .grid:has(> :nth-child(6)) .card:nth-child(5) { grid-column: span 2; }
 }
 
 /* ---------- idle motion inside the illustrations ---------- */

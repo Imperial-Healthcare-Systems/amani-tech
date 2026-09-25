@@ -203,7 +203,7 @@ ul,ol{margin:0 0 1em;padding-left:1.25em}
 /* ---------- Header ---------- */
 .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s,box-shadow .2s}
 .site-header.is-scrolled{border-color:var(--border);box-shadow:var(--sh-sm)}
-.header-inner{height:var(--header-h);display:flex;align-items:center;gap:16px}
+.header-inner{position:relative;height:var(--header-h);display:flex;align-items:center;gap:16px}
 .logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:var(--navy-900);letter-spacing:-.02em;text-decoration:none!important}
 .logo-mark{width:36px;height:36px;flex:none}
 .logo span em{font-style:normal;color:var(--accent-600)}
@@ -220,6 +220,15 @@ ul,ol{margin:0 0 1em;padding-left:1.25em}
 .dropdown a{display:block;padding:10px 12px;border-radius:var(--r-sm);font-weight:500;font-size:var(--fs-sm);color:var(--text)}
 .dropdown a small{display:block;color:var(--muted);font-weight:400;font-size:var(--fs-xs)}
 .dropdown a:hover{background:var(--navy-50)}
+/* A mega menu escapes its own <li> and spans the header container instead, so four columns never overflow. */
+.nav .has-dropdown.is-mega{position:static}
+.dropdown.mega{left:0;right:0;min-width:0;padding:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px 20px}
+.dd-col{display:flex;flex-direction:column;gap:1px}
+.dd-title{display:inline-flex;align-items:center;gap:6px;padding:0 12px 8px;margin-bottom:4px;font-family:var(--font-head);font-weight:700;font-size:var(--fs-sm);color:var(--navy-900);border-bottom:1px solid var(--border);border-radius:0}
+a.dd-title:hover{background:none;color:var(--accent-600)}
+a.dd-title .icon-arrow{width:13px;height:13px;opacity:0;transform:translateX(-3px);transition:all .18s var(--ease)}
+a.dd-title:hover .icon-arrow{opacity:1;transform:none}
+.dropdown:not(.mega) .dd-title{padding-left:12px}
 .header-actions{display:none;align-items:center;gap:8px;margin-left:auto}
 .menu-btn{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--border);border-radius:var(--r-sm);background:#fff;color:var(--navy-900)}
 .mobile-nav{position:fixed;inset:0;z-index:200;display:none}
@@ -684,6 +693,12 @@ body.modal-open{overflow:hidden}
 .value-card .ico{width:40px;height:40px;border-radius:10px;background:var(--navy-50);color:var(--navy-700);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
 .value-card h3{font-size:var(--fs-lg);margin-bottom:4px}
 .value-card p{margin:0;color:var(--muted);font-size:var(--fs-sm)}
+a.value-card.is-link{display:block;height:100%;text-decoration:none!important;transition:border-color .18s,box-shadow .18s,transform .18s}
+a.value-card.is-link:hover{border-color:var(--accent-400);box-shadow:var(--sh-md);transform:translateY(-2px)}
+a.value-card.is-link h3{color:var(--navy-900)}
+.check-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:760px}
+.check-list li{display:flex;align-items:flex-start;gap:12px;color:var(--muted);font-size:var(--fs-md)}
+.check-list li .icon{flex:none;width:20px;height:20px;margin-top:2px;padding:3px;border-radius:50%;background:var(--accent-50);color:var(--accent-600)}
 
 /* Practice cards (services index) and niche cards (IT consulting, GCC) */
 .practice-card{display:flex;flex-direction:column;height:100%;padding:24px;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);text-decoration:none!important;transition:border-color .18s,box-shadow .18s,transform .18s}
@@ -714,6 +729,7 @@ body.modal-open{overflow:hidden}
 .tech-chip .icon-arrow{color:var(--accent-600);flex:none}
 .tech-chip .ico{width:38px;height:38px;border-radius:10px;background:var(--accent-50);color:var(--accent-600);display:flex;align-items:center;justify-content:center;flex:none}
 .tech-chip>span:nth-child(2){flex:1;min-width:0}
+.tech-chip>span:nth-child(2) small{display:block;font-weight:400;font-size:var(--fs-xs);color:var(--muted);margin-top:2px}
 
 /* the numbers now sit inside the industries band */
 .trust-band{padding:22px 0 28px;overflow:hidden}
@@ -721,6 +737,28 @@ body.modal-open{overflow:hidden}
 
 /* Home: one line about building a team in India */
 .gcc-band{display:grid;gap:20px;align-items:center;padding:32px 24px;border-radius:var(--r-lg);background:linear-gradient(135deg,#F3F7FF,#EEF3FE 60%,#E9F0FF);border:1px solid rgba(37,99,235,.18)}
+/* Dark bands are rationed to two places on the site — the GCC section and the employer CTA — so they land. */
+.gcc-band.is-dark{background:linear-gradient(135deg,var(--navy-700),var(--navy-900) 68%);border-color:rgba(96,165,250,.28);color:#fff;position:relative;overflow:hidden;padding:40px 28px}
+.gcc-band.is-dark::after{content:"";position:absolute;right:-8%;top:-45%;width:48%;height:190%;background:radial-gradient(closest-side,rgba(59,130,246,.42),transparent 70%);pointer-events:none}
+.gcc-band.is-dark>*{position:relative;z-index:1}
+.gcc-band.is-dark h2{color:#fff;font-size:var(--fs-3xl);margin-bottom:10px}
+.gcc-band.is-dark p{color:rgba(255,255,255,.76);max-width:56ch}
+.gcc-band.is-dark .eyebrow{color:var(--accent-100)}
+.gcc-band.is-dark .eyebrow::before{background:var(--accent-400)}
+
+/* Footprint: one thin band under the hero, so "where we are" is settled before the reader scrolls. */
+.footprint{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#fff}
+.footprint .container{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;padding-block:18px}
+.footprint>.container>div{display:flex;flex-direction:column;gap:2px}
+.footprint strong{font-family:var(--font-head);font-size:var(--fs-sm);color:var(--navy-900);letter-spacing:-.01em}
+.footprint span{font-size:var(--fs-xs);color:var(--muted)}
+.footprint .link{margin-left:auto;font-size:var(--fs-sm);color:var(--accent-600);white-space:nowrap}
+
+/* The single place jobs appear on the home page. */
+.section-candidates{background:linear-gradient(180deg,#F7F9FE,#fff)}
+.cand-layout{display:grid;gap:28px;align-items:center}
+.cand-layout .lead{margin-bottom:24px}
+.cand-jobs{display:grid;gap:14px}
 .gcc-band h2{font-size:var(--fs-2xl);margin:6px 0 8px}
 .gcc-band p{color:var(--muted);margin:0;max-width:620px}
 .gcc-band .btn{justify-self:start;white-space:nowrap}
@@ -783,7 +821,7 @@ body.modal-open{overflow:hidden}
   .section-cats .dots{display:block}
   .steps{grid-template-columns:repeat(2,1fr)}
   .job-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
   .modal{align-items:center;padding:24px}
   .modal .dialog{width:min(640px,100%);border-radius:var(--r-lg);max-height:88vh}
   .form-card{padding:32px}
@@ -802,7 +840,6 @@ body.modal-open{overflow:hidden}
 @media (min-width:1200px){
   .job-grid:not(.list){grid-template-columns:repeat(3,1fr)}
   .nav{display:block}
-  .tech-strip{grid-template-columns:repeat(5,1fr)}
   .header-actions{display:flex}
   .menu-btn{display:none}
 }
@@ -821,6 +858,8 @@ body.modal-open{overflow:hidden}
   .stat+.stat{border-left:1px solid var(--border)}
   .grid-3{grid-template-columns:repeat(3,1fr)}
   .grid-4{grid-template-columns:repeat(4,1fr)}
+  .footer-grid{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr}
+  .cand-layout{grid-template-columns:1.05fr .95fr;gap:48px}
   .cat-grid{grid-template-columns:repeat(3,1fr)}
   .cat-grid:has(>:nth-child(8)){grid-template-columns:repeat(4,1fr)}
   .steps{grid-template-columns:repeat(4,1fr)}

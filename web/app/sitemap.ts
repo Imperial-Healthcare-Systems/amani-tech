@@ -5,7 +5,7 @@ const APP = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [jobs, categories, posts, openings, services] = await Promise.all([getPublishedJobs(), getCategories(), getPosts(), getOpenings(), getServices()]);
-  const statics = ['', '/about', '/services', '/services/it-consulting', '/gcc', '/lms', '/jobs', '/employers', '/vendor-registration', '/blog', '/careers', '/contact', '/faqs', '/privacy', '/terms'].map(p => ({ url: `${APP}${p}`, changeFrequency: 'weekly' as const, priority: p === '' ? 1 : 0.7 }));
+  const statics = ['', '/about', '/services', '/services/it-consulting', '/services/talent', '/services/transformation', '/gcc', '/lms', '/candidates', '/jobs', '/employers', '/vendor-registration', '/blog', '/careers', '/contact', '/faqs', '/privacy', '/terms'].map(p => ({ url: `${APP}${p}`, changeFrequency: 'weekly' as const, priority: p === '' ? 1 : 0.7 }));
   return [
     ...statics,
     ...services.map(s => ({ url: `${APP}/services/${s.slug}`, changeFrequency: 'monthly' as const, priority: 0.6 })),

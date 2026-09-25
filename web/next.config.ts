@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: supabaseHost },
     ],
   },
+  // Names used in the new navigation that point at pages built under older slugs.
+  async redirects() {
+    return [
+      { source: '/services/technology', destination: '/services/it-consulting', permanent: false },
+      { source: '/services/digital-transformation', destination: '/services/transformation', permanent: false },
+      { source: '/services/talent-solutions', destination: '/services/talent', permanent: false },
+    ];
+  },
   async headers() {
     return [{
       source: '/(.*)',

@@ -9,8 +9,8 @@ import { EngageJourney } from '@/components/EngageJourney';
 import pg from '@/components/PracticeGrid.module.css';
 
 export const metadata: Metadata = {
-  title: 'IT Consulting — AI, Cloud, Security, Software & Data',
-  description: 'Enterprise-grade technology consulting built for small and mid-sized businesses: AI and automation, cloud and DevOps, cybersecurity and compliance, custom software, data engineering and analytics.',
+  title: 'Technology Services — Cloud, Software, QA, DevOps, Security & AI',
+  description: 'Six engineering capabilities delivered end to end: cloud platforms, custom web and app development, QA automation with Playwright, DevOps and CI/CD, cybersecurity and data protection, and applied AI and analytics.',
   alternates: { canonical: '/services/it-consulting' },
 };
 
@@ -20,10 +20,11 @@ const NICHES: { art: string; title: string; lead: string; points: string[] }[] =
   { art: 'security', title: 'Cybersecurity & Compliance', lead: 'Know where you stand, close the gaps, and keep customer data protected.', points: ['Security audits and vulnerability assessments', 'Data protection frameworks and access control', 'Compliance readiness and documentation', 'Incident response planning'] },
   { art: 'software', title: 'Custom Software & App Development', lead: 'Web and mobile products engineered to grow with the business, not to be rebuilt in a year.', points: ['Product discovery and scoping', 'Web application engineering', 'iOS and Android applications', 'Integrations and API development'] },
   { art: 'data', title: 'Data Engineering & Analytics', lead: 'Turn the data you already collect into reporting leaders actually use.', points: ['Data pipelines and warehousing', 'Reporting and dashboard delivery', 'Data quality and governance', 'Analytics that answer business questions'] },
+  { art: 'qa', title: 'Software Testing & QA Automation', lead: 'Catch regressions before your customers do, with suites that run on every change.', points: ['Automated test frameworks built with Playwright', 'End-to-end, API and regression coverage', 'Test automation inside your CI pipeline', 'Manual and exploratory testing where it pays'] },
 ];
 
 // The strip that runs under the hero — the stacks and practices a visitor scans for.
-const TICKER = ['Artificial Intelligence', 'Process Automation', 'Cloud Migration', 'DevOps & CI/CD', 'Cybersecurity Audits', 'Compliance Readiness', 'Web & Mobile Engineering', 'Data Pipelines', 'Dashboards & Reporting', 'Managed Support'];
+const TICKER = ['Artificial Intelligence', 'Process Automation', 'Cloud Migration', 'DevOps & CI/CD', 'Cybersecurity Audits', 'Compliance Readiness', 'Web & Mobile Engineering', 'Data Pipelines', 'Dashboards & Reporting', 'Playwright Test Automation', 'Managed Support'];
 
 const HOW = [
   { art: 'discovery', title: 'Discovery', body: 'A short, focused review of your systems, goals and constraints — no obligation.', points: ['Understand your goals', 'Assess current setup', 'Identify opportunities'] },
@@ -36,7 +37,7 @@ const WHY = [
   { art: 'growth', title: 'Enterprise practice, SMB scale', body: 'The same engineering discipline large enterprises pay for, sized and priced for a growing business.', href: '#niches' },
   { art: 'people', title: 'Senior people on your work', body: 'Consultants who have shipped this before, not a layer of coordinators between you and the build.', href: '/about' },
   { art: 'outcomes', title: 'Outcome-based engagements', body: 'Scoped deliverables and clear milestones, so you always know what you are paying for.', href: '/contact' },
-  { art: 'talent', title: 'Talent that stays available', body: 'Backed by our staffing practice, so a team can be extended the moment the work grows.', href: '/services' },
+  { art: 'talent', title: 'Talent that stays available', body: 'Backed by our staffing practice, so a team can be extended the moment the work grows.', href: '/services/talent' },
 ];
 
 export default function ItConsultingPage() {
@@ -46,9 +47,9 @@ export default function ItConsultingPage() {
         <Image src="/it_consulting/hero.png" alt="" fill priority sizes="100vw" className="page-hero-photo" />
         <span className="page-hero-tint" aria-hidden="true" />
         <div className="container">
-        <Enter><span className="eyebrow">IT Consulting</span></Enter>
+        <Enter><span className="eyebrow">Technology Services</span></Enter>
         <Enter delay={0.08}><h1>Enterprise-grade technology, built for your size</h1></Enter>
-        <Enter delay={0.16}><p className="lead">Small and mid-sized businesses deserve the same technology standards as large enterprises — without enterprise overheads. We consult, build and support across the five areas where demand is highest right now.</p></Enter>
+        <Enter delay={0.16}><p className="lead">Small and mid-sized businesses deserve the same technology standards as large enterprises — without enterprise overheads. We consult, build and support across the six capabilities where demand is highest right now.</p></Enter>
         <Enter delay={0.24}><div className="row"><Link className="btn btn-primary btn-lg" href="/contact">Talk to a consultant</Link><Link className="btn btn-outline-light btn-lg" href="#niches">See what we do</Link></div></Enter>
         </div>
         <div className="hero-scroll"><a href="#niches" aria-label="See what we do"><Icon name="chevron" /></a></div>
@@ -58,7 +59,7 @@ export default function ItConsultingPage() {
       </section>
 
       <section className={`section ${pg.section}`} id="niches"><div className="container">
-        <Reveal><div className={`section-head center ${pg.head}`}><span className="eyebrow">What we do</span><h2>Five high-demand practices</h2><p className="lead">Each one is a standalone engagement, or a part of a larger programme we run end to end.</p></div></Reveal>
+        <Reveal><div className={`section-head center ${pg.head}`}><span className="eyebrow">What we do</span><h2>Six high-demand capabilities</h2><p className="lead">Each one is a standalone engagement, or a part of a larger programme we run end to end.</p></div></Reveal>
         <PracticeGrid items={NICHES} />
       </div></section>
 

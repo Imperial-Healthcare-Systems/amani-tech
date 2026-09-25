@@ -21,7 +21,7 @@ export default async function ServiceDetail({ params }: Props) {
       <section className="page-hero" style={{ position: 'relative', overflow: 'hidden' }}>
         {s.image && <><Image src={s.image} alt="" fill priority sizes="100vw" style={{ objectFit: 'cover' }} /><div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(255,255,255,.97) 40%, rgba(255,255,255,.75))' }} /></>}
         <div className="container" style={{ position: 'relative' }}>
-          <ol className="breadcrumb"><li><Link href="/">Home</Link></li><li><Link href="/services">Services</Link></li><li aria-current="page">{s.title}</li></ol>
+          <ol className="breadcrumb"><li><Link href="/">Home</Link></li><li><Link href="/services">Services</Link></li><li><Link href="/services/talent">Talent Solutions</Link></li><li aria-current="page">{s.title}</li></ol>
           <span className="eyebrow">Service</span><h1>{s.title}</h1><p className="lead">{s.long_description || s.short_description}</p>
           <div className="row"><Link className="btn btn-primary btn-lg" href="/employers#request-talent">Request Talent</Link></div>
         </div>

@@ -144,6 +144,37 @@ export function PracticeArt({ name }: { name: string }) {
     </svg>
   );
 
+  if (name === 'qa') return (
+    <svg {...common}><Defs id={id} />
+      <ellipse cx="210" cy="152" rx="150" ry="90" fill={`url(#${id}-glow)`} />
+      {/* the run: a browser under test, with each spec turning green in turn */}
+      <g className={s.rise}>
+        <rect x="96" y="66" width="196" height="132" rx="12" fill="#fff" stroke="#C9D8FF" />
+        <path d="M96 84 h196" stroke="#C9D8FF" strokeWidth="1.5" />
+        {[0, 1, 2].map(i => <circle key={i} cx={112 + i * 12} cy="75" r="3.5" fill={i ? '#D5E1FF' : BLUE_LIGHT} />)}
+        {[0, 1, 2, 3].map(i => (
+          <g key={i}>
+            <rect x="130" y={102 + i * 22} width={i === 3 ? 86 : 118} height="6" rx="3" fill="#D5E1FF" />
+            <circle className={s.pulse} style={{ animationDelay: `${i * 0.28}s` }} cx="115" cy={105 + i * 22} r="8" fill="#E6F6EF" />
+            <path className={s.grow} style={{ animationDelay: `${i * 0.28}s`, transformOrigin: `115px ${105 + i * 22}px` }}
+              d={`M111 ${105 + i * 22} l3 3.5 l6 -7`} stroke="#0E9F6E" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        ))}
+      </g>
+      {/* the runner that drives it */}
+      <g className={s.float} style={{ animationDelay: '.35s' }}>
+        <path d="M300 148 L252 122 L300 96 L348 122 Z" fill={`url(#${id}-deep)`} />
+        <path d="M252 122 L300 148 L300 162 L252 136 Z" fill={NAVY} />
+        <path d="M348 122 L300 148 L300 162 L348 136 Z" fill={NAVY_MID} />
+        <text x="300" y="128" textAnchor="middle" fontSize="15" fontWeight="800" fill="#fff">QA</text>
+      </g>
+      <g stroke="#B9CCFF" strokeWidth="1.5" strokeDasharray="4 5" fill="none"><path d="M292 124 L262 118" /></g>
+      <Tile x="304" y="52" id={id} delay={.1}><path d="M314 74 l5 5 l9 -11" stroke="#0E9F6E" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></Tile>
+      <Tile x="62" y="140" id={id} delay={.7}><path d="M74 164 h22 M74 172 h14" stroke={VIOLET} strokeWidth="2.5" strokeLinecap="round" /><circle cx="85" cy="154" r="5" fill="none" stroke="#9DB8F5" strokeWidth="2" /></Tile>
+      <circle className={s.pulse} style={{ animationDelay: '.5s' }} cx="328" cy="76" r="3.5" fill={BLUE} />
+    </svg>
+  );
+
   // data
   return (
     <svg {...common}><Defs id={id} />
