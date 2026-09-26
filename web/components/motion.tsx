@@ -4,19 +4,26 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const EASE = [0.2, 0.7, 0.2, 1] as const;
 
-/** Fade-up on scroll (once). */
-export function Reveal({ children, delay = 0, className, style, y = 18 }: { children: ReactNode; delay?: number; className?: string; style?: React.CSSProperties; y?: number }) {
+/** Soft landing on scroll (once): sections rise out of a slight blur and settle to full scale,
+ *  so they arrive like they are coming into focus rather than sliding in flat. */
+export function Reveal({ children, delay = 0, className, style, y = 30 }: { children: ReactNode; delay?: number; className?: string; style?: React.CSSProperties; y?: number }) {
   const reduce = useReducedMotion();
   return (
-    <motion.div className={className} style={style} initial={reduce ? false : { opacity: 0, y }} whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.6, ease: EASE, delay }}>
+    <motion.div className={className} style={style}
+      initial={reduce ? false : { opacity: 0, y, scale: 0.98, filter: 'blur(8px)' }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.12, margin: '0px 0px -60px' }}
+      transition={{ duration: 0.75, ease: EASE, delay }}>
       {children}
     </motion.div>
   );
 }
 
-const container: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } } };
-const item: Variants = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } } };
+const container: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.06 } } };
+const item: Variants = {
+  hidden: { opacity: 0, y: 26, scale: 0.96, filter: 'blur(6px)' },
+  show: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: EASE } },
+};
 
 /** Staggered children (grids of cards). */
 export function Stagger({ children, className, style }: { children: ReactNode; className?: string; style?: React.CSSProperties }) {
