@@ -1,7 +1,8 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValueEvent, useReducedMotion, useTransform } from 'framer-motion';
+import { useTrackProgress } from './useTrackProgress';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
 import s from './PracticeShowcase.module.css';
@@ -30,7 +31,7 @@ export function PracticeShowcase({ items, head }: { items: Practice[]; head?: Re
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
 
-  const { scrollYProgress } = useScroll({ target: track, offset: ['start start', 'end end'] });
+  const scrollYProgress = useTrackProgress(track, drive);
   const x = useTransform(scrollYProgress, [0, 1], [0, -shift]);
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 

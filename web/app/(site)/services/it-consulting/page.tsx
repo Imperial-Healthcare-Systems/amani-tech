@@ -27,10 +27,10 @@ const NICHES: { art: string; title: string; lead: string; points: string[] }[] =
 const TICKER = ['Artificial Intelligence', 'Process Automation', 'Cloud Migration', 'DevOps & CI/CD', 'Cybersecurity Audits', 'Compliance Readiness', 'Web & Mobile Engineering', 'Data Pipelines', 'Dashboards & Reporting', 'Playwright Test Automation', 'Managed Support'];
 
 const HOW = [
-  { art: 'discovery', title: 'Discovery', body: 'A short, focused review of your systems, goals and constraints — no obligation.', points: ['Understand your goals', 'Assess current setup', 'Identify opportunities'] },
-  { art: 'proposal', title: 'Proposal', body: 'A scoped plan with timelines, team and cost, written in plain language.', points: ['Clear scope and deliverables', 'Transparent pricing', 'Timeline and team structure'] },
-  { art: 'build', title: 'Build', body: 'A dedicated engagement team delivers in increments you can see and test.', points: ['Agile, milestone-driven delivery', 'Regular updates and demos', 'Continuous feedback and iteration'] },
-  { art: 'handover', title: 'Handover & support', body: 'Documentation, training and ongoing support so your team stays in control.', points: ['Knowledge transfer and training', 'Documentation and playbooks', 'Ongoing support and optimisation'] },
+  { image: '/engage/discover.webp', art: 'discovery', title: 'Discovery & Assessment', body: 'A focused review of your systems, goals and constraints — no obligation.', points: ['Requirement gathering', 'Current-state assessment', 'Opportunity mapping'] },
+  { image: '/engage/proposal.webp', art: 'proposal', title: 'Solution Design & SOW', body: 'A scoped statement of work with timelines, team mix and commercials, written in plain language.', points: ['Defined scope & deliverables', 'Transparent commercials', 'Timeline & team mix'] },
+  { image: '/engage/deliver.webp', art: 'build', title: 'Agile Delivery', body: 'A dedicated engagement team delivers in sprints you can see and test.', points: ['Sprint-based milestone delivery', 'Demos and status reporting', 'Continuous feedback loops'] },
+  { image: '/engage/partner.webp', art: 'handover', title: 'Handover & Managed Support', body: 'Documentation, training and SLA-backed support so your team stays in control.', points: ['Knowledge transfer & training', 'Documentation & playbooks', 'SLA-backed support & optimisation'] },
 ];
 
 const WHY = [

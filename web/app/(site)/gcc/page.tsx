@@ -52,15 +52,15 @@ const SCOPE = [
 ];
 
 const STAGES: RunStage[] = [
-  { art: 'plan', title: 'Plan', body: 'We map your scope, headcount, budget and timeline, and tell you honestly what is realistic.',
+  { art: 'plan', title: 'Assess & Plan', body: 'We map your scope, headcount, budget and timeline, and tell you honestly what is realistic.',
     caps: [['target', 'Define scope & goals'], ['users', 'Estimate headcount'], ['chart', 'Build budget & timeline']] },
-  { art: 'establish', title: 'Establish', body: 'Entity, office and compliances run in parallel, tracked on one plan with one point of contact.',
+  { art: 'establish', title: 'Build', body: 'Entity incorporation, office fit-out and statutory compliance run in parallel, tracked on one plan with a single point of contact.',
     caps: [['file', 'Set up legal entity'], ['building', 'Office & infrastructure'], ['shield', 'Handle compliances']] },
-  { art: 'staff', title: 'Staff', body: 'We hire your leadership first, then build the team around them.',
+  { art: 'staff', title: 'Staff & Scale', body: 'We hire your leadership first, then build the functional teams around them.',
     caps: [['usercheck', 'Leadership hiring'], ['users', 'Build functional teams'], ['trend', 'Scale with your roadmap']] },
-  { art: 'operate', title: 'Operate', body: 'Payroll, compliance and workforce support continue for as long as you need them.',
+  { art: 'operate', title: 'Operate', body: 'Payroll administration, statutory compliance and workforce support continue for as long as you need them.',
     caps: [['settings', 'Manage payroll & HR'], ['file', 'Ensure ongoing compliance'], ['message', 'Provide continuous support']] },
-  { art: 'transition', title: 'Transition', body: 'When you are ready to run it yourself, we hand over cleanly — people, records and vendors.',
+  { art: 'transition', title: 'Transfer', body: 'When you are ready to run it yourself, we hand over cleanly — people, records and vendor relationships.',
     caps: [['graduation', 'Knowledge transfer'], ['file', 'Handover people & records'], ['check', 'Transition vendors']] },
 ];
 
@@ -101,7 +101,7 @@ export default function GccPage() {
         <EngageTimeline
           eyebrow="How it runs"
           heading="From plan to operating center"
-          period="Five stages · plan to handover"
+          period="Build · Operate · Transfer"
           image="/practices/03.webp"
           stages={STAGES.map(st => ({ title: st.title, body: st.body, points: st.caps.map(c => c[1]) }))}
         />

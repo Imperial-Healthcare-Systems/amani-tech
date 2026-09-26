@@ -1,10 +1,11 @@
 'use client';
 import Image from 'next/image';
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValueEvent, useReducedMotion, useTransform } from 'framer-motion';
+import { useTrackProgress } from './useTrackProgress';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import s from './EngageTimeline.module.css';
 
-export type Stage = { title: string; body: string; points: string[] };
+export type Stage = { title: string; body: string; points: string[]; image?: string };
 
 /** How we engage, read as a process: the section pins, the track slides sideways, and each stage
  *  draws its stem and lifts its copy as it reaches the middle.
@@ -15,7 +16,8 @@ export function EngageTimeline({ eyebrow, heading, period, image, stages }: {
   eyebrow: string;
   heading: string;
   period: string;
-  image: string;
+  /** A single photo beside the heading, for timelines whose stages carry none of their own. */
+  image?: string;
   stages: Stage[];
 }) {
   const track = useRef<HTMLDivElement>(null);
@@ -23,19 +25,14 @@ export function EngageTimeline({ eyebrow, heading, period, image, stages }: {
   const stage = useRef<HTMLDivElement>(null);
   const [drive, setDrive] = useState(false);
   const [shift, setShift] = useState(0);
-  const [reached, setReached] = useState(1);
-  const [arrived, setArrived] = useState(false);
+  const [reached, setReached] = useState(0);
   const reduce = useReducedMotion();
 
-  /* The track holds still at both ends of the pin: the section arrives, settles, and only then
-     starts moving — and it comes to rest on the last stage before it lets the page go. Without
-     these the rail was already sliding the instant the section touched the top of the screen. */
-  const LEAD = 0.16, TAIL = 0.88;
+  /* The pin is three acts: the section lands and sits still with nothing revealed, the track moves
+     while the stages reveal one per scroll, then it rests on the last one before letting go. */
+  const LEAD = 0.16, TAIL = 0.97;
 
-  const { scrollYProgress } = useScroll({ target: track, offset: ['start start', 'end end'] });
-  /* Runs 0 → 1 while the section is still travelling up the screen, hitting 1 exactly when it pins.
-     Nothing reveals before that, so the reader sees the whole section at rest first. */
-  const { scrollYProgress: arrival } = useScroll({ target: track, offset: ['start end', 'start start'] });
+  const scrollYProgress = useTrackProgress(track, drive);
   const x = useTransform(scrollYProgress, [LEAD, TAIL], [0, -shift], { clamp: true });
   const drawn = useTransform(scrollYProgress, [LEAD, TAIL], [0, 1], { clamp: true });
 
@@ -59,13 +56,12 @@ export function EngageTimeline({ eyebrow, heading, period, image, stages }: {
      from a stacked list to a row, and a measurement taken before that render reads zero. */
   useEffect(measure, [drive, measure]);
 
-  useMotionValueEvent(arrival, 'change', v => setArrived(v >= 0.999));
-
   // A stage lights up a little before it reaches the middle, so the reveal leads the eye.
   useMotionValueEvent(scrollYProgress, 'change', p => {
     if (!drive) return;
-    const q = Math.min(1, Math.max(0, (p - LEAD) / (TAIL - LEAD)));
-    setReached(Math.max(1, Math.min(stages.length, Math.floor(q * stages.length + 0.9))));
+    // 0 through the opening hold, then one more stage per band of scroll.
+    const q = (p - LEAD) / (TAIL - LEAD);
+    setReached(q < 0 ? 0 : Math.min(stages.length, Math.floor(q * stages.length) + 1));
   });
 
   return (
@@ -76,22 +72,29 @@ export function EngageTimeline({ eyebrow, heading, period, image, stages }: {
             <span className="eyebrow">{eyebrow}</span>
             <h2>{heading}</h2>
             <span className={s.period}>{period}</span>
-            <div className={s.photo}>
-              <Image src={image} alt="" width={900} height={1200} sizes="(max-width: 1023px) 100vw, 28vw" />
-            </div>
+            {image && (
+              <div className={s.photo}>
+                <Image src={image} alt="" width={400} height={480} sizes="(max-width: 1023px) 92vw, 380px" />
+              </div>
+            )}
           </div>
 
           <div className={s.body}>
-            <div className={s.axis} aria-hidden="true"><motion.span style={drive ? { scaleX: drawn } : undefined} /></div>
+            <div className={s.axis} aria-hidden="true" data-on={!drive || reached > 0}><motion.span style={drive ? { scaleX: drawn } : undefined} /></div>
 
             <ol className={s.steps}>
               {stages.map((st, i) => (
-                <li key={st.title} className={s.step} data-on={!drive || (arrived && i < Math.max(1, reached))}>
+                <li key={st.title} className={s.step} data-on={!drive || i < reached}>
                   <div className={s.rule} aria-hidden="true">
                     <span className={s.dot} />
                     <span className={s.stem} />
                   </div>
                   <div className={s.inner}>
+                    {st.image && (
+                      <span className={s.shot}>
+                        <Image src={st.image} alt="" width={420} height={240} sizes="(max-width: 1023px) 92vw, 380px" priority={i === 0} />
+                      </span>
+                    )}
                     <span className={s.mask}><span className={s.num}>{String(i + 1).padStart(2, '0')}</span></span>
                     <span className={s.mask}><h3>{st.title}</h3></span>
                     <span className={s.mask}><p>{st.body}</p></span>

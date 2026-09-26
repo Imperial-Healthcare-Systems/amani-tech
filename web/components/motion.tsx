@@ -30,7 +30,7 @@ export function Item({ children, className, style }: { children: ReactNode; clas
 /** Hero-style staged entrance (no viewport trigger). */
 export function Enter({ children, delay = 0, className, style }: { children: ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const reduce = useReducedMotion();
-  return <motion.div className={className} style={style} initial={reduce ? false : { opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE, delay }}>{children}</motion.div>;
+  return <motion.div className={className} style={style} initial={reduce ? false : { opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.3 + delay }}>{children}</motion.div>;
 }
 
 /** Card hover lift. */

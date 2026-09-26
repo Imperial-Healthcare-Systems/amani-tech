@@ -7,6 +7,10 @@
 .lead { display: flex; flex-direction: column; gap: 18px; }
 .photo { position: relative; border-radius: 20px; overflow: hidden; background: var(--navy-900); }
 .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; display: block; }
+
+/* Each stage carries its own picture at the head of its card. */
+.shot { display: block; border-radius: 14px; overflow: hidden; background: var(--navy-100); margin-bottom: 14px; }
+.shot img { width: 100%; height: 150px; object-fit: cover; display: block; }
 .lead h2 { margin: 0; }
 .period {
   font-family: var(--font-head); font-size: var(--fs-sm); font-weight: 700;
@@ -52,7 +56,7 @@
 
 /* ---- pinned, horizontal ---- */
 @media (min-width: 1024px) {
-  .isDriven { height: 300vh; }
+  .isDriven { height: 250vh; }
   .isDriven .stage {
     position: sticky; top: 0;
     height: 100vh;
@@ -66,21 +70,23 @@
   }
 
   .isDriven .lead { flex: none; width: 26vw; max-width: 400px; gap: 22px; }
-  .isDriven .photo { height: 50vh; }
+  .isDriven .photo { height: 46vh; }
 
-  .isDriven .body { flex: none; height: 58vh; }
+  .isDriven .body { flex: none; height: 68vh; }
   /* The axis runs the width of the steps and draws itself as the track slides. */
   .isDriven .axis {
     display: block; position: absolute; left: 0; right: 0; top: 50%;
     height: 2px; border-radius: 2px; background: var(--navy-100);
+    opacity: 0; transition: opacity .45s var(--ease);
   }
+  .isDriven .axis[data-on='true'] { opacity: 1; }
   .isDriven .axis span {
     display: block; height: 100%; width: 100%; border-radius: 2px;
     transform-origin: left; background: linear-gradient(90deg, var(--accent-600), var(--accent-400));
   }
 
   .isDriven .steps { display: flex; align-items: stretch; gap: 0; height: 100%; }
-  .isDriven .step { position: relative; width: 26vw; max-width: 400px; padding: 0 2.5vw 0 0; display: flex; flex-direction: column; }
+  .isDriven .step { position: relative; width: 27vw; max-width: 410px; padding: 0 2.5vw 0 0; display: flex; flex-direction: column; }
 
   /* The dot and stem are pinned to the axis at the step's midpoint; odd steps hang their copy
      above it and even steps below, so the eye zigzags along the line. */
@@ -107,18 +113,21 @@
   /* flex: none keeps the masks at their natural height — squeezed, they clip their own text. */
   .isDriven .inner { height: 50%; display: flex; flex-direction: column; padding-left: 30px; }
   .isDriven .inner > * { flex: none; }
-  .isDriven .step:nth-child(odd) .inner { justify-content: flex-end; padding-bottom: 30px; }
+  .isDriven .step:nth-child(odd) .inner { justify-content: flex-end; padding-bottom: 26px; }
   /* auto, not 50%: a percentage margin resolves against the width, which put this half adrift. */
-  .isDriven .step:nth-child(even) .inner { margin-top: auto; justify-content: flex-start; padding-top: 30px; }
+  .isDriven .step:nth-child(even) .inner { margin-top: auto; justify-content: flex-start; padding-top: 26px; }
 
   /* Copy waits below its mask until the step is reached. */
   .isDriven .mask > * { transform: translateY(110%); opacity: 0; transition: transform .6s var(--ease), opacity .4s var(--ease); }
+  .isDriven .shot { opacity: 0; transform: translateY(18px) scale(.97); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+  .isDriven .shot img { height: 132px; }
   .isDriven .points { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
 
   .isDriven .step[data-on='true'] .dot { transform: scale(1); }
   .isDriven .step[data-on='true'] .stem { transform: scaleY(1); }
   .isDriven .step[data-on='true'] .mask > * { transform: none; opacity: 1; }
   .isDriven .step[data-on='true'] .points { opacity: 1; transform: none; }
+  .isDriven .step[data-on='true'] .shot { opacity: 1; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -84,11 +84,11 @@
 .primary:hover .arrow, .secondary:hover .arrow { transform: translateX(3px); }
 
 /* content stagger */
-.up { opacity: 0; transform: translateY(18px); animation: gUp .7s cubic-bezier(.22, .61, .36, 1) both; }
-.d1 { animation-delay: .1s; }
-.d2 { animation-delay: .2s; }
-.d3 { animation-delay: .32s; }
-.d4 { animation-delay: .44s; }
+.up { opacity: 0; transform: translateY(40px); animation: gUp .8s ease-in-out both; animation-delay: .3s; }
+.d1 { animation-delay: .38s; }
+.d2 { animation-delay: .46s; }
+.d3 { animation-delay: .56s; }
+.d4 { animation-delay: .66s; }
 @keyframes gUp { to { opacity: 1; transform: none; } }
 
 /* ---------- phones: keep the skyline low and the words legible ---------- */

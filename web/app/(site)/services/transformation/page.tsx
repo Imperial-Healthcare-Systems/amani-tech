@@ -35,10 +35,10 @@ const WHY = [
 ];
 
 const HOW = [
-  { art: 'discovery', title: 'Process audit', body: 'We map how work actually moves through your business today, including the parts that live in someone’s inbox.', points: ['Map current workflows', 'Find the manual bottlenecks', 'Quantify the hours lost'] },
-  { art: 'proposal', title: 'Automation plan', body: 'A prioritised plan: what gets automated first, what it costs and what it gives back.', points: ['Prioritised by payback', 'Transparent pricing', 'Clear success measures'] },
-  { art: 'build', title: 'Build & integrate', body: 'We configure the ecosystem and connect it to the tools you already pay for.', points: ['Channel consolidation', 'Pipeline and workflow build', 'Integration with existing tools'] },
-  { art: 'handover', title: 'Train & optimise', body: 'Your team is trained on the new flow, then we tune it as real usage shows what to change.', points: ['Team training', 'Playbooks and documentation', 'Ongoing optimisation'] },
+  { image: '/engage/discover.webp', art: 'discovery', title: 'Process Audit & Discovery', body: 'We map how work actually moves through your business today, including the parts that live in someone’s inbox.', points: ['Map current workflows', 'Find the manual bottlenecks', 'Quantify the hours lost'] },
+  { image: '/engage/proposal.webp', art: 'proposal', title: 'Automation Roadmap', body: 'A prioritised plan: what gets automated first, what it costs and what it gives back.', points: ['Prioritised by ROI', 'Transparent commercials', 'Defined success metrics'] },
+  { image: '/engage/deliver.webp', art: 'build', title: 'Build & Integrate', body: 'We configure the ecosystem and connect it to the tools you already pay for.', points: ['Channel consolidation', 'Workflow orchestration', 'Systems integration'] },
+  { image: '/engage/partner.webp', art: 'handover', title: 'Enablement & Optimisation', body: 'Your team is trained on the new flow, then we tune it as real usage shows what to change.', points: ['User enablement & training', 'Playbooks & documentation', 'Continuous optimisation'] },
 ];
 
 export default function TransformationPage() {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Reveal } from '@/components/motion';
+import { Enter, Reveal } from '@/components/motion';
 import { FaqList } from '@/components/cards';
 import { getFaqs } from '@/lib/queries';
 
@@ -13,7 +13,7 @@ export default async function FaqPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <section className="page-hero"><div className="container"><span className="eyebrow">FAQs</span><h1>Questions people ask us</h1><p className="lead">Can&apos;t find your answer? <Link href="/contact">Contact us</Link> and we will reply within one business day.</p></div></section>
+      <section className="page-hero"><div className="container"><Enter><span className="eyebrow">FAQs</span></Enter><Enter delay={0.08}><h1>Questions people ask us</h1></Enter><Enter delay={0.16}><p className="lead">Can&apos;t find your answer? <Link href="/contact">Contact us</Link> and we will reply within one business day.</p></Enter></div></section>
       <section className="section" style={{ paddingTop: 32 }}><div className="container" style={{ maxWidth: 840 }}>
         {groups.map(g => <Reveal key={g}><section className="faq-group"><h2>{g}</h2><FaqList items={faqs.filter(f => f.group === g)} /></section></Reveal>)}
       </div></section>
